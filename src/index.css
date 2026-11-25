@@ -13,6 +13,11 @@
   --color-glow-2: #2b3190;
   --color-glow-3: #3a3fc0;
   --color-card: #171a21;
+  /* shadcn token names, mapped to the DealDesk palette so 21st.dev components work unchanged */
+  --color-background: #0f1115;
+  --color-foreground: #f2f4f8;
+  --color-ring: #b7acff;
+  --color-muted-foreground: #a9b1c0;
   --color-raised: #1f2430;
   --color-text: #f2f4f8;
   --color-muted: #a9b1c0;

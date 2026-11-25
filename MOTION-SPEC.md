@@ -83,3 +83,13 @@ Rows 11, 12, 13 and 41 are replaced by:
 | 49 | 1 Jordan's film | >= 55% visible | Film starts by itself WITH sound; if the browser refuses, it starts muted and shows "Sound is off · tap to turn it on". Pauses when it leaves the view. Controls on top: mute, pause / replay, skip (scrolls to How it works) | 19 s, plays once, progress hairline | Does not autoplay; the person presses play | Frame scales .94 to 1 on entry |
 | 50 | 6 Last section | Visible | Motion reel plays muted in a loop (pause button), then the CTA | 15 s loop | Poster until play is pressed | n/a |
 | 51 | 2 Four moments | Scroll (pin) | Pin shortened from +400% to +320% | Scrubbed | Swipe row | n/a |
+## Revision 4 (Coverflow + team orbit)
+
+Row 20 to 21 and 46 (the old Inside bento) are replaced by:
+
+| # | Section | Trigger | What moves | Duration / easing | Reduced motion / touch | Parallax |
+|---|---|---|---|---|---|---|
+| 52 | 4 Inside | Drag, flick, arrows, dots | Coverflow: centre card faces front, neighbours tilt back (rotateY up to 82 deg, translateZ recession, 14% fade per step), ring loops. A flick carries up to 2 cards | Exponential ease-out, 0.16 per frame | Only user-driven (nothing autoplays) | Depth from the 3D perspective |
+| 53 | 4 Inside | Scroll into view | Carousel rises and fades in (y 60 to 0) | 1.1 s expo.out | Final state | n/a |
+| 54 | 3 Fits | Click a person / arrows | Orbit: the ring turns the short way round to bring the person to the top; the person leaves the ring and appears in the centre card (pop-in) | 0.9 s token (ring), 0.5 s (card) | Instant | Counter-rotation keeps faces upright |
+| 55 | 3 Fits | Click "Ask Dana to add" | Chip changes NOT ON HARBOR to PENDING, button to "Withdraw request". Nothing is sent | 0.5 s | Instant | n/a |

@@ -2,11 +2,24 @@ import { useEffect, useRef } from 'react'
 import { PenLine, SendHorizontal, UserCheck } from 'lucide-react'
 import { fits } from '@/content/copy'
 import { TeamInvite } from '@/components/ui/team-invite'
+import { OrbitingTeamCarousel, type TeamPerson } from '@/components/ui/orbiting-team-carousel'
 import { Chip } from '@/components/bits'
 import { GlassCard } from '@/components/GlassCard'
 import { Words } from '@/components/Words'
 import { Avatar, avatarUri } from '@/lib/avatars'
 import { gsap, prefersReducedMotion } from '@/lib/motion'
+
+// The fictional deal team, from the prototype (Harbor · Deal team). Alternating so the ring reads as a mix.
+const team: TeamPerson[] = [
+  { id: 'pat', name: 'Pat Morgan', role: 'Advisor', onHarbor: true, avatar: 'pat' },
+  { id: 'sam', name: 'Sam Lee', role: 'Client company · Finance', deals: 'Deals: Atlas · Keystone', onHarbor: false, avatar: 'sam' },
+  { id: 'alex', name: 'Alex Rivera', role: 'Client representative', onHarbor: true, avatar: 'alex' },
+  { id: 'maya', name: 'Maya Chen', role: 'Advisor', deals: 'Deals: Atlas', onHarbor: false, avatar: 'maya' },
+  { id: 'dana', name: 'Dana', role: 'Deal owner', onHarbor: true, avatar: 'dana' },
+  { id: 'leo', name: 'Leo Ortiz', role: 'Client representative', deals: 'Deals: Keystone', onHarbor: false, avatar: 'leo' },
+  { id: 'priya', name: 'Priya Nair', role: 'Analyst', onHarbor: true, avatar: 'priya' },
+  { id: 'adrian', name: 'Adrián Soto', role: 'Advisor', deals: 'Deals: Orion', onHarbor: false, avatar: 'adrian' },
+]
 
 /** Leading visual for each role: an illustrated avatar with a small role icon, the DealDesk mark, or the Send icon. */
 function RoleVisual({ name }: { name: string }) {
@@ -106,6 +119,20 @@ export function TeamFits() {
               </li>
             ))}
           </ol>
+        </div>
+
+        {/* Who can be on the message: the deal team orbit. On Harbor, or not on Harbor and "Ask Dana to add" (as in the app). */}
+        <div data-rise className="mt-24 lg:mt-32">
+          <div className="text-center">
+            <p className="text-[13px] font-semibold tracking-[0.12em] text-lavender-soft">HARBOR · DEAL TEAM</p>
+            <h3 className="mx-auto mt-4 max-w-[640px] text-[clamp(26px,3vw,40px)] font-bold leading-[1.1] tracking-[-0.01em] text-text">
+              Not on Harbor? Ask Dana to add.
+            </h3>
+            <p className="mx-auto mt-4 max-w-[520px] text-[17px] text-muted">Tap a person. Approvals stay with your people, and nothing is sent.</p>
+          </div>
+          <div className="mt-10">
+            <OrbitingTeamCarousel people={team} />
+          </div>
         </div>
       </div>
     </section>

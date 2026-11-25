@@ -21,6 +21,10 @@ const specs: Record<string, Spec> = {
   alex: { bg: ['#B7ACFF', '#6941E1'], skin: '#F3D0B5', hair: '#9A4B2A', hairStyle: 'long', shirt: '#141A44' },
   dana: { bg: ['#9B8CFF', '#2B3190'], skin: '#8D5A3C', hair: '#1A1216', hairStyle: 'bun', shirt: '#2A2160' },
   sam: { bg: ['#A9B1C0', '#4A5072'], skin: '#F0C7A5', hair: '#D9B35F', hairStyle: 'curly', shirt: '#171A21' },
+  priya: { bg: ['#C9A2FF', '#6941E1'], skin: '#B97A56', hair: '#1A1216', hairStyle: 'long', shirt: '#25297A' },
+  maya: { bg: ['#7FB4FF', '#25297A'], skin: '#E8B796', hair: '#15151B', hairStyle: 'bun', shirt: '#0D1233', glasses: true },
+  leo: { bg: ['#9B8CFF', '#3A3FC0'], skin: '#F3D0B5', hair: '#6B3A22', hairStyle: 'short', shirt: '#171A21' },
+  adrian: { bg: ['#B7ACFF', '#2B3190'], skin: '#D9A07A', hair: '#2A1B14', hairStyle: 'curly', shirt: '#141A44' },
 }
 
 function hairBack(s: Spec) {

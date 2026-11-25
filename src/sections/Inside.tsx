@@ -2,126 +2,169 @@ import { useEffect, useRef } from 'react'
 import { Check } from 'lucide-react'
 import { inside } from '@/content/copy'
 import { Chip } from '@/components/bits'
-import { GlassCard } from '@/components/GlassCard'
-import { PhoneFrame } from '@/components/PhoneFrame'
+import { CoverflowCarousel, type CoverflowSlide } from '@/components/ui/coverflow-carousel'
 import { Words } from '@/components/Words'
 import { Avatar } from '@/lib/avatars'
-import { gsap, ScrollTrigger, prefersReducedMotion } from '@/lib/motion'
-import { cn } from '@/lib/utils'
+import { gsap, prefersReducedMotion } from '@/lib/motion'
 
-const depth = (d: number) => ({ ['--d' as string]: d }) as React.CSSProperties
+const c = inside.cards
 
-function Card({ className, children, label }: { className?: string; children: React.ReactNode; label?: string }) {
+/**
+ * One review card: a SOLID dark surface (no blur, no translucency) with a deep gradient from the DealDesk palette,
+ * a hairline border and a big index number. The content is the Figma copy for "Inside every review".
+ */
+function Face({ n, tint, children }: { n: string; tint: string; children: React.ReactNode }) {
   return (
-    <GlassCard as="article" data-card label={label} tilt={3} className={cn('group p-7 lg:p-8', className)}>
+    <div
+      className="relative flex h-full w-full flex-col p-6 text-left sm:p-7"
+      style={{ background: `linear-gradient(160deg, ${tint} 0%, #12151c 62%)`, boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.09)' }}
+    >
+      <span aria-hidden className="text-[13px] font-semibold tracking-[0.14em] text-white/45">
+        {n} / 06
+      </span>
       {children}
-    </GlassCard>
+    </div>
   )
 }
 
+const title = 'mt-3 text-[clamp(22px,2vw,28px)] font-semibold leading-[1.15] text-text'
+const line = 'mt-3 text-[15px] leading-[1.5] text-muted sm:text-[16px]'
+
+const slides: CoverflowSlide[] = [
+  {
+    label: 'What to fix',
+    content: (
+      <Face n="01" tint="#1d2275">
+        <p className="mt-4 text-[12px] font-semibold tracking-[0.1em] text-lavender-soft">WHAT TO FIX</p>
+        <h3 className={title}>{c.fix.title}</h3>
+        <p className={line}>{c.fix.line}</p>
+        {/* the real "What to fix" screen, rising from the bottom of the card */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-[44%] w-[72%] overflow-hidden rounded-t-[22px] ring-1 ring-white/15">
+          <img src="/assets/screens/G9.webp" alt="" loading="lazy" decoding="async" draggable={false} className="w-full object-cover object-top" />
+        </div>
+      </Face>
+    ),
+  },
+  {
+    label: 'Recipients',
+    content: (
+      <Face n="02" tint="#2a1d6e">
+        <h3 className={title + ' !mt-6'}>{c.recipients.title}</h3>
+        <p className={line}>{c.recipients.line}</p>
+        <div className="mt-auto" aria-label="Pat Morgan and Alex Rivera are on the deal team; Sam Lee is not">
+          <div className="flex">
+            <Avatar name="pat" size={64} ring="#1a1740" className="relative z-[3]" />
+            <Avatar name="alex" size={64} ring="#1a1740" className="relative z-[2] -ml-4" />
+            <Avatar name="sam" size={64} ring="#1a1740" dashed className="relative z-[1] -ml-4" />
+          </div>
+          <ul className="mt-5 space-y-1.5 text-[14px] text-muted">
+            <li className="flex items-center gap-2"><Check size={15} className="text-[#58d6a0]" /> Pat Morgan</li>
+            <li className="flex items-center gap-2"><Check size={15} className="text-[#58d6a0]" /> Alex Rivera</li>
+            <li className="flex items-center gap-2"><span aria-hidden className="size-[15px] rounded-full border border-dashed border-lavender-soft" /> Sam Lee</li>
+          </ul>
+        </div>
+      </Face>
+    ),
+  },
+  {
+    label: 'Wording',
+    content: (
+      <Face n="03" tint="#15185a">
+        <h3 className={title + ' !mt-6'}>{c.wording.title}</h3>
+        <p className="mt-6 text-[clamp(21px,2vw,27px)] font-medium leading-[1.3] text-text">{c.wording.quote}</p>
+        <span aria-hidden className="mt-4 block h-[3px] w-[62%] rounded bg-lavender-soft" />
+        <p className={line + ' mt-auto'}>{c.wording.line}</p>
+      </Face>
+    ),
+  },
+  {
+    label: 'Ask the deal owner',
+    content: (
+      <Face n="04" tint="#26145f">
+        <div className="mt-5"><Chip>{c.ask.state}</Chip></div>
+        <h3 className={title + ' !mt-5'}>{c.ask.title}</h3>
+        <p className={line}>{c.ask.line}</p>
+        <div className="mt-auto flex items-center gap-4">
+          <Avatar name="dana" size={72} ring="#1a1740" />
+          <span className="text-[15px] text-muted">Dana<br />deal owner</span>
+        </div>
+      </Face>
+    ),
+  },
+  {
+    label: 'After an edit',
+    content: (
+      <Face n="05" tint="#19206a">
+        <div className="mt-5"><Chip tone="muted">↻ {c.edit.state}</Chip></div>
+        <h3 className={title + ' !mt-5'}>{c.edit.title}</h3>
+        <p className={line}>{c.edit.line}</p>
+        <div className="mt-auto flex items-center gap-3" aria-hidden>
+          <Chip tone="muted">↻ OUTDATED</Chip>
+          <span className="text-[26px] text-lavender">→</span>
+          <Chip>✓ READY</Chip>
+        </div>
+      </Face>
+    ),
+  },
+  {
+    label: 'A short record',
+    content: (
+      <Face n="06" tint="#1f1a52">
+        <div className="mt-5"><Chip>✓ READY</Chip></div>
+        <h3 className={title + ' !mt-5'}>{c.record.title}</h3>
+        <p className={line}>{c.record.line}</p>
+        <div className="mt-auto rounded-2xl bg-black/25 p-4 ring-1 ring-white/10">
+          <p className="text-[15px] font-medium text-text">{c.record.version}</p>
+          <p className="mt-1 text-[14px] text-muted">{c.record.to}</p>
+        </div>
+      </Face>
+    ),
+  },
+]
+
 export function Inside() {
   const root = useRef<HTMLElement>(null)
-  const c = inside.cards
 
   useEffect(() => {
     if (prefersReducedMotion()) return
     const ctx = gsap.context(() => {
       /*
-       * MOTION · scroll into view · the 6 cards reveal staggered (y 60 -> 0, opacity 0 -> 1) · 1.1s expo.out, stagger 0.09 ·
-       *   plays once · reduced-motion: none.
-       * MOTION · scroll (desktop) · the big phone drifts up slower than the page (y 40 -> -50px), scrubbed (ease none) ·
+       * MOTION · scroll into view · the carousel rises and fades in (y 60 -> 0, opacity 0 -> 1) · 1.1s expo.out · plays once ·
        *   reduced-motion: none.
+       * MOTION · drag / arrow keys / buttons / dots · COVERFLOW: the centre card faces front, neighbours tilt back (rotateY up to 82 deg,
+       *   translateZ recession, fading 10% per step); the ring loops. Exponential ease-out settle (factor 0.16 per frame),
+       *   a flick carries up to 2 cards · reduced-motion: movement is still user-driven only (nothing autoplays).
        */
-      gsap.from('[data-card]', { y: 60, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.09, scrollTrigger: { trigger: '[data-grid]', start: 'top 82%', once: true } })
-      gsap.fromTo('[data-big-phone]', { y: 40 }, { y: -50, ease: 'none', scrollTrigger: { trigger: '[data-grid]', start: 'top 80%', end: 'bottom 20%', scrub: 0.8 } })
-      ScrollTrigger.refresh()
+      gsap.from('[data-stage]', { y: 60, opacity: 0, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '[data-stage]', start: 'top 85%', once: true } })
     }, root.current!)
     return () => ctx.revert()
   }, [])
 
   return (
     <section ref={root} id="inside" aria-labelledby="inside-title" className="relative overflow-hidden bg-bg py-24 lg:py-[130px]">
-      <div aria-hidden className="drift pointer-events-none absolute -left-40 top-[28%] size-[520px] rounded-full bg-glow-3/20 blur-[130px] max-md:hidden" />
+      <div aria-hidden className="drift pointer-events-none absolute left-1/2 top-[40%] size-[620px] -translate-x-1/2 rounded-full bg-glow-3/15 blur-[130px] max-md:hidden" />
       <div className="relative mx-auto max-w-[1440px] px-6 lg:px-[120px]">
         <h2 id="inside-title" className="text-[clamp(40px,5vw,72px)] font-extrabold leading-[1.04] tracking-[-0.02em]">
           <Words lines={[inside.title]} />
         </h2>
+        <p className="mt-5 max-w-[520px] text-[clamp(17px,1.5vw,20px)] text-muted">Drag, or use the arrows, to move through a review.</p>
+      </div>
 
-        <div data-grid className="mt-14 grid gap-4 lg:grid-cols-12 lg:gap-6">
-          {/* What to fix: big card, the phone plays the real Review recording and breaks out of the card at the top */}
-          <Card label="What to fix" className="min-h-[520px] lg:col-span-7 lg:row-span-2 lg:min-h-[700px]">
-            <div className="depth max-w-[230px] xl:max-w-[300px]" style={depth(0.6)}>
-              <p className="text-[13px] font-semibold tracking-[0.08em] text-lavender-soft">WHAT TO FIX</p>
-              <h3 className="mt-4 text-[clamp(24px,2.2vw,34px)] font-semibold leading-[1.15] text-text">{c.fix.title}</h3>
-              <p className="mt-4 text-[17px] leading-[1.55] text-muted">{c.fix.line}</p>
-            </div>
-            <div
-              data-big-phone
-              className="mt-10 w-[min(280px,70%)] lg:absolute lg:-top-10 lg:right-8 lg:mt-0 lg:w-[270px] xl:right-10 xl:w-[330px]"
-              style={{ filter: 'drop-shadow(0 40px 60px rgba(8,12,60,.7))' }}
-            >
-              <PhoneFrame
-                src="/assets/screens/G9.webp"
-                video="/assets/video/moment-review.mp4"
-                alt="What to fix: two items, each listed next to the recipient or the words it concerns."
-              />
-            </div>
-          </Card>
-
-          <Card label="Recipients" className="lg:col-span-5">
-            <h3 className="depth text-[24px] font-semibold text-text" style={depth(0.5)}>
-              {c.recipients.title}
-            </h3>
-            <p className="mt-2 text-[17px] text-muted">{c.recipients.line}</p>
-            <div className="mt-7 flex items-center gap-4" aria-label="Pat Morgan and Alex Rivera are on the deal team; Sam Lee is not">
-              <div className="flex">
-                <Avatar name="pat" size={60} ring="#12151c" className="relative z-[3]" />
-                <Avatar name="alex" size={60} ring="#12151c" className="relative z-[2] -ml-4" />
-                <Avatar name="sam" size={60} ring="#12151c" dashed className="relative z-[1] -ml-4" />
-              </div>
-              <ul className="space-y-1 text-[14px] text-muted">
-                <li className="flex items-center gap-2"><Check size={14} className="text-[#58d6a0]" /> Pat Morgan</li>
-                <li className="flex items-center gap-2"><Check size={14} className="text-[#58d6a0]" /> Alex Rivera</li>
-                <li className="flex items-center gap-2"><span aria-hidden className="size-[14px] rounded-full border border-dashed border-lavender-soft" /> Sam Lee</li>
-              </ul>
-            </div>
-          </Card>
-
-          <Card label="Wording" className="lg:col-span-5">
-            <h3 className="depth text-[24px] font-semibold text-text" style={depth(0.5)}>
-              {c.wording.title}
-            </h3>
-            <p className="mt-5 text-[clamp(20px,1.7vw,24px)] font-medium leading-[1.35] text-text">{c.wording.quote}</p>
-            <span aria-hidden className="mt-4 block h-[3px] w-[62%] origin-left rounded bg-lavender-soft transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-[1.35]" />
-            <p className="mt-4 text-[16px] text-muted">{c.wording.line}</p>
-          </Card>
-
-          <Card label="Ask the deal owner" className="lg:col-span-4">
-            <Chip>{c.ask.state}</Chip>
-            <h3 className="mt-6 text-[24px] font-semibold text-text">{c.ask.title}</h3>
-            <p className="mt-2 text-[17px] text-muted">{c.ask.line}</p>
-            <div className="mt-6 flex items-center gap-3">
-              <Avatar name="dana" size={40} />
-              <span className="text-[14px] text-muted">Dana · deal owner</span>
-            </div>
-          </Card>
-
-          <Card label="After an edit" className="lg:col-span-4">
-            <Chip tone="muted">↻ {c.edit.state}</Chip>
-            <h3 className="mt-6 text-[24px] font-semibold text-text">{c.edit.title}</h3>
-            <p className="mt-2 text-[17px] text-muted">{c.edit.line}</p>
-          </Card>
-
-          <Card label="A short record" className="lg:col-span-4">
-            <Chip>✓ READY</Chip>
-            <h3 className="mt-6 text-[24px] font-semibold text-text">{c.record.title}</h3>
-            <p className="mt-2 text-[17px] text-muted">{c.record.line}</p>
-            <div className="mt-5 rounded-2xl bg-white/[0.04] p-4 ring-1 ring-white/[0.07]">
-              <p className="text-[15px] font-medium text-text">{c.record.version}</p>
-              <p className="mt-1 text-[14px] text-muted">{c.record.to}</p>
-            </div>
-          </Card>
-        </div>
+      <div data-stage className="relative mt-6 lg:mt-10">
+        <CoverflowCarousel
+          slides={slides}
+          label="Inside every review"
+          aspect={0.8}
+          cardWidth="clamp(250px, 30vw, 380px)"
+          rotate={40}
+          depth={0.55}
+          perspective={3.2}
+          fade={0.14}
+          gap={0.06}
+          showNavigation
+          showPagination
+          cardClassName="!rounded-[26px] shadow-[0_40px_70px_-30px_rgba(0,0,0,0.85)]"
+        />
       </div>
     </section>
   )
