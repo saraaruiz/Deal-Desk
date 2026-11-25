@@ -19,7 +19,10 @@ export function LoopVideo({
   rate = 1,
   scrub,
   fit = 'cover',
+  afterLoad,
 }: {
+  /** Don't touch the network or decode anything until the page has loaded and gone idle (used by the hero clip). */
+  afterLoad?: boolean
   fit?: 'cover' | 'contain'
   /** Scroll-scrubbed: never plays on its own; the parent sets currentTime from scroll progress (see FourMoments). */
   scrub?: boolean
@@ -35,7 +38,22 @@ export function LoopVideo({
   const ref = useRef<HTMLVideoElement>(null)
   const wrap = useRef<HTMLSpanElement>(null)
   const reduced = useReducedMotion()
-  const [near, setNear] = useState(false)
+  const [nearIo, setNear] = useState(false)
+  const [loaded, setLoaded] = useState(!afterLoad)
+  const near = nearIo && loaded
+  useEffect(() => {
+    if (!afterLoad) return
+    let t = 0
+    const go = () => {
+      t = window.setTimeout(() => setLoaded(true), 1500)
+    }
+    if (document.readyState === 'complete') go()
+    else window.addEventListener('load', go, { once: true })
+    return () => {
+      window.clearTimeout(t)
+      window.removeEventListener('load', go)
+    }
+  }, [afterLoad])
   const [visible, setVisible] = useState(false)
   const [broken, setBroken] = useState(false)
   const [userPaused, setUserPaused] = useState(false) // normal motion: person paused it

@@ -49,3 +49,21 @@ See `MOTION-SPEC.md` (every animation) and `SIMULATED.md` (what is fictional).
 
 ## Profile pictures
 Drop square images named after the person (jordan, pat, alex, dana, sam, priya, maya, leo, adrian) into src/assets/avatars/ (see the README there). They replace the illustrated avatars; missing ones keep the illustration.
+
+## Performance (Lighthouse, mobile)
+Measured on the production build (`npm run build` + `npm run preview`), mobile emulation, machine otherwise idle:
+
+| | Before | After |
+|---|---|---|
+| Performance | 49 to 51 | **94 to 97** |
+| FCP / LCP | 2.4 to 2.9 s / 4.3 to 4.7 s | 0.8 s / 2.3 s |
+| TBT | 1.5 to 2.8 s | 0.12 to 0.24 s |
+| Accessibility / Best practices / SEO | 100 / 100 / 100 | 100 / 100 / 100 |
+
+What changed (and what to keep in mind when editing):
+- **Only the hero loads at startup.** Every other section is its own chunk, mounted by `<Defer>` in `src/App.tsx` when it gets within 300px of the viewport, when the URL hash points at it, or 8s+ after load when the browser is idle. Placeholders reserve the height and carry the section id. Jumping to an anchor mounts every section above it first, then re-aligns.
+- **The film-grain overlay is off on touch screens** (a full-screen blended layer repainted on every frame was the single biggest cost) and uses a plain blend elsewhere.
+- **Lenis is not started on touch screens** (native scrolling there).
+- **The hero text and phone no longer fade in from opacity 0**, so they paint on the first frame; the hero chat clip waits for page load.
+- **Headings own their reveal** (`Words.tsx`), so sections that mount late animate correctly. Section dividers mount with their section.
+- Lighthouse scores swing by up to 30 points between single runs when the machine is busy: close other windows and take the median of 3 to 5 runs.

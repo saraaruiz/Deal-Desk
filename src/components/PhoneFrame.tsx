@@ -16,7 +16,10 @@ export function PhoneFrame({
   video,
   activeIndex,
   scrub,
+  videoAfterLoad,
 }: {
+  /** Hold the recording back until the page has loaded (hero). */
+  videoAfterLoad?: boolean
   /** Clips are scrubbed by scroll from outside instead of playing */
   scrub?: boolean
   src?: string
@@ -92,6 +95,7 @@ export function PhoneFrame({
                 poster={s.src}
                 label={`Screen recording: ${s.alt}`}
                 scrub={scrub}
+                afterLoad={videoAfterLoad}
                 playing={activeIndex === undefined ? undefined : activeIndex === i}
               />
             )}

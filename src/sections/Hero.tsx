@@ -34,16 +34,16 @@ export function Hero() {
     const ctx = gsap.context(() => {
       /*
        * MOTION · page load · LOAD SEQUENCE (~2.2s): shader canvas fades in (1.2s, CSS), H1 lines rise from a mask
-       *   (y 105% -> 0, 0.9s, stagger 0.12), sub + micro-line fade/rise (0.7s), buttons (0.7s), then the iPhone
-       *   rises (y 140 -> 0, scale .96 -> 1, 1.2s) · all expo.out ≈ cubic-bezier(.22,1,.36,1) ·
+       *   (y 105% -> 0, 0.9s, stagger 0.12), sub + buttons rise (y 18 -> 0, 0.6s; NO opacity fade, so the text paints on the first frame), then the iPhone
+       *   rises (y 140 -> 0, scale .96 -> 1, 1.2s, also no fade) · all expo.out ≈ cubic-bezier(.22,1,.36,1) ·
        *   reduced-motion: skipped, content is shown in its final state.
        */
       const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
       tl.from('[data-line]', { yPercent: 105, duration: 0.9, stagger: 0.12 }, 0.05)
-        .from('[data-sub]', { y: 18, opacity: 0, duration: 0.6 }, 0.3)
-        .from('[data-cta]', { y: 18, opacity: 0, duration: 0.6, stagger: 0.08 }, 0.4)
-        .from('[data-micro]', { opacity: 0, duration: 0.6 }, 0.6)
-        .from('[data-phone-in]', { y: 140, scale: 0.96, opacity: 0, duration: 1.2 }, 0.5)
+        .from('[data-sub]', { y: 18, duration: 0.6 }, 0.3)
+        .from('[data-cta]', { y: 18, duration: 0.6, stagger: 0.08 }, 0.4)
+        
+        .from('[data-phone-in]', { y: 140, scale: 0.96, duration: 1.2 }, 0.5)
         .from('[data-chip]', { opacity: 0, x: (i) => (i ? 24 : -24), duration: 0.8, stagger: 0.12 }, 1.5)
 
       if (isDesktopMotion()) {
@@ -191,6 +191,7 @@ export function Hero() {
                   eager
                   src="/assets/screens/G11.webp"
                   video="/assets/video/hero-chat.mp4"
+                  videoAfterLoad
                   alt="Project Harbor chat with Pat Morgan. A message is typed, checked and shown as Ready, then sent. The message says: Hi @Pat Morgan quick question on Harbor. Can you confirm the fee question?"
                 />
               </div>

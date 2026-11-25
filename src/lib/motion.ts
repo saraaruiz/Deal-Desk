@@ -96,7 +96,8 @@ export function useNearViewport<T extends HTMLElement>(margin = '600px') {
  * reduced-motion: Lenis is NOT created (native scroll).
  */
 export function startSmoothScroll() {
-  if (prefersReducedMotion()) return () => {}
+  // Touch screens scroll natively (Lenis would only add a per-frame loop there)
+  if (prefersReducedMotion() || window.matchMedia('(pointer: coarse)').matches) return () => {}
   const lenis = new Lenis({ lerp: 0.1, smoothWheel: true })
   lenis.on('scroll', ScrollTrigger.update)
   const tick = (t: number) => lenis.raf(t * 1000)
