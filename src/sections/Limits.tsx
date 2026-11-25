@@ -3,6 +3,7 @@ import { FileText, Pause, Search, Users } from 'lucide-react'
 import { limits } from '@/content/copy'
 import { GlassCard } from '@/components/GlassCard'
 import { Words } from '@/components/Words'
+import { cn } from '@/lib/utils'
 import { gsap, prefersReducedMotion } from '@/lib/motion'
 
 const icons = { search: Search, users: Users, pause: Pause, file: FileText }
@@ -43,21 +44,30 @@ export function Limits() {
           {limits.line}
         </p>
 
-        <ul data-limits className="mx-auto mt-16 grid max-w-[1200px] gap-4 md:grid-cols-2 lg:gap-6">
-          {limits.items.map((it) => {
+        <ul data-limits className="mx-auto mt-16 grid max-w-[1200px] gap-4 lg:grid-cols-3 lg:gap-6">
+          {limits.items.map((it, i) => {
             const Icon = icons[it.icon]
+            const featured = i === 0 // the main limit leads: bigger type, full width; the other three support it
             return (
-              <GlassCard key={it.t} as="li" tilt={3} data-limit className="group p-8 lg:min-h-[200px]">
-                <div className="flex items-start gap-5">
+              <GlassCard key={it.t} as="li" tilt={featured ? 2 : 3} data-limit className={cn('group relative overflow-hidden p-8', featured ? 'lg:col-span-3 lg:p-12' : 'lg:min-h-[270px]')}>
+                {/* accent hairline and a big faint index number */}
+                <span aria-hidden className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-lavender/55 to-transparent" />
+                <span aria-hidden className="pointer-events-none absolute right-6 top-3 select-none text-[clamp(64px,8vw,128px)] font-extrabold leading-none tracking-[-0.04em] text-white/[0.045]">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <div className={cn('relative flex gap-5', featured ? 'flex-col lg:flex-row lg:items-center lg:gap-12' : 'flex-col')}>
                   <span
                     aria-hidden
-                    className="mt-0.5 inline-flex size-12 flex-none items-center justify-center rounded-full bg-lavender/12 text-lavender-soft ring-1 ring-lavender/30 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-rotate-6 group-hover:scale-105"
+                    className={cn(
+                      'inline-flex flex-none items-center justify-center rounded-full bg-lavender/12 text-lavender-soft ring-1 ring-lavender/30 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-rotate-6 group-hover:scale-105',
+                      featured ? 'size-16 lg:size-20' : 'size-12',
+                    )}
                   >
-                    <Icon size={22} strokeWidth={1.7} />
+                    <Icon size={featured ? 32 : 22} strokeWidth={1.6} />
                   </span>
-                  <div>
-                    <h3 className="text-[24px] font-semibold leading-snug text-text">{it.t}</h3>
-                    <p className="mt-3 text-[17px] leading-[1.55] text-muted">{it.d}</p>
+                  <div className={cn(featured && 'lg:flex lg:flex-1 lg:items-center lg:justify-between lg:gap-12')}>
+                    <h3 className={cn('font-semibold leading-[1.15] tracking-[-0.01em] text-text', featured ? 'text-[clamp(28px,3vw,42px)] font-bold lg:max-w-[460px]' : 'text-[22px]')}>{it.t}</h3>
+                    <p className={cn('leading-[1.55] text-muted', featured ? 'mt-4 text-[clamp(17px,1.5vw,20px)] lg:mt-0 lg:max-w-[460px]' : 'mt-3 text-[16px]')}>{it.d}</p>
                   </div>
                 </div>
               </GlassCard>

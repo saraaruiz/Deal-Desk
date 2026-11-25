@@ -116,3 +116,15 @@ The role flow (Coordinator, DealDesk, Deal owner, Send) is now part of "One mess
 | 63 | 6 Last section | Visible | FULL SCREEN Motion reel: edge to edge, 100svh, letterboxed on black (nothing cropped), starts with sound; mute, pause, skip (to the button). The real button sits under it | 15 s, plays once | Poster until play is pressed | n/a |
 
 Restore point before the full-screen experiment: commit `87362a8`.
+## Revision 8 (Jordan zoom to full screen, diffused words, card clean-up)
+
+Replaces rows 49 and 50's frame-in-page behaviour for section 1.
+
+| # | Section | Trigger | What moves | Duration / easing | Reduced motion / touch | Parallax |
+|---|---|---|---|---|---|---|
+| 64 | 1 Jordan's film | Scroll (pin, +320%) | ZOOM TO FULL SCREEN: the film starts as a window under the title and zooms (scale s0 to 1, y to 0, corner radius 28 to 0) until it fills the screen; the title rises and fades (y -60). Phones in portrait: it fills the width (16:9) | 0 to 26% of the pin, scrubbed 0.5, none | No pin: film in a normal frame | Title vs film |
+| 65 | 1 Jordan's film | Scroll | The film starts by itself WITH sound once the picture is big enough (22% of the pin) and pauses at 97% | Time-based | Press play | n/a |
+| 66 | 1 Jordan's film | Scroll (last 12% of the pin) | DISSOLVE: a veil in the page colour fades in over the picture (opacity 0 to 1) while the volume fades 1 to 0, so section 2 begins from a soft transition | Scrubbed, none | No veil | n/a |
+| 67 | 2 Four moments | Always | Giant step words are filled with a soft gradient that fades inside the letters (lavender to transparent) and are blurred 3 px, no outline | n/a | Not shown | 2x phone speed |
+| 68 | 4 Inside | n/a | Cards are text and pills only (no phone mockup); "OUTDATED" appears once | n/a | n/a | n/a |
+| 69 | 5 Limits | Enter view | One featured limit (full width, large type) and three supporting ones, each with a faint index number and an accent hairline | 0.9 s expo.out, stagger 0.14 | Final state | n/a |

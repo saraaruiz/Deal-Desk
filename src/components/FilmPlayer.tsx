@@ -23,7 +23,13 @@ export function FilmPlayer({
   skipLabel,
   className,
   fullBleed,
+  playWhen,
+  volume,
 }: {
+  /** When set, it decides if the film should be playing (used by the pinned zoom section) instead of the on-screen test. */
+  playWhen?: boolean
+  /** 0..1, for the fade-out at the end of the pinned section. */
+  volume?: number
   /** Edge to edge and the full height of the screen (no rounding, nothing cropped: the picture is letterboxed on black). */
   fullBleed?: boolean
   src: string
@@ -43,13 +49,17 @@ export function FilmPlayer({
   const video = useRef<HTMLVideoElement>(null)
   const bar = useRef<HTMLSpanElement>(null)
   const [near, setNear] = useState(false)
-  const [visible, setVisible] = useState(false) // >= 55% of the frame on screen
+  const [ioVisible, setVisible] = useState(false) // >= 55% of the frame on screen
   const [muted, setMuted] = useState(false) // sound ON by default
   const [soundBlocked, setSoundBlocked] = useState(false) // the browser refused sound autoplay -> started muted
   const [userPaused, setUserPaused] = useState(false)
   const [ended, setEnded] = useState(false)
   const [broken, setBroken] = useState(false)
   const reduced = prefersReducedMotion()
+  const visible = playWhen ?? ioVisible
+  useEffect(() => {
+    if (video.current && volume !== undefined) video.current.volume = Math.min(1, Math.max(0, volume))
+  }, [volume])
 
   useEffect(() => {
     const el = stage.current
@@ -136,7 +146,7 @@ export function FilmPlayer({
 
   return (
     <div ref={stage} className={cn('relative will-change-transform', className)}>
-      <div className={cn('relative w-full overflow-hidden bg-black', fullBleed ? 'h-[100svh]' : 'aspect-video rounded-[20px] shadow-[0_40px_90px_-30px_rgba(10,14,70,0.9)] ring-1 ring-white/10 lg:rounded-[28px]')}>
+      <div className={cn('relative w-full overflow-hidden bg-black', fullBleed ? 'h-[100svh] portrait:aspect-video portrait:h-auto' : 'aspect-video rounded-[20px] shadow-[0_40px_90px_-30px_rgba(10,14,70,0.9)] ring-1 ring-white/10 lg:rounded-[28px]')}>
         <img src={poster} alt={posterAlt} loading="lazy" decoding="async" className={cn('absolute inset-0 h-full w-full', fullBleed ? 'object-contain' : 'object-cover')} />
         {!broken && (
           <video

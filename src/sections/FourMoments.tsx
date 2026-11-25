@@ -160,9 +160,13 @@ export function FourMoments() {
         </div>
       ) : (
         <div className="relative flex h-[100svh] flex-col px-[clamp(20px,7vw,120px)] pb-6 pt-20 sm:pb-8">
-          <h2 id="moments-title" className="text-[clamp(24px,2.8vw,40px)] font-extrabold leading-[1.08] tracking-[-0.02em] text-text">
-            {moments.title.join(' ')}
-          </h2>
+          <div className="relative z-10">
+            <p className="text-[12px] font-semibold tracking-[0.18em] text-lavender-soft">HOW IT WORKS</p>
+            <h2 id="moments-title" className="mt-2 text-[clamp(32px,4.2vw,60px)] font-extrabold leading-[1.02] tracking-[-0.025em] text-text">
+              {moments.title[0]}{' '}
+              <span className="bg-gradient-to-r from-[#F2F4F8] via-[#B7ACFF] to-[#7FB4FF] bg-clip-text text-transparent">{moments.title[1]}</span>
+            </h2>
+          </div>
 
           {/* stage: giant step word behind, four phones in a row, the centred one in focus */}
           <div data-stage className="relative min-h-0 flex-1">
@@ -171,8 +175,8 @@ export function FourMoments() {
                 key={s.step}
                 data-word
                 aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 select-none whitespace-nowrap text-[clamp(120px,24vw,360px)] font-extrabold leading-none tracking-[-0.04em] text-transparent will-change-transform"
-                style={{ WebkitTextStroke: '2px rgba(183,172,255,0.22)' }}
+                className="pointer-events-none absolute left-1/2 top-1/2 select-none whitespace-nowrap text-[clamp(120px,24vw,360px)] font-extrabold leading-none tracking-[-0.04em] will-change-transform"
+                style={{ backgroundImage: 'linear-gradient(180deg, rgba(183,172,255,0.42) 0%, rgba(111,125,245,0.16) 55%, rgba(111,125,245,0) 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', filter: 'blur(3px)' }}
               >
                 {s.step}
               </span>

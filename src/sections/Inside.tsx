@@ -36,11 +36,16 @@ const slides: CoverflowSlide[] = [
         <p className="mt-4 text-[12px] font-semibold tracking-[0.1em] text-lavender-soft">WHAT TO FIX</p>
         <h3 className={title}>{c.fix.title}</h3>
         <p className={line}>{c.fix.line}</p>
-        {/* the real "What to fix" screen, rising from the bottom of the card */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-[26%] w-[72%] sm:h-[44%] overflow-hidden rounded-t-[22px] ring-1 ring-white/15">
-          <img src="/assets/screens/G9.webp" alt="" loading="lazy" decoding="async" draggable={false} className="w-full object-cover object-top" />
-        </div>
-      </Face>
+        {/* no mockup: just words and pills, as in the app ("2 things to fix") */}
+        <div className="mt-auto flex flex-wrap items-center gap-2">
+          <span className="rounded-full bg-lavender px-3.5 py-1.5 text-[13px] font-bold tracking-[0.04em] text-indigo">2 TO FIX</span>
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.07] px-3.5 py-1.5 text-[13px] font-semibold text-text ring-1 ring-white/12">
+            <span aria-hidden className="size-2 rounded-full bg-[#ff7a6b]" /> Recipient
+          </span>
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.07] px-3.5 py-1.5 text-[13px] font-semibold text-text ring-1 ring-white/12">
+            <span aria-hidden className="size-2 rounded-full bg-[#F5C451]" /> Wording
+          </span>
+        </div>      </Face>
     ),
   },
   {
@@ -58,8 +63,7 @@ const slides: CoverflowSlide[] = [
     label: 'After an edit',
     content: (
       <Face n="03" tint="#19206a">
-        <div className="mt-5"><Chip tone="muted">↻ {c.edit.state}</Chip></div>
-        <h3 className={title + ' !mt-5'}>{c.edit.title}</h3>
+        <h3 className={title + ' !mt-6'}>{c.edit.title}</h3>
         <p className={line}>{c.edit.line}</p>
         <div className="mt-auto flex items-center gap-3" aria-hidden>
           <Chip tone="muted">↻ OUTDATED</Chip>
@@ -87,7 +91,7 @@ const slides: CoverflowSlide[] = [
 
 export function Inside() {
   const root = useRef<HTMLElement>(null)
-  // phones get taller, narrower cards so the screen at the bottom of card 1 never covers its text
+  // phones get slightly taller, narrower cards so the text never feels cramped
   const [narrow, setNarrow] = useState(false)
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 639px)')
@@ -126,7 +130,7 @@ export function Inside() {
         <CoverflowCarousel
           slides={slides}
           label="Inside every review"
-          aspect={narrow ? 0.62 : 0.8}
+          aspect={narrow ? 0.78 : 0.82}
           cardWidth={narrow ? 'clamp(240px, 68vw, 300px)' : 'clamp(250px, 30vw, 380px)'}
           rotate={40}
           depth={0.55}
