@@ -93,3 +93,13 @@ Row 20 to 21 and 46 (the old Inside bento) are replaced by:
 | 53 | 4 Inside | Scroll into view | Carousel rises and fades in (y 60 to 0) | 1.1 s expo.out | Final state | n/a |
 | 54 | 3 Fits | Click a person / arrows | Orbit: the ring turns the short way round to bring the person to the top; the person leaves the ring and appears in the centre card (pop-in) | 0.9 s token (ring), 0.5 s (card) | Instant | Counter-rotation keeps faces upright |
 | 55 | 3 Fits | Click "Ask Dana to add" | Chip changes NOT ON HARBOR to PENDING, button to "Withdraw request". Nothing is sent | 0.5 s | Instant | n/a |
+## Revision 5 (sideways moments, fewer repeats)
+
+Replaces rows 16, 17, 45 (four moments), 52 (Coverflow dots) and 54 (orbit dots). The Team Invite is no longer rendered (file kept in `src/components/ui/team-invite.tsx`). Inside has 4 cards (Recipients and Ask the deal owner are covered by the deal-team orbit and by moment 3).
+
+| # | Section | Trigger | What moves | Duration / easing | Reduced motion / touch | Parallax |
+|---|---|---|---|---|---|---|
+| 56 | 2 Four moments | Scroll (desktop pin, +320%) | SIDEWAYS: four phones in a row; the one at p is centred at full size, the others slide away (x = (i - p) x spacing), minimise (scale 1 to .58) and dim (opacity 1 to .4) | Scrubbed 0.6, none | Swipe row of 4 phones, no pin | Phones vs giant word |
+| 57 | 2 Four moments | Scroll | Giant outlined step word (Draft / Review / Ask / Send) travels sideways at about 2x the phone speed and fades around the centre | Scrubbed, none | Not shown | Layer at 2x |
+| 58 | 2 Four moments | Scroll | The centred phone's recording is scrubbed: time = (p - (i - .5)) x duration. Step sentence cross-fades under it; labels and a hairline show progress | Scrubbed, none | Clips play on their own | n/a |
+| 59 | 3 Fits | Click "Ask Dana to add" | NOT ON HARBOR (red) becomes PENDING (yellow, #F5C451) with "Withdraw request"; ON HARBOR is green | 0.5 s | Instant | n/a |

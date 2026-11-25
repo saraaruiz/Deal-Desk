@@ -1,10 +1,8 @@
 import { useEffect, useRef } from 'react'
-import { Check } from 'lucide-react'
 import { inside } from '@/content/copy'
 import { Chip } from '@/components/bits'
 import { CoverflowCarousel, type CoverflowSlide } from '@/components/ui/coverflow-carousel'
 import { Words } from '@/components/Words'
-import { Avatar } from '@/lib/avatars'
 import { gsap, prefersReducedMotion } from '@/lib/motion'
 
 const c = inside.cards
@@ -20,7 +18,7 @@ function Face({ n, tint, children }: { n: string; tint: string; children: React.
       style={{ background: `linear-gradient(160deg, ${tint} 0%, #12151c 62%)`, boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.09)' }}
     >
       <span aria-hidden className="text-[13px] font-semibold tracking-[0.14em] text-white/45">
-        {n} / 06
+        {n} / 04
       </span>
       {children}
     </div>
@@ -46,30 +44,9 @@ const slides: CoverflowSlide[] = [
     ),
   },
   {
-    label: 'Recipients',
-    content: (
-      <Face n="02" tint="#2a1d6e">
-        <h3 className={title + ' !mt-6'}>{c.recipients.title}</h3>
-        <p className={line}>{c.recipients.line}</p>
-        <div className="mt-auto" aria-label="Pat Morgan and Alex Rivera are on the deal team; Sam Lee is not">
-          <div className="flex">
-            <Avatar name="pat" size={64} ring="#1a1740" className="relative z-[3]" />
-            <Avatar name="alex" size={64} ring="#1a1740" className="relative z-[2] -ml-4" />
-            <Avatar name="sam" size={64} ring="#1a1740" dashed className="relative z-[1] -ml-4" />
-          </div>
-          <ul className="mt-5 space-y-1.5 text-[14px] text-muted">
-            <li className="flex items-center gap-2"><Check size={15} className="text-[#58d6a0]" /> Pat Morgan</li>
-            <li className="flex items-center gap-2"><Check size={15} className="text-[#58d6a0]" /> Alex Rivera</li>
-            <li className="flex items-center gap-2"><span aria-hidden className="size-[15px] rounded-full border border-dashed border-lavender-soft" /> Sam Lee</li>
-          </ul>
-        </div>
-      </Face>
-    ),
-  },
-  {
     label: 'Wording',
     content: (
-      <Face n="03" tint="#15185a">
+      <Face n="02" tint="#15185a">
         <h3 className={title + ' !mt-6'}>{c.wording.title}</h3>
         <p className="mt-6 text-[clamp(21px,2vw,27px)] font-medium leading-[1.3] text-text">{c.wording.quote}</p>
         <span aria-hidden className="mt-4 block h-[3px] w-[62%] rounded bg-lavender-soft" />
@@ -78,23 +55,9 @@ const slides: CoverflowSlide[] = [
     ),
   },
   {
-    label: 'Ask the deal owner',
-    content: (
-      <Face n="04" tint="#26145f">
-        <div className="mt-5"><Chip>{c.ask.state}</Chip></div>
-        <h3 className={title + ' !mt-5'}>{c.ask.title}</h3>
-        <p className={line}>{c.ask.line}</p>
-        <div className="mt-auto flex items-center gap-4">
-          <Avatar name="dana" size={72} ring="#1a1740" />
-          <span className="text-[15px] text-muted">Dana<br />deal owner</span>
-        </div>
-      </Face>
-    ),
-  },
-  {
     label: 'After an edit',
     content: (
-      <Face n="05" tint="#19206a">
+      <Face n="03" tint="#19206a">
         <div className="mt-5"><Chip tone="muted">↻ {c.edit.state}</Chip></div>
         <h3 className={title + ' !mt-5'}>{c.edit.title}</h3>
         <p className={line}>{c.edit.line}</p>
@@ -109,7 +72,7 @@ const slides: CoverflowSlide[] = [
   {
     label: 'A short record',
     content: (
-      <Face n="06" tint="#1f1a52">
+      <Face n="04" tint="#1f1a52">
         <div className="mt-5"><Chip>✓ READY</Chip></div>
         <h3 className={title + ' !mt-5'}>{c.record.title}</h3>
         <p className={line}>{c.record.line}</p>
@@ -162,7 +125,6 @@ export function Inside() {
           fade={0.14}
           gap={0.06}
           showNavigation
-          showPagination
           cardClassName="!rounded-[26px] shadow-[0_40px_70px_-30px_rgba(0,0,0,0.85)]"
         />
       </div>

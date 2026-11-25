@@ -1,12 +1,11 @@
 import { useEffect, useRef } from 'react'
 import { PenLine, SendHorizontal, UserCheck } from 'lucide-react'
 import { fits } from '@/content/copy'
-import { TeamInvite } from '@/components/ui/team-invite'
 import { OrbitingTeamCarousel, type TeamPerson } from '@/components/ui/orbiting-team-carousel'
 import { Chip } from '@/components/bits'
 import { GlassCard } from '@/components/GlassCard'
 import { Words } from '@/components/Words'
-import { Avatar, avatarUri } from '@/lib/avatars'
+import { Avatar } from '@/lib/avatars'
 import { gsap, prefersReducedMotion } from '@/lib/motion'
 
 // The fictional deal team, from the prototype (Harbor · Deal team). Alternating so the ring reads as a mix.
@@ -83,19 +82,8 @@ export function TeamFits() {
           {fits.line}
         </p>
 
-        <div className="mt-16 grid items-center gap-12 lg:grid-cols-[minmax(0,560px)_1fr] lg:gap-24">
-          <GlassCard data-rise tilt={3} className="!rounded-[28px] p-4 sm:p-8">
-            {/* Illustrated avatars (fictional people). Dana, the deal owner, is the one dragged into the slot. */}
-            <TeamInvite
-              avatars={[
-                { src: avatarUri('pat'), name: 'Pat Morgan' },
-                { src: avatarUri('alex'), name: 'Alex Rivera' },
-                { src: avatarUri('dana'), name: 'Dana, deal owner' },
-              ]}
-              label={fits.label}
-            />
-          </GlassCard>
-
+        <div className="mt-16 grid items-start gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-20">
+          {/* the review flow, as people and steps */}
           <ol data-roles className="relative space-y-4">
             {/* vertical connector between the rows */}
             <span data-connector aria-hidden className="absolute bottom-10 left-[51px] top-10 w-px bg-gradient-to-b from-lavender/60 via-lavender/25 to-lavender/60" />
@@ -119,19 +107,19 @@ export function TeamFits() {
               </li>
             ))}
           </ol>
-        </div>
 
-        {/* Who can be on the message: the deal team orbit. On Harbor, or not on Harbor and "Ask Dana to add" (as in the app). */}
-        <div data-rise className="mt-24 lg:mt-32">
-          <div className="text-center">
-            <p className="text-[13px] font-semibold tracking-[0.12em] text-lavender-soft">HARBOR · DEAL TEAM</p>
-            <h3 className="mx-auto mt-4 max-w-[640px] text-[clamp(26px,3vw,40px)] font-bold leading-[1.1] tracking-[-0.01em] text-text">
-              Not on Harbor? Ask Dana to add.
-            </h3>
-            <p className="mx-auto mt-4 max-w-[520px] text-[17px] text-muted">Tap a person. Approvals stay with your people, and nothing is sent.</p>
-          </div>
-          <div className="mt-10">
-            <OrbitingTeamCarousel people={team} />
+          {/* who can be on the message: On Harbor, or not on Harbor and "Ask Dana to add" (as in the app) */}
+          <div data-rise>
+            <div className="text-center">
+              <p className="text-[13px] font-semibold tracking-[0.12em] text-lavender-soft">HARBOR · DEAL TEAM</p>
+              <h3 className="mx-auto mt-3 max-w-[480px] text-[clamp(24px,2.4vw,32px)] font-bold leading-[1.12] tracking-[-0.01em] text-text">
+                Not on Harbor? Ask Dana to add.
+              </h3>
+              <p className="mx-auto mt-3 max-w-[420px] text-[16px] text-muted">Tap a person. Nothing is sent.</p>
+            </div>
+            <div className="mt-6">
+              <OrbitingTeamCarousel people={team} />
+            </div>
           </div>
         </div>
       </div>

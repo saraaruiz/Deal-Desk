@@ -115,7 +115,7 @@ export function OrbitingTeamCarousel({
               "mt-[2.4cqw] inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[clamp(10px,2.1cqw,12px)] font-semibold tracking-[0.08em]",
               person.onHarbor && "bg-[#58d6a0]/12 text-[#58d6a0]",
               !person.onHarbor && !isRequested && "bg-[#ff7a6b]/12 text-[#ff9a8d]",
-              !person.onHarbor && isRequested && "bg-lavender/15 text-lavender-soft",
+              !person.onHarbor && isRequested && "bg-[#F5C451]/15 text-[#F5C451]",
             )}
           >
             {person.onHarbor ? <Check size={12} aria-hidden /> : isRequested ? <span aria-hidden>●</span> : <X size={12} aria-hidden />}
@@ -184,7 +184,7 @@ export function OrbitingTeamCarousel({
                     name={p.avatar}
                     size={80}
                     className="!size-full"
-                    ring={isActive ? "#B7ACFF" : status === "on" ? "rgba(88,214,160,.7)" : status === "pending" ? "rgba(155,140,255,.9)" : "rgba(255,255,255,.2)"}
+                    ring={isActive ? "#B7ACFF" : status === "on" ? "rgba(88,214,160,.7)" : status === "pending" ? "rgba(245,196,81,.95)" : "rgba(255,255,255,.2)"}
                     dashed={status === "off"}
                   />
                   <span
@@ -193,7 +193,7 @@ export function OrbitingTeamCarousel({
                       "absolute -bottom-0.5 -right-0.5 flex size-[5.2cqw] min-h-[18px] min-w-[18px] items-center justify-center rounded-full text-[10px] ring-2 ring-[#0f1115]",
                       status === "on" && "bg-[#58d6a0] text-[#0f1115]",
                       status === "off" && "bg-[#ff7a6b] text-[#0f1115]",
-                      status === "pending" && "bg-lavender text-indigo",
+                      status === "pending" && "bg-[#F5C451] text-[#1a1400]",
                     )}
                   >
                     {status === "on" ? <Check size={11} strokeWidth={3} /> : status === "off" ? <X size={11} strokeWidth={3} /> : "●"}
@@ -210,18 +210,14 @@ export function OrbitingTeamCarousel({
         <button type="button" aria-label="Previous person" onClick={() => nudge(-1)} className="flex size-11 items-center justify-center rounded-full bg-white/[0.06] text-text ring-1 ring-white/10 transition-colors hover:bg-white/10">
           <ChevronLeft size={18} />
         </button>
-        <div className="flex items-center gap-1.5" aria-hidden>
-          {people.map((p, i) => (
-            <span key={p.id} className={cn("size-1.5 rounded-full bg-white transition-opacity", i === active ? "opacity-100" : "opacity-25")} />
-          ))}
-        </div>
         <button type="button" aria-label="Next person" onClick={() => nudge(1)} className="flex size-11 items-center justify-center rounded-full bg-white/[0.06] text-text ring-1 ring-white/10 transition-colors hover:bg-white/10">
           <ChevronRight size={18} />
         </button>
       </div>
-      <p className="mt-3 flex items-center justify-center gap-5 text-[13px] text-muted">
+      <p className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[13px] text-muted">
         <span className="inline-flex items-center gap-1.5"><span aria-hidden className="size-2 rounded-full bg-[#58d6a0]" /> On Harbor</span>
-        <span className="inline-flex items-center gap-1.5"><span aria-hidden className="size-2 rounded-full bg-[#ff7a6b]" /> Not on Harbor · ask Dana to add</span>
+        <span className="inline-flex items-center gap-1.5"><span aria-hidden className="size-2 rounded-full bg-[#ff7a6b]" /> Not on Harbor</span>
+        <span className="inline-flex items-center gap-1.5"><span aria-hidden className="size-2 rounded-full bg-[#F5C451]" /> Pending</span>
       </p>
     </div>
   );
