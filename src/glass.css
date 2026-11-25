@@ -307,3 +307,33 @@
   .dd-splash-glow, .dd-splash-mark, .dd-splash-word { animation: none; }
   .dd-splash, .dd-splash--out { transition: opacity 0.3s linear; transform: none; }
 }
+
+/* ---------- Microinteractions ---------- */
+/* Tailwind's reset leaves buttons with the arrow cursor: anything clickable shows the pointer and gives press feedback */
+button:not(:disabled), [role='button'] { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: 0.5; }
+a, button { -webkit-tap-highlight-color: transparent; }
+button:active:not(:disabled), a.btn-shine:active { scale: 0.96; }
+a[aria-busy='true'] { cursor: progress; }
+a[aria-busy='true']::before { content: ''; flex: none; width: 14px; height: 14px; margin-right: 10px; border-radius: 9999px; border: 2px solid currentColor; border-right-color: transparent; animation: dd-spin 0.7s linear infinite; }
+.dd-spinner { width: 28px; height: 28px; border-radius: 9999px; border: 2px solid rgba(183, 172, 255, 0.9); border-right-color: transparent; animation: dd-spin 0.7s linear infinite; }
+@keyframes dd-spin { to { transform: rotate(360deg); } }
+.dd-pop { animation: dd-pop 0.22s var(--ease) backwards; }
+@keyframes dd-pop { from { opacity: 0; transform: scale(0.98); } }
+
+.hint-pill { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; border-radius: 9999px; padding: 8px 14px; font-size: 13px; font-weight: 600; color: #f2f4f8; background: rgba(30, 34, 52, 0.92); box-shadow: inset 0 0 0 1px rgba(155, 140, 255, 0.45); }
+.hint-chevron { animation: dd-bob 1.6s ease-in-out infinite; }
+@keyframes dd-bob { 50% { transform: translateY(6px); } }
+
+.nudge-btn { position: relative; display: flex; width: 48px; height: 48px; align-items: center; justify-content: center; border-radius: 9999px; color: #f2f4f8; background: rgba(155, 140, 255, 0.14); box-shadow: inset 0 0 0 1px rgba(155, 140, 255, 0.45); transition: translate 0.2s var(--ease), scale 0.15s var(--ease), box-shadow 0.2s var(--ease); }
+.nudge-btn:hover, .nudge-btn:focus-visible { translate: 0 -2px; box-shadow: inset 0 0 0 2px #9b8cff; }
+.nudge-ring { position: absolute; inset: 0; border-radius: 9999px; background: rgba(155, 140, 255, 0.35); opacity: 0; pointer-events: none; animation: dd-pulse 2s ease-out 3; }
+.nudge-btn:hover .nudge-ring, .nudge-btn:focus-visible .nudge-ring { display: none; }
+@keyframes dd-pulse { from { transform: scale(1); opacity: 0.5; } to { transform: scale(1.35); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hint-chevron, .dd-pop { animation: none; }
+  .nudge-ring { display: none; }
+  .nudge-btn { box-shadow: inset 0 0 0 2px rgba(155, 140, 255, 0.8); }
+  button:active:not(:disabled), a.btn-shine:active { scale: 1; }
+}

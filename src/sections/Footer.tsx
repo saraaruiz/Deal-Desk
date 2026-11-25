@@ -80,14 +80,14 @@ export function Footer() {
           <p className={col}>CONTACT</p>
           <ul className="mt-4 space-y-1">
             <li>
-              <a href="#" onClick={(e) => e.preventDefault()} className={link + ' gap-3'}>
+              <span className="flex min-h-[40px] items-center gap-3 text-[16px] text-text/80">
                 <Mail size={16} className="text-lavender-soft" aria-hidden /> hello@dealdesk.example
-              </a>
+              </span>
             </li>
             <li>
-              <a href="#" onClick={(e) => e.preventDefault()} className={link + ' gap-3'}>
+              <span className="flex min-h-[40px] items-center gap-3 text-[16px] text-text/80">
                 <Phone size={16} className="text-lavender-soft" aria-hidden /> +1 (555) 010-0100
-              </a>
+              </span>
             </li>
             <li className="flex min-h-[40px] items-center gap-3 text-[16px] text-text/80">
               <MapPin size={16} className="text-lavender-soft" aria-hidden /> Project Harbor (fictional)
@@ -100,16 +100,11 @@ export function Footer() {
           <ul className="mt-4 flex gap-3">
             {social.map((s) => (
               <li key={s.name}>
-                <a
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
-                  aria-label={`${s.name} (example link)`}
-                  className="group flex size-11 items-center justify-center rounded-full bg-white/[0.05] text-text/80 ring-1 ring-white/12 transition-all duration-500 hover:-translate-y-1 hover:bg-white/12 hover:text-text hover:ring-lavender-soft/60"
-                >
+                <span role="img" aria-label={`${s.name} (example)`} className="flex size-11 items-center justify-center text-text/60">
                   <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     {s.d}
                   </svg>
-                </a>
+                </span>
               </li>
             ))}
           </ul>

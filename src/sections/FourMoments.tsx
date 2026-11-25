@@ -17,6 +17,8 @@ export function FourMoments() {
   // Only reduced motion / data saver / very low-power devices get the plain swipe row.
   const staticMode = useStaticMotion()
   const [step, setStep] = useState(0)
+  const [hint, setHint] = useState(true) // scroll hint: leaves after the first step change or 4s of scrolling, never returns
+  const jump = useRef<(i: number) => void>(() => {})
 
   useEffect(() => {
     if (staticMode) return
@@ -29,6 +31,8 @@ export function FourMoments() {
       const lines = gsap.utils.toArray<HTMLElement>('[data-step-line]', el)
       const seg = el.querySelector<HTMLElement>('[data-seg]')
       const stage = el.querySelector<HTMLElement>('[data-stage]')!
+      const bar = el.querySelector<HTMLElement>('[data-progress]')
+      let hintTimer = 0
       gsap.set([...phones, ...words], { xPercent: -50, yPercent: -50 })
       gsap.set(lines, { xPercent: -50 })
       gsap.set(tilts, { transformPerspective: 1100 })
@@ -64,6 +68,8 @@ export function FourMoments() {
           if (Math.abs(v.currentTime - t) > 0.04) v.currentTime = t
         })
         if (seg) gsap.set(seg, { xPercent: p * 100 })
+        if (bar) gsap.set(bar, { scaleX: p / 3 })
+        if (Math.round(p) > 0) setHint(false)
         const s = Math.round(p)
         setStep((prev) => (prev === s ? prev : s))
         activeIndex = s
@@ -71,12 +77,30 @@ export function FourMoments() {
       let activeIndex = 0
       const state = { p: 0 }
       apply(0)
-      gsap.to(state, {
+      const tween = gsap.to(state, {
         p: 3,
         ease: 'none',
         onUpdate: () => apply(state.p),
-        scrollTrigger: { trigger: el, start: 'top top', end: '+=320%', pin: true, scrub: 0.6, anticipatePin: 1 },
+        scrollTrigger: {
+          trigger: el,
+          start: 'top top',
+          end: '+=320%',
+          pin: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+          onUpdate: () => {
+            if (!hintTimer) hintTimer = window.setTimeout(() => setHint(false), 4000)
+          },
+        },
       })
+      // click a step label: scroll to that step's position inside the pin
+      jump.current = (i) => {
+        const st = tween.scrollTrigger!
+        const top = st.start + ((st.end - st.start) * i) / 3 + (i === 0 ? 2 : 0)
+        const lenis = (window as unknown as { __lenis?: { scrollTo: (t: number, o?: { duration?: number }) => void } }).__lenis
+        if (lenis) lenis.scrollTo(top, { duration: 0.9 })
+        else window.scrollTo({ top, behavior: 'smooth' })
+      }
 
       /*
        * MOTION · pointer over the stage (mouse only) · CINEMATIC HOVER on the centred phone: it turns toward the cursor
@@ -120,6 +144,7 @@ export function FourMoments() {
       window.addEventListener('resize', onResize)
       return () => {
         window.removeEventListener('resize', onResize)
+        window.clearTimeout(hintTimer)
         cleanups.forEach((c) => c())
       }
     }, el)
@@ -142,6 +167,9 @@ export function FourMoments() {
             ))}
           </h2>
           {/* Reduced motion / data saver: horizontal swipe row of 4 phones (scroll-snap), no pin, no scrub */}
+          <p className="hint-pill mt-6">
+            Swipe to see each step <span aria-hidden>→</span>
+          </p>
           <ol className="swipe -mx-6 mt-10 px-6 pb-4 md:mx-0 md:px-0" aria-label="The four moments">
             {moments.steps.map((s, i) => (
               <li key={s.step} className="w-[min(70vw,260px)] text-center">
@@ -166,6 +194,14 @@ export function FourMoments() {
               {moments.title[0]} {moments.title[1].split(' ')[0]}{' '}
               <span className="bg-gradient-to-r from-[#F2F4F8] via-[#B7ACFF] to-[#7FB4FF] bg-clip-text text-transparent">{moments.title[1].split(' ')[1]}</span>
             </h2>
+            <div className="mt-3 flex items-center gap-3">
+              <p className="text-[13px] font-semibold tabular-nums tracking-[0.04em] text-text/80">
+                {step + 1} / 4 · {moments.steps[step]?.step}
+              </p>
+              <span aria-hidden className="h-[2px] w-[120px] overflow-hidden rounded bg-white/15">
+                <span data-progress className="block h-full origin-left bg-lavender-soft" style={{ transform: 'scaleX(0)' }} />
+              </span>
+            </div>
           </div>
 
           {/* stage: giant step word behind, four phones in a row, the centred one in focus */}
@@ -197,6 +233,15 @@ export function FourMoments() {
             ))}
           </div>
 
+          <div aria-hidden={!hint} className={`pointer-events-none relative z-20 flex h-0 justify-center sm:justify-start transition-opacity duration-300 ${hint ? 'opacity-100' : 'opacity-0'}`}>
+            <p className="hint-pill absolute bottom-1">
+              <svg className="hint-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M7 6l5 5 5-5M7 13l5 5 5-5" />
+              </svg>
+              Scroll to move the screens
+            </p>
+          </div>
+
           {/* who acts + the sentence for the centred step. The role chip is a frosted, iOS-style pill: it sits over the giant word,
               so the glass has something to refract. */}
           <div className="relative h-[84px] sm:h-[66px]" aria-live="polite">
@@ -225,11 +270,16 @@ export function FourMoments() {
                   <li
                     key={s.step}
                     aria-current={step === i ? 'step' : undefined}
-                    className="flex-1 py-2.5 text-center text-[12px] font-semibold tracking-[0.06em] transition-colors duration-500 sm:text-[13px]"
-                    style={{ color: step === i ? '#F2F4F8' : 'rgba(183,172,255,.6)' }}
+                    className="flex-1"
                   >
-                    <span className="hidden sm:inline">{String(i + 1).padStart(2, '0')} · </span>
-                    {s.step}
+                    <button
+                      type="button"
+                      onClick={() => jump.current(i)}
+                      className={`min-h-[44px] w-full rounded-full text-center text-[12px] font-semibold tracking-[0.06em] transition-colors duration-200 hover:bg-white/[0.08] sm:text-[13px] ${step === i ? 'text-text' : 'text-lavender-soft/80 hover:text-text'}`}
+                    >
+                      <span className="hidden sm:inline">{String(i + 1).padStart(2, '0')} · </span>
+                      {s.step}
+                    </button>
                   </li>
                 ))}
               </ol>

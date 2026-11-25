@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { FilmGrain, ScrollProgress, SkipLink } from '@/components/bits'
 import { FloatingNav } from '@/components/FloatingNav'
 import { Splash } from '@/components/Splash'
+import { PrototypeWindow } from '@/components/PrototypeWindow'
 import { SectionDivider } from '@/components/SectionDivider'
 import { ScrollTrigger, startSmoothScroll } from '@/lib/motion'
 import { Hero } from '@/sections/Hero'
@@ -104,6 +105,7 @@ export default function App() {
   return (
     <>
       <Splash />
+      <PrototypeWindow />
       <SkipLink />
       <ScrollProgress />
       <FilmGrain />

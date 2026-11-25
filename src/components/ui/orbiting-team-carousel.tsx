@@ -46,6 +46,42 @@ export function OrbitingTeamCarousel({
   const [angle, setAngle] = React.useState(0);
   const [requested, setRequested] = React.useState<Set<string>>(new Set());
 
+  /* Pulse affordance on the arrows: 3 cycles when the carousel enters the viewport, again after 6s without interaction. */
+  const root = React.useRef<HTMLDivElement>(null);
+  const [pulse, setPulse] = React.useState(0);
+  const timer = React.useRef(0);
+  const visible = React.useRef(false);
+  const schedule = React.useCallback((ms: number) => {
+    window.clearTimeout(timer.current);
+    if (!visible.current) return;
+    const run = () => {
+      setPulse((p) => p + 1);
+      timer.current = window.setTimeout(run, 12000); // 6s of pulsing + 6s idle
+    };
+    timer.current = window.setTimeout(run, ms);
+  }, []);
+  React.useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        visible.current = e.isIntersecting;
+        if (e.isIntersecting) schedule(300);
+        else window.clearTimeout(timer.current);
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      window.clearTimeout(timer.current);
+    };
+  }, [schedule]);
+  const touched = () => {
+    setPulse(0);
+    schedule(6000);
+  };
+
   const goTo = (index: number) => {
     const delta = ((((index - active) % n) + n + n / 2) % n) - n / 2; // shortest signed distance in cards
     setAngle((a) => a + delta * step);
@@ -68,6 +104,9 @@ export function OrbitingTeamCarousel({
 
   return (
     <div
+      ref={root}
+      onPointerDown={touched}
+      onKeyDownCapture={touched}
       className={cn("mx-auto w-full max-w-[560px]", className)}
       role="region"
       aria-roledescription="carousel"
@@ -207,11 +246,13 @@ export function OrbitingTeamCarousel({
 
       {/* arrows + dots + legend */}
       <div className="mt-3 flex items-center justify-center gap-4">
-        <button type="button" aria-label="Previous person" onClick={() => nudge(-1)} className="flex size-11 items-center justify-center rounded-full bg-white/[0.06] text-text ring-1 ring-white/10 transition-colors hover:bg-white/10">
-          <ChevronLeft size={18} />
+        <button type="button" aria-label="Previous person" title="Previous person" onClick={() => nudge(-1)} className="nudge-btn">
+          {pulse > 0 && <span key={pulse} aria-hidden className="nudge-ring" />}
+          <ChevronLeft size={20} />
         </button>
-        <button type="button" aria-label="Next person" onClick={() => nudge(1)} className="flex size-11 items-center justify-center rounded-full bg-white/[0.06] text-text ring-1 ring-white/10 transition-colors hover:bg-white/10">
-          <ChevronRight size={18} />
+        <button type="button" aria-label="Next person" title="Next person" onClick={() => nudge(1)} className="nudge-btn">
+          {pulse > 0 && <span key={pulse} aria-hidden className="nudge-ring" />}
+          <ChevronRight size={20} />
         </button>
       </div>
       <p className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[13px] text-muted">

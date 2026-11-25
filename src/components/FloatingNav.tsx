@@ -9,6 +9,7 @@ import { MagneticLink } from '@/components/bits'
  */
 export function FloatingNav() {
   const [show, setShow] = useState(false)
+  const [current, setCurrent] = useState('')
 
   useEffect(() => {
     let last = window.scrollY
@@ -17,6 +18,12 @@ export function FloatingNav() {
       const goingUp = y < last
       setShow(y > 520 && goingUp)
       last = y
+      let cur = ''
+      for (const l of nav.links) {
+        const el = document.getElementById(l.href.slice(1))
+        if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) cur = l.href
+      }
+      setCurrent(cur)
     }
     window.addEventListener('scroll', on, { passive: true })
     return () => window.removeEventListener('scroll', on)
@@ -35,7 +42,7 @@ export function FloatingNav() {
         <img src="/assets/logo-mark.svg" alt="" width={30} height={20} className="h-5 w-[30px]" />
       </a>
       {nav.links.map((l) => (
-        <a key={l.label} href={l.href} className="flex min-h-[44px] items-center rounded-full px-4 text-[14px] font-medium text-text/85 transition-colors hover:bg-white/10 hover:text-text">
+        <a key={l.label} href={l.href} aria-current={current === l.href ? 'location' : undefined} className={`flex min-h-[44px] items-center rounded-full px-4 text-[14px] font-medium transition-colors duration-200 hover:bg-white/10 hover:text-text ${current === l.href ? 'bg-white/[0.14] text-text' : 'text-text/85'}`}>
           {l.label}
         </a>
       ))}
