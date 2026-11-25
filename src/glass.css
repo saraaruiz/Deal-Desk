@@ -287,3 +287,23 @@
     linear-gradient(160deg, rgba(96, 140, 255, 0.2) 0%, rgba(120, 90, 240, 0.1) 60%, rgba(140, 100, 255, 0.16) 100%) !important;
   box-shadow: inset 0 1px 0 rgba(200, 215, 255, 0.5), inset 0 0 0 1px rgba(150, 140, 255, 0.28) !important;
 }
+
+/* Splash (components/Splash.tsx) */
+.dd-splash { position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0f1115; overflow: hidden; transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+.dd-splash--out { opacity: 0; transform: translateY(-14px) scale(1.02); pointer-events: none; }
+.dd-splash-glow { position: absolute; border-radius: 9999px; filter: blur(90px); animation: dd-glow 1.6s ease-out both, dd-drift 6s ease-in-out infinite alternate; }
+.dd-splash-glow--a { width: 62vmax; height: 62vmax; top: -22vmax; right: -14vmax; background: rgba(120, 90, 230, 0.5); }
+.dd-splash-glow--b { width: 52vmax; height: 52vmax; top: 22%; left: -24vmax; background: rgba(110, 80, 215, 0.4); animation-delay: 0.1s, 0s; }
+.dd-splash-glow--c { width: 52vmax; height: 52vmax; bottom: -22vmax; right: -12vmax; background: rgba(60, 100, 190, 0.4); animation-delay: 0.2s, 0s; }
+.dd-splash-logo { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.dd-splash-mark { width: clamp(120px, 34vw, 164px); height: auto; animation: dd-mark 0.95s var(--ease) 0.1s both; }
+.dd-splash-word { font-size: clamp(30px, 8vw, 40px); font-weight: 800; letter-spacing: -0.03em; animation: dd-mark 0.95s var(--ease) 0.28s both; }
+.dd-splash-note { position: absolute; bottom: max(48px, env(safe-area-inset-bottom)); font-size: 14px; color: rgba(255, 255, 255, 0.55); animation: dd-note 1s ease 0.6s both; }
+@keyframes dd-glow { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dd-drift { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(3vmax, -2vmax, 0); } }
+@keyframes dd-mark { from { opacity: 0; transform: translateY(18px) scale(0.92); filter: blur(10px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes dd-note { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .dd-splash-glow, .dd-splash-mark, .dd-splash-word { animation: none; }
+  .dd-splash, .dd-splash--out { transition: opacity 0.3s linear; transform: none; }
+}
