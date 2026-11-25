@@ -106,3 +106,13 @@ Replaces rows 16, 17, 45 (four moments), 52 (Coverflow dots) and 54 (orbit dots)
 ## Revision 6 (Fits merged into Four moments)
 
 The role flow (Coordinator, DealDesk, Deal owner, Send) is now part of "One message, four moments": row 58 also cross-fades a role chip (avatar or mark + role name, "Only when needed" for the deal owner) above each step sentence. Page flow: Hero, 1 Jordan's film, 2 Four moments (with roles), 3 Fits (title + deal-team orbit), 4 Inside (4 cards), 5 Limits, 6 Look twice. Send once. (Motion reel). The old roles list and its connector animation (row 47) no longer exist.
+## Revision 7 (sideways moments everywhere, cinematic hover, full-screen Motion)
+
+| # | Section | Trigger | What moves | Duration / easing | Reduced motion / touch | Parallax |
+|---|---|---|---|---|---|---|
+| 60 | 2 Four moments | Scroll (pin, +320%), now on desktop, tablet AND phone | Same sideways effect as row 56 to 58; it is scroll-driven so it works on touch | Scrubbed 0.6, none | Reduced motion / data saver / very low power: swipe row | n/a |
+| 61 | 2 Four moments | Pointer over the stage (mouse only) | Cinematic hover: the centred phone turns toward the cursor (rotationY +-9, rotationX +-6) and a soft-light highlight follows the cursor over its glass | 0.8 s power3.out, light fades 0.5 s | Not shown | Tilt depth |
+| 62 | 2 Four moments | Scroll | iOS-style segmented control: its frosted highlight slides with p (xPercent = p x 100); the role chip is a frosted pill | Scrubbed | Static | n/a |
+| 63 | 6 Last section | Visible | FULL SCREEN Motion reel: edge to edge, 100svh, letterboxed on black (nothing cropped), starts with sound; mute, pause, skip (to the button). The real button sits under it | 15 s, plays once | Poster until play is pressed | n/a |
+
+Restore point before the full-screen experiment: commit `87362a8`.

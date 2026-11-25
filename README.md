@@ -46,3 +46,6 @@ The phone clips in "One message, four moments" are scrubbed by scroll, so they a
 Every "Try the sample review" points at `href="#prototype"`. Replace it with the real prototype link (search for `#prototype`).
 
 See `MOTION-SPEC.md` (every animation) and `SIMULATED.md` (what is fictional).
+
+## Profile pictures
+Drop square images named after the person (jordan, pat, alex, dana, sam, priya, maya, leo, adrian) into src/assets/avatars/ (see the README there). They replace the illustrated avatars; missing ones keep the illustration.
