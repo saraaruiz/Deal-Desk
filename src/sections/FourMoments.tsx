@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { moments } from '@/content/copy'
+import { fits, moments } from '@/content/copy'
+import { RoleVisual } from '@/components/RoleVisual'
 import { PhoneFrame } from '@/components/PhoneFrame'
 import { gsap, ScrollTrigger, isDesktopMotion, useLiteMode } from '@/lib/motion'
 
@@ -50,7 +51,7 @@ export function FourMoments() {
         })
         lines.forEach((l, i) => {
           const d = i - p
-          gsap.set(l, { opacity: Math.max(0, 1 - Math.abs(d) * 2.4), y: d * 22 })
+          gsap.set(l, { opacity: clamp01(1 - (Math.abs(d) - 0.15) * 2.2), y: d * 22 })
         })
         el.querySelectorAll<HTMLVideoElement>('video[data-scrub]').forEach((v, i) => {
           if (!v.duration || !Number.isFinite(v.duration)) return
@@ -96,7 +97,8 @@ export function FourMoments() {
             {moments.steps.map((s, i) => (
               <li key={s.step} className="w-[min(70vw,260px)] text-center">
                 <PhoneFrame src={screen(s)} alt={s.alt} video={clip(s)} />
-                <p className="mt-5 text-[15px] font-semibold tracking-[0.06em] text-lavender-soft">
+                <div className="mt-5 flex items-center justify-center gap-2.5"><RoleVisual name={fits.roles[i].name} size={32} /><span className="text-[13px] font-semibold uppercase tracking-[0.1em] text-lavender-soft">{fits.roles[i].name}</span></div>
+                <p className="mt-3 text-[15px] font-semibold tracking-[0.06em] text-lavender-soft">
                   {i + 1} · {s.step}
                 </p>
                 <p className="mt-1 text-[17px] leading-[1.5] text-muted">{s.line}</p>
@@ -105,7 +107,7 @@ export function FourMoments() {
           </ol>
         </div>
       ) : (
-        <div className="relative flex h-screen flex-col px-[clamp(32px,7vw,120px)] pb-8 pt-24">
+        <div className="relative flex h-screen flex-col px-[clamp(32px,7vw,120px)] pb-8 pt-20">
           <h2 id="moments-title" className="text-[clamp(26px,2.8vw,40px)] font-extrabold leading-[1.08] tracking-[-0.02em] text-text">
             {moments.title.join(' ')}
           </h2>
@@ -124,22 +126,24 @@ export function FourMoments() {
               </span>
             ))}
             {moments.steps.map((s) => (
-              <div key={s.step} data-phone className="absolute left-1/2 top-1/2 w-[clamp(180px,min(26vw,36vh),290px)] will-change-transform">
+              <div key={s.step} data-phone className="absolute left-1/2 top-1/2 w-[clamp(165px,min(24vw,25vh),280px)] will-change-transform">
                 <PhoneFrame src={screen(s)} alt={s.alt} video={clip(s)} scrub />
               </div>
             ))}
           </div>
 
           {/* the sentence for the centred step */}
-          <div className="relative h-[64px]" aria-live="polite">
-            {moments.steps.map((s) => (
-              <p
-                key={s.step}
-                data-step-line
-                className="absolute left-1/2 top-0 whitespace-nowrap text-[clamp(20px,2.2vw,30px)] font-semibold tracking-[-0.01em] text-text will-change-transform"
-              >
-                {s.line}
-              </p>
+          <div className="relative h-[92px]" aria-live="polite">
+            {moments.steps.map((s, i) => (
+              <div key={s.step} data-step-line className="absolute left-1/2 top-0 flex flex-col items-center gap-2.5 will-change-transform">
+                {/* who acts in this step (the old "Fits the way your team works" roles, now part of the flow) */}
+                <span className="flex items-center gap-2.5">
+                  <RoleVisual name={fits.roles[i].name} size={34} />
+                  <span className="text-[13px] font-semibold uppercase tracking-[0.1em] text-lavender-soft">{fits.roles[i].name}</span>
+                  {fits.roles[i].note && <span className="text-[12px] text-muted/70">· {fits.roles[i].note}</span>}
+                </span>
+                <p className="whitespace-nowrap text-[clamp(20px,2.2vw,30px)] font-semibold tracking-[-0.01em] text-text">{s.line}</p>
+              </div>
             ))}
           </div>
 

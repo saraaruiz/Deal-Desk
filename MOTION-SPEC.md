@@ -103,3 +103,6 @@ Replaces rows 16, 17, 45 (four moments), 52 (Coverflow dots) and 54 (orbit dots)
 | 57 | 2 Four moments | Scroll | Giant outlined step word (Draft / Review / Ask / Send) travels sideways at about 2x the phone speed and fades around the centre | Scrubbed, none | Not shown | Layer at 2x |
 | 58 | 2 Four moments | Scroll | The centred phone's recording is scrubbed: time = (p - (i - .5)) x duration. Step sentence cross-fades under it; labels and a hairline show progress | Scrubbed, none | Clips play on their own | n/a |
 | 59 | 3 Fits | Click "Ask Dana to add" | NOT ON HARBOR (red) becomes PENDING (yellow, #F5C451) with "Withdraw request"; ON HARBOR is green | 0.5 s | Instant | n/a |
+## Revision 6 (Fits merged into Four moments)
+
+The role flow (Coordinator, DealDesk, Deal owner, Send) is now part of "One message, four moments": row 58 also cross-fades a role chip (avatar or mark + role name, "Only when needed" for the deal owner) above each step sentence. Page flow: Hero, 1 Jordan's film, 2 Four moments (with roles), 3 Fits (title + deal-team orbit), 4 Inside (4 cards), 5 Limits, 6 Look twice. Send once. (Motion reel). The old roles list and its connector animation (row 47) no longer exist.
