@@ -35,7 +35,8 @@ shadcn's CLI and every 21st.dev snippet import from `@/components/ui/...`. `comp
 ## Assets to drop in
 | File | Used by | Fallback today |
 |---|---|---|
-| `public/assets/video1-jordan.mp4` | Section 1 (scrubbed on desktop, muted loop on mobile) | Poster only |
+| `public/assets/video/jordan-scrub.mp4` | Section 1: Jordan's story, no audio, dense keyframes. Scrubbed by scroll on desktop, muted loop on mobile | Poster only |
+| `public/assets/video/jordan.mp4` | Section 1: same film with sound, opens from "Watch with sound" | Button hidden if missing |
 | `public/assets/video1-poster.webp` | Section 1 poster | Placeholder exported from Figma (ASSET A3). Replace it (same path) when you have the real poster |
 | `public/assets/video/motion-reel.mp4` + `.jpg` | Section 2 (Motion reel, 16:9, no audio) | Poster only |
 | `public/assets/video/moment-draft / review / ask / send .mp4` + `.jpg` | Section 3, inside the phone, one clip per moment | Static exported screen |
