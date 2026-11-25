@@ -72,3 +72,14 @@ Cards (rows 32 to 33) are now near-solid dark surfaces with a hairline rim: same
 | 46 | 5 Inside | Scroll | Big phone (plays the Review recording) drifts y 40 to -50 against the page | Scrubbed 0.8, none | None | Phone vs card |
 | 47 | 4 Fits | Enter view | Vertical connector between the roles draws down (scaleY 0 to 1) | 1.4 s expo.out | Final state | n/a |
 | 48 | 7 Invitation | Always (desktop) | Soft conic halo behind the phone turns slowly | 40 s linear | None | n/a |
+## Revision 3 (flow reduced, videos re-ordered)
+
+Page flow is now: Hero, 1 Jordan's film, 2 Four moments, 3 Fits your team, 4 Inside every review, 5 Limits, 6 Look twice. Send once. (with the Motion reel).
+The "Right people / Right words / Latest version" section (Warp Carousel) is no longer rendered: its three ideas are already the Recipients, Wording and After-an-edit cards in section 4. Files are kept (`src/sections/RightPeople.tsx`, `src/components/ui/warp-carousel.tsx`) so it can be brought back.
+Rows 11, 12, 13 and 41 are replaced by:
+
+| # | Section | Trigger | What moves | Duration / easing | Reduced motion / touch | Parallax |
+|---|---|---|---|---|---|---|
+| 49 | 1 Jordan's film | >= 55% visible | Film starts by itself WITH sound; if the browser refuses, it starts muted and shows "Sound is off · tap to turn it on". Pauses when it leaves the view. Controls on top: mute, pause / replay, skip (scrolls to How it works) | 19 s, plays once, progress hairline | Does not autoplay; the person presses play | Frame scales .94 to 1 on entry |
+| 50 | 6 Last section | Visible | Motion reel plays muted in a loop (pause button), then the CTA | 15 s loop | Poster until play is pressed | n/a |
+| 51 | 2 Four moments | Scroll (pin) | Pin shortened from +400% to +320% | Scrubbed | Swipe row | n/a |

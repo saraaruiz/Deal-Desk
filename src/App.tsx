@@ -9,7 +9,6 @@ import { Hero } from '@/sections/Hero'
 import { Inside } from '@/sections/Inside'
 import { Invitation } from '@/sections/Invitation'
 import { Limits } from '@/sections/Limits'
-import { RightPeople } from '@/sections/RightPeople'
 import { TeamFits } from '@/sections/TeamFits'
 
 export default function App() {
@@ -36,7 +35,6 @@ export default function App() {
       <main id="main">
         <Hero />
         <DealsOneSend />
-        <RightPeople />
         <FourMoments />
         <TeamFits />
         <Inside />

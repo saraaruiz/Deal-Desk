@@ -22,7 +22,7 @@ export function FourMoments() {
       gsap.set(imgs.slice(1), { opacity: 0, y: 28 })
       gsap.set(lines.slice(1), { opacity: 0, y: 16 })
       /*
-       * MOTION · scroll · PINNED 100vh (+300%). ONE phone; the screen swaps Draft (H5) -> Review (G9) -> Ask (A1) -> Send (G17):
+       * MOTION · scroll · PINNED 100vh (+320%). ONE phone; the screen swaps Draft (H5) -> Review (G9) -> Ask (A1) -> Send (G17):
        *   outgoing screen opacity 1 -> 0 + y -28, incoming 0 -> 1 + y 28 -> 0 (cross-fade/slide, 0.3 of a step, ease none because scrubbed) ·
        *   step line copy cross-fades the same way · the dotted connector draws with stroke-dashoffset 1 -> 0 across the whole pin ·
        *   labels light up per step · reduced-motion / mobile: no pin, no scrub (swipe row of 4 phones).
@@ -41,7 +41,7 @@ export function FourMoments() {
         animation: tl,
         trigger: el,
         start: 'top top',
-        end: '+=400%',
+        end: '+=320%',
         pin: true,
         scrub: 0.5,
         anticipatePin: 1,
