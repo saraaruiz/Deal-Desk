@@ -66,7 +66,19 @@ export function avatarSvg(name: keyof typeof specs | string) {
   )
 }
 
-export const avatarUri = (name: string) => `data:image/svg+xml;utf8,${encodeURIComponent(avatarSvg(name))}`
+/*
+ * Real profile pictures: drop a square image named after the person in src/assets/avatars/ (jordan, pat, alex, dana, sam, priya,
+ * maya, leo, adrian) as .webp, .jpg or .png and it replaces the illustration everywhere, with no code change.
+ * People without a file keep the illustrated avatar. Vite bundles whatever is in the folder, so there are no 404s for missing ones.
+ */
+const photoFiles = import.meta.glob('/src/assets/avatars/*.{webp,jpg,jpeg,png}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>
+const photos: Record<string, string> = {}
+for (const [path, url] of Object.entries(photoFiles)) {
+  const base = path.split('/').pop()!.replace(/\.[^.]+$/, '').toLowerCase()
+  photos[base] = url
+}
+
+export const avatarUri = (name: string) => photos[name] ?? `data:image/svg+xml;utf8,${encodeURIComponent(avatarSvg(name))}`
 
 /** Round avatar: fixed square, never squashed by flex layouts. */
 export function Avatar({

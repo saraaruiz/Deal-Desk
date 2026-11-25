@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { inside } from '@/content/copy'
 import { Chip } from '@/components/bits'
 import { CoverflowCarousel, type CoverflowSlide } from '@/components/ui/coverflow-carousel'
@@ -37,7 +37,7 @@ const slides: CoverflowSlide[] = [
         <h3 className={title}>{c.fix.title}</h3>
         <p className={line}>{c.fix.line}</p>
         {/* the real "What to fix" screen, rising from the bottom of the card */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-[44%] w-[72%] overflow-hidden rounded-t-[22px] ring-1 ring-white/15">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-[26%] w-[72%] sm:h-[44%] overflow-hidden rounded-t-[22px] ring-1 ring-white/15">
           <img src="/assets/screens/G9.webp" alt="" loading="lazy" decoding="async" draggable={false} className="w-full object-cover object-top" />
         </div>
       </Face>
@@ -87,6 +87,15 @@ const slides: CoverflowSlide[] = [
 
 export function Inside() {
   const root = useRef<HTMLElement>(null)
+  // phones get taller, narrower cards so the screen at the bottom of card 1 never covers its text
+  const [narrow, setNarrow] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)')
+    const on = () => setNarrow(mq.matches)
+    on()
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [])
 
   useEffect(() => {
     if (prefersReducedMotion()) return
@@ -117,8 +126,8 @@ export function Inside() {
         <CoverflowCarousel
           slides={slides}
           label="Inside every review"
-          aspect={0.8}
-          cardWidth="clamp(250px, 30vw, 380px)"
+          aspect={narrow ? 0.62 : 0.8}
+          cardWidth={narrow ? 'clamp(240px, 68vw, 300px)' : 'clamp(250px, 30vw, 380px)'}
           rotate={40}
           depth={0.55}
           perspective={3.2}

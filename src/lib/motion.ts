@@ -49,6 +49,26 @@ export function useLiteMode() {
   return lite
 }
 
+/**
+ * True only when the page should NOT run scroll choreography: reduced motion, data saver, or a very low-power device.
+ * Unlike useLiteMode it does not depend on screen width or on having a mouse: scroll-driven effects work on touch too.
+ */
+export function useStaticMotion() {
+  const [stat, setStat] = useState(false)
+  useEffect(() => {
+    const check = () => {
+      const nav = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } }
+      const lowPower = (nav.deviceMemory ?? 8) <= 2 || (nav.hardwareConcurrency ?? 8) <= 2 || !!nav.connection?.saveData
+      setStat(mqReduce().matches || lowPower)
+    }
+    check()
+    const b = mqReduce()
+    b.addEventListener('change', check)
+    return () => b.removeEventListener('change', check)
+  }, [])
+  return stat
+}
+
 /** Lazy mount: true once the element is within `margin` of the viewport. */
 export function useNearViewport<T extends HTMLElement>(margin = '600px') {
   const ref = useRef<T>(null)

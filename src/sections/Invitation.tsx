@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { invite } from '@/content/copy'
 import { MagneticLink, btnPrimary } from '@/components/bits'
-import { LoopVideo } from '@/components/LoopVideo'
+import { FilmPlayer } from '@/components/FilmPlayer'
 import { ShaderBackground } from '@/components/ShaderBackground'
 import { gsap, prefersReducedMotion } from '@/lib/motion'
 
@@ -47,25 +47,20 @@ export function Invitation() {
           {invite.line}
         </p>
 
-        {/* Motion reel (16:9, shown whole, muted loop with a pause button) */}
+        {/* Motion reel (16:9): same player as Jordan's film. Starts with sound when on screen; mute, pause, skip on top. */}
         <div data-in className="relative mx-auto mt-12 max-w-[1280px] lg:mt-16">
-          <div className="relative aspect-video overflow-hidden rounded-[18px] bg-black shadow-[0_40px_90px_-30px_rgba(10,14,70,0.9)] ring-1 ring-white/10 lg:rounded-[24px]">
-            <img src="/assets/video/motion-reel.jpg" alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-contain" />
-            <LoopVideo
-              fit="contain"
-              src="/assets/video/motion-reel.mp4"
-              poster="/assets/video/motion-reel.jpg"
-              label="Motion reel: DealDesk flags a recipient who is not on the deal team and a promise nobody approved, and marks the message outdated after an edit"
-              showToggle
-            />
-          </div>
-          <p className="sr-only">
-            Motion reel, no audio. Looks ready. Sam isn&apos;t on the deal team. A promise nobody approved. Pending is not approved. Ready when everything
-            is clear. Edit it, and it&apos;s outdated. Look twice. Send once. A second look, not a guarantee.
-          </p>
+          <FilmPlayer
+            src="/assets/video/motion-reel.mp4"
+            poster="/assets/video/motion-reel.jpg"
+            posterAlt="Looks ready. A phone showing the Project Harbor message next to the words on screen."
+            label="Motion reel, 15 seconds, with sound: DealDesk flags a recipient who is not on the deal team and a promise nobody approved, and marks the message outdated after an edit"
+            transcript="Looks ready. Sam isn't on the deal team. A promise nobody approved. Pending is not approved. Ready when everything is clear. Edit it, and it's outdated. Look twice. Send once. A second look, not a guarantee."
+            skipTo="invite-cta"
+            skipLabel="Skip the reel and go to the button"
+          />
         </div>
 
-        <div data-in className="mt-12 lg:mt-14">
+        <div id="invite-cta" data-in className="mt-12 scroll-mt-32 lg:mt-14">
           {/* href="#prototype" is a placeholder: replace it with the real prototype link */}
           <MagneticLink href="#prototype" className={btnPrimary + ' h-16 w-auto px-10 text-[18px]'}>
             {invite.cta}
