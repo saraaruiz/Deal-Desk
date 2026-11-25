@@ -1,8 +1,9 @@
 /*
- * Apple-style "liquid glass".
- * Layers (back to front): translucent gradient fill + heavy backdrop blur/saturation, a 1px gradient rim (mask trick),
- * inner top highlight, a specular sheen that follows the cursor (--mx / --my), soft drop shadow.
- * Tilt is driven from GlassCard.tsx (GSAP). Children with .depth shift in parallax from --px / --py (-1..1).
+ * Card surface system ("glass-apple" class name kept so components don't change).
+ * v2: sober and professional. NO backdrop blur on cards: a near-solid dark surface, a 1px hairline rim that is brighter on the
+ * top-left, a very soft inner highlight and one soft shadow. The interaction stays (small tilt + a faint sheen that follows the
+ * cursor), but nothing is milky or blurry. Real blur is used only where something actually sits behind it (the floating nav).
+ * Children with .depth shift slightly from --px / --py (-1..1).
  */
 .glass-apple {
   --mx: 50%;
@@ -12,22 +13,18 @@
   position: relative;
   isolation: isolate;
   transform-style: preserve-3d;
-  border-radius: 28px;
+  border-radius: 24px;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 42%, rgba(255, 255, 255, 0.09) 100%),
-    rgba(23, 26, 33, 0.35);
-  -webkit-backdrop-filter: blur(28px) saturate(185%) brightness(1.06);
-  backdrop-filter: blur(28px) saturate(185%) brightness(1.06);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.012) 55%, rgba(255, 255, 255, 0.025) 100%),
+    #12151c;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.42),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
-    inset 0 0 40px rgba(155, 140, 255, 0.05),
-    0 34px 70px -24px rgba(6, 9, 48, 0.75),
-    0 2px 6px rgba(0, 0, 0, 0.28);
-  transition: box-shadow 0.6s var(--ease), background-color 0.6s var(--ease);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 28px 50px -30px rgba(0, 0, 0, 0.85);
+  transition: box-shadow 0.7s var(--ease);
   will-change: transform;
 }
-/* 1px gradient rim: bright on the top-left, fading to nothing, with a second glow where the cursor is */
+/* hairline rim: a touch brighter top-left, plus a faint glow under the cursor */
 .glass-apple::before {
   content: '';
   position: absolute;
@@ -35,26 +32,30 @@
   border-radius: inherit;
   padding: 1px;
   background:
-    radial-gradient(220px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.85), transparent 60%),
-    linear-gradient(140deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.06) 38%, rgba(255, 255, 255, 0.02) 62%, rgba(183, 172, 255, 0.35));
+    radial-gradient(180px circle at var(--mx) var(--my), rgba(183, 172, 255, 0.55), transparent 65%),
+    linear-gradient(140deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 35%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   pointer-events: none;
+  opacity: 0.55;
+  transition: opacity 0.7s var(--ease);
   z-index: 2;
 }
-/* specular sheen that chases the cursor */
+/* very soft sheen that follows the cursor */
 .glass-apple::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(320px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.22), rgba(155, 140, 255, 0.1) 40%, transparent 70%);
+  background: radial-gradient(360px circle at var(--mx) var(--my), rgba(155, 140, 255, 0.09), transparent 70%);
   opacity: 0;
-  transition: opacity 0.6s var(--ease);
-  mix-blend-mode: soft-light;
+  transition: opacity 0.7s var(--ease);
   pointer-events: none;
   z-index: 1;
+}
+.glass-apple:hover::before {
+  opacity: 1;
 }
 .glass-apple:hover::after,
 .glass-apple:focus-within::after {
@@ -62,113 +63,80 @@
 }
 .glass-apple:hover {
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 0 60px rgba(155, 140, 255, 0.1),
-    0 50px 90px -26px rgba(43, 49, 144, 0.7),
-    0 2px 8px rgba(0, 0, 0, 0.3);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 34px 60px -30px rgba(10, 14, 70, 0.9);
 }
 .glass-apple > * {
   position: relative;
   z-index: 3;
 }
 
-/* Light variant (Limits): frosted white over soft colour orbs */
-.glass-apple[data-tone='light'] {
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.6) 55%, rgba(255, 255, 255, 0.78) 100%);
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  backdrop-filter: blur(24px) saturate(170%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 1),
-    inset 0 0 0 1px rgba(13, 18, 51, 0.06),
-    0 24px 50px -22px rgba(63, 52, 190, 0.35),
-    0 2px 6px rgba(13, 18, 51, 0.06);
-}
-.glass-apple[data-tone='light']::before {
-  background:
-    radial-gradient(220px circle at var(--mx) var(--my), rgba(91, 75, 219, 0.7), transparent 60%),
-    linear-gradient(140deg, rgba(255, 255, 255, 1), rgba(13, 18, 51, 0.06) 45%, rgba(91, 75, 219, 0.18));
-}
-.glass-apple[data-tone='light']::after {
-  background: radial-gradient(320px circle at var(--mx) var(--my), rgba(155, 140, 255, 0.22), transparent 70%);
-  mix-blend-mode: normal;
-}
-.glass-apple[data-tone='light']:hover {
-  box-shadow:
-    inset 0 1px 0 #fff,
-    inset 0 0 0 1px rgba(91, 75, 219, 0.18),
-    0 40px 70px -24px rgba(63, 52, 190, 0.5),
-    0 2px 8px rgba(13, 18, 51, 0.08);
+/* The only real glass: the floating nav pill over scrolling content */
+.glass-nav {
+  background: rgba(18, 21, 28, 0.72);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09), 0 18px 40px -18px rgba(0, 0, 0, 0.8);
 }
 
-/* Parallax depth: children drift with the cursor */
+/* Parallax depth: children drift with the cursor (subtle) */
 .depth {
-  transform: translate3d(calc(var(--px) * var(--d, 1) * 12px), calc(var(--py) * var(--d, 1) * 12px), calc(var(--d, 1) * 18px));
-  transition: transform 0.5s var(--ease);
+  transform: translate3d(calc(var(--px) * var(--d, 1) * 8px), calc(var(--py) * var(--d, 1) * 8px), 0);
+  transition: transform 0.6s var(--ease);
 }
 
-/* Button sheen sweep + lift */
+/* Buttons: same height/baseline everywhere, calm sheen on hover */
 .btn-shine {
   position: relative;
   overflow: hidden;
-  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), background-color 0.5s var(--ease);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), background-color 0.5s var(--ease), border-color 0.5s var(--ease);
 }
 .btn-shine::after {
   content: '';
   position: absolute;
   inset: -20% auto -20% -60%;
-  width: 45%;
-  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
   transform: skewX(-18deg) translateX(0);
   transition: transform 0.9s var(--ease);
   pointer-events: none;
 }
 .btn-shine:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 44px rgba(156, 140, 255, 0.5);
 }
 .btn-shine:hover::after {
-  transform: skewX(-18deg) translateX(520%);
+  transform: skewX(-18deg) translateX(560%);
 }
 .btn-shine:active {
   transform: translateY(0) scale(0.98);
 }
 
-/* Ambient motion */
+/* Ambient motion (kept very slow) */
 @keyframes float-y {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-6px); }
 }
 @keyframes drift {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(40px, -30px, 0) scale(1.08); }
+  50% { transform: translate3d(30px, -20px, 0) scale(1.06); }
 }
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
 }
-.float-y { animation: float-y 6s ease-in-out infinite; }
-.drift { animation: drift 22s ease-in-out infinite; }
-.marquee-track { animation: marquee 28s linear infinite; }
-.marquee:hover .marquee-track { animation-play-state: paused; }
+.float-y { animation: float-y 7s ease-in-out infinite; }
+.drift { animation: drift 26s ease-in-out infinite; }
+.spin-slow { animation: spin-slow 40s linear infinite; }
 
 @media (prefers-reduced-motion: reduce) {
-  .glass-apple, .glass-apple::after, .depth, .btn-shine, .btn-shine::after { transition-duration: 0.01ms !important; }
-  .float-y, .drift, .marquee-track { animation: none !important; }
+  .glass-apple, .glass-apple::before, .glass-apple::after, .depth, .btn-shine, .btn-shine::after { transition-duration: 0.01ms !important; }
+  .float-y, .drift, .spin-slow { animation: none !important; }
 }
 
-/* Lighter glass on phones / coarse pointers: backdrop blur is the costliest paint on mid-range devices */
+/* Phones / coarse pointers: no ambient loops, no cursor sheen */
 @media (max-width: 767px), (pointer: coarse) {
-  .glass-apple { -webkit-backdrop-filter: blur(12px) saturate(140%); backdrop-filter: blur(12px) saturate(140%); }
-  .glass-apple[data-tone='light'] { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
   .glass-apple::after { display: none; }
 }
-
-
-/* Phones: no continuous ambient animation (keeps the main thread free); marquee stays but is cheap */
 @media (max-width: 767px) {
-  .drift { animation: none; }
-  .marquee-track { animation-duration: 40s; }
+  .drift, .spin-slow { animation: none; }
 }
-

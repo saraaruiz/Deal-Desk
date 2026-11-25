@@ -27,7 +27,7 @@ export function FloatingNav() {
       aria-label="Floating"
       // @ts-expect-error `inert` is valid HTML, missing from this React type version
       inert={!show ? '' : undefined}
-      className="glass-apple fixed left-1/2 top-4 z-[80] hidden -translate-x-1/2 items-center gap-1 !rounded-full px-2 py-2 transition-[transform,opacity] duration-700 ease-[cubic-bezier(.22,1,.36,1)] md:flex"
+      className="glass-nav fixed left-1/2 top-4 z-[80] hidden -translate-x-1/2 items-center gap-1 !rounded-full px-2 py-2 transition-[transform,opacity] duration-700 ease-[cubic-bezier(.22,1,.36,1)] md:flex"
       style={{ transform: `translate(-50%, ${show ? '0' : '-160%'})`, opacity: show ? 1 : 0 }}
     >
       <a href="#top" aria-label="DealDesk, back to top" className="flex size-11 items-center justify-center rounded-full hover:bg-white/10">

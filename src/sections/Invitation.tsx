@@ -29,8 +29,15 @@ export function Invitation() {
       <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-bg/20 via-bg/30 to-bg/80" />
       <div className="relative mx-auto max-w-[1440px] px-6">
         <h2 id="invite-title" data-big className="text-[clamp(52px,7.2vw,104px)] font-extrabold leading-[0.98] tracking-[-0.03em] text-text will-change-transform">
-          {invite.title.map((l) => (
-            <span key={l} className="block">
+          {invite.title.map((l, i) => (
+            <span
+              key={l}
+              className={
+                i === 1
+                  ? 'block bg-gradient-to-r from-[#F2F4F8] via-[#B7ACFF] to-[#7FB4FF] bg-clip-text text-transparent'
+                  : 'block'
+              }
+            >
               {l}
             </span>
           ))}
@@ -47,7 +54,12 @@ export function Invitation() {
         <p data-in className="mt-5 text-[14px] text-muted/80">
           {invite.micro}
         </p>
-        <div data-in className="mx-auto mt-14 w-[min(405px,72vw)] lg:mt-[70px]">
+        <div data-in className="relative mx-auto mt-14 w-[min(405px,72vw)] lg:mt-[70px]">
+          {/* slow-turning halo behind the phone (decorative, desktop) */}
+          <div
+            aria-hidden
+            className="spin-slow pointer-events-none absolute left-1/2 top-[8%] -z-10 size-[150%] -translate-x-1/2 rounded-full opacity-50 blur-[70px] max-md:hidden [background:conic-gradient(from_0deg,rgba(105,65,225,0),rgba(155,140,255,.7),rgba(127,180,255,0),rgba(145,107,191,.6),rgba(105,65,225,0))]"
+          />
           <PhoneFrame
             src="/assets/screens/G11.webp"
             video="/assets/video/invite-sent.mp4"

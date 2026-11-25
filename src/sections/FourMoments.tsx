@@ -41,18 +41,34 @@ export function FourMoments() {
         animation: tl,
         trigger: el,
         start: 'top top',
-        end: '+=300%',
+        end: '+=400%',
         pin: true,
         scrub: 0.5,
         anticipatePin: 1,
-        onUpdate: (s) => setStep(Math.min(3, Math.floor(s.progress * 4))),
+        onUpdate: (s) => {
+          const p = s.progress * 4
+          const i = Math.min(3, Math.floor(p))
+          setStep((prev) => (prev === i ? prev : i))
+          /*
+           * MOTION · scroll · each clip is SCRUBBED by scroll, not played: clip i shows time = (progress within step i) × duration,
+           *   so Draft / Review / Ask / Send always line up with the step labels whatever the scroll speed ·
+           *   clips before the current step rest on their last frame, later ones on their first · reduced-motion / mobile: clips play instead.
+           */
+          const vids = el.querySelectorAll<HTMLVideoElement>('video[data-scrub]')
+          vids.forEach((v, j) => {
+            if (!v.duration || !Number.isFinite(v.duration)) return
+            const local = j < i ? 1 : j > i ? 0 : Math.min(1, Math.max(0, p - i))
+            const t = Math.min(v.duration - 0.05, local * v.duration)
+            if (Math.abs(v.currentTime - t) > 0.04) v.currentTime = t
+          })
+        },
       })
     }, el)
     return () => ctx.revert()
   }, [lite])
 
   const title = (
-    <h2 id="moments-title" className="text-[clamp(40px,5vw,72px)] font-extrabold leading-[1.04] tracking-[-0.02em]">
+    <h2 id="moments-title" className="text-[clamp(36px,4.2vw,64px)] font-extrabold leading-[1.04] tracking-[-0.02em]">
       {moments.title.map((l) => (
         <span key={l} className="block">
           {l}
@@ -81,7 +97,7 @@ export function FourMoments() {
           </ol>
         </div>
       ) : (
-        <div className="relative mx-auto grid h-screen max-w-[1440px] grid-cols-[1fr_auto_1fr] items-center gap-10 px-[120px]">
+        <div className="relative mx-auto grid h-screen max-w-[1440px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-8 px-[clamp(32px,7vw,120px)]">
           <div className="self-center">
             {title}
             {/* stepper with the dotted connector */}
@@ -112,12 +128,12 @@ export function FourMoments() {
           </div>
 
           <div className="w-[300px]">
-            <PhoneFrame stack={moments.steps.map(shot)} activeIndex={step} />
+            <PhoneFrame stack={moments.steps.map(shot)} scrub />
           </div>
 
           <div className="relative h-[120px] self-center" aria-live="polite">
             {moments.steps.map((s) => (
-              <p key={s.step} data-step-line className="absolute inset-0 flex items-center text-[28px] font-semibold leading-[1.25] tracking-[-0.01em] text-text">
+              <p key={s.step} data-step-line className="absolute inset-0 flex items-center text-[clamp(22px,2.2vw,30px)] font-semibold leading-[1.25] tracking-[-0.01em] text-text">
                 {s.line}
               </p>
             ))}

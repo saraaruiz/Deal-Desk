@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
-@import './glass.css';
+@import './glass.css' layer(components);
 
 /* Tokens read from the Figma variables (get_variable_defs on 316:5948) + the brief. */
 @theme {

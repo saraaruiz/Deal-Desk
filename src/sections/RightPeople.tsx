@@ -3,7 +3,6 @@ import { look } from '@/content/copy'
 import { reviewCards } from '@/content/cards'
 import { WarpCarousel } from '@/components/ui/warp-carousel'
 import { Words } from '@/components/Words'
-import { GlassCard } from '@/components/GlassCard'
 import { LoopVideo } from '@/components/LoopVideo'
 import { gsap, useLiteMode, useNearViewport, prefersReducedMotion } from '@/lib/motion'
 
@@ -76,18 +75,18 @@ export function RightPeople() {
       </div>
 
       {/* Motion reel (16:9). Its on-screen words are the same three ideas as this section's title. */}
-      <div data-rise className="relative mx-auto mt-12 max-w-[1440px] px-6 lg:mt-14 lg:px-[120px]">
-        <GlassCard tilt={2} className="!rounded-[32px] p-2 sm:p-3">
-          <div className="relative aspect-video overflow-hidden rounded-[24px] bg-card">
-            <img src="/assets/video/motion-reel.jpg" alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
-            <LoopVideo
-              src="/assets/video/motion-reel.mp4"
-              poster="/assets/video/motion-reel.jpg"
-              label="Motion reel: DealDesk flags a recipient who is not on the deal team and a promise nobody approved, and marks the message outdated after an edit"
-              showToggle
-            />
-          </div>
-        </GlassCard>
+      <div data-rise className="relative mx-auto mt-14 max-w-[1680px] px-3 lg:mt-16 lg:px-8">
+        {/* Wider, edge-to-edge frame: the 16:9 reel is shown whole (object-contain on black), never cropped */}
+        <div className="relative aspect-video overflow-hidden rounded-[18px] bg-black shadow-[0_40px_90px_-30px_rgba(10,14,70,0.9)] ring-1 ring-white/10 lg:rounded-[24px]">
+          <img src="/assets/video/motion-reel.jpg" alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-contain" />
+          <LoopVideo
+            fit="contain"
+            src="/assets/video/motion-reel.mp4"
+            poster="/assets/video/motion-reel.jpg"
+            label="Motion reel: DealDesk flags a recipient who is not on the deal team and a promise nobody approved, and marks the message outdated after an edit"
+            showToggle
+          />
+        </div>
         <p className="sr-only">
           Motion reel, no audio. Looks ready. Sam isn&apos;t on the deal team. A promise nobody approved. Pending is not approved. Ready when everything
           is clear. Edit it, and it&apos;s outdated. Look twice. Send once. A second look, not a guarantee.

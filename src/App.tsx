@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import { FilmGrain, ScrollProgress, SkipLink } from '@/components/bits'
-import { Cursor } from '@/components/Cursor'
 import { FloatingNav } from '@/components/FloatingNav'
-import { Marquee } from '@/components/Marquee'
 import { ScrollTrigger, revealWords, startSmoothScroll } from '@/lib/motion'
 import { DealsOneSend } from '@/sections/DealsOneSend'
 import { Footer } from '@/sections/Footer'
@@ -34,11 +32,9 @@ export default function App() {
       <SkipLink />
       <ScrollProgress />
       <FilmGrain />
-      <Cursor />
       <FloatingNav />
       <main id="main">
         <Hero />
-        <Marquee />
         <DealsOneSend />
         <RightPeople />
         <FourMoments />

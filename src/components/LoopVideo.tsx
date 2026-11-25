@@ -17,7 +17,12 @@ export function LoopVideo({
   label,
   showToggle,
   rate = 1,
+  scrub,
+  fit = 'cover',
 }: {
+  fit?: 'cover' | 'contain'
+  /** Scroll-scrubbed: never plays on its own; the parent sets currentTime from scroll progress (see FourMoments). */
+  scrub?: boolean
   src: string
   poster?: string
   className?: string
@@ -50,7 +55,7 @@ export function LoopVideo({
     }
   }, [])
 
-  const shouldPlay = !broken && near && (reduced ? manualPlay && visible : !userPaused && (playing ?? visible))
+  const shouldPlay = !scrub && !broken && near && (reduced ? manualPlay && visible : !userPaused && (playing ?? visible))
 
   useEffect(() => {
     const v = ref.current
@@ -69,10 +74,11 @@ export function LoopVideo({
           muted
           loop
           playsInline
-          preload="none"
+          preload={scrub ? 'auto' : 'none'}
+          data-scrub={scrub ? '' : undefined}
           poster={poster}
           onError={() => setBroken(true)}
-          className="h-full w-full object-cover"
+          className={fit === 'contain' ? 'h-full w-full object-contain' : 'h-full w-full object-cover'}
           src={near ? src : undefined}
         />
       )}

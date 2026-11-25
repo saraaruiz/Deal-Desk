@@ -58,3 +58,17 @@ Smart Animate notes for Figma: keep layer names identical between frames for row
 | 39 | 3 Four moments | Scroll (desktop pin) | The phone plays the real screen recording of the active moment (Draft, Review, Ask, Send); the others pause. Cross-fade as in row 16 | Clips of 8 to 14 s, looped | Static exported screens | n/a |
 | 40 | 3 Four moments | Mobile swipe | Each phone plays its clip while it is on screen | Same clips | Static screens | n/a |
 | 41 | 7 Invitation | Visible | The final phone plays the clean path (message to Pat, Ready, Send, Sent) | 8 s loop | Static G11 screen | n/a |
+## Revision 2 (less noise, more cinema)
+
+Removed: rows 28 (custom cursor) and 31 (states marquee); row 36 orbs now only on dark sections and very slow; the Limits white curtain (rows 22 and 23) is replaced by row 42.
+Cards (rows 32 to 33) are now near-solid dark surfaces with a hairline rim: same tilt (max 3 deg) and faint cursor sheen, no backdrop blur.
+
+| # | Section | Trigger | What moves | Duration / easing | Reduced motion / touch | Parallax |
+|---|---|---|---|---|---|---|
+| 42 | 6 Limits | Scroll | A hairline of light draws across the top edge (scaleX 0 to 1 from the centre) | Scrubbed, none | Fully drawn | n/a |
+| 43 | Hero | Scroll | Giant "DealDesk" wordmark glides sideways (x 8vw to -22vw) | Scrubbed, none | None | Slowest layer |
+| 44 | Hero | Scroll | Phone rises faster (y -170, scale 1 to 1.05, rotateX 7 deg); panel behind it -50 px; chips -110 / -60 px | Scrubbed 0.8, none | None | Three depth layers |
+| 45 | 3 Four moments | Scroll (desktop pin, +400%) | Each phone clip is SCRUBBED by scroll: clip i time = progress inside step i x duration. Earlier clips rest on their last frame, later ones on their first | Scrubbed 0.5, none | Clips play on their own (swipe row) | n/a |
+| 46 | 5 Inside | Scroll | Big phone (plays the Review recording) drifts y 40 to -50 against the page | Scrubbed 0.8, none | None | Phone vs card |
+| 47 | 4 Fits | Enter view | Vertical connector between the roles draws down (scaleY 0 to 1) | 1.4 s expo.out | Final state | n/a |
+| 48 | 7 Invitation | Always (desktop) | Soft conic halo behind the phone turns slowly | 40 s linear | None | n/a |

@@ -47,11 +47,11 @@ export function Hero() {
           const r = el.getBoundingClientRect()
           const nx = (e.clientX - r.left) / r.width - 0.5
           const ny = (e.clientY - r.top) / Math.min(r.height, 900) - 0.5
-          ry(nx * 16)
-          rx(-ny * 10)
+          ry(nx * 9)
+          rx(-ny * 6)
           pars.forEach((p) => {
-            p.x(-nx * 44 * p.dir * -1)
-            p.y(-ny * 30)
+            p.x(nx * 26 * p.dir)
+            p.y(-ny * 16)
           })
         }
         el.addEventListener('pointermove', onMove)
@@ -67,17 +67,18 @@ export function Hero() {
          * MOTION · scroll (hero leaving) · phone: slow Z parallax (translateY 0 -> -90px) + subtle tilt
          *   (rotateX 0 -> 6deg max) · scrubbed (ease none, scrub 0.6) · desktop only · reduced-motion: none.
          */
-        gsap.to(phone.current, {
-          y: -90,
-          rotateX: 6,
-          ease: 'none',
-          scrollTrigger: { trigger: el, start: 'top top', end: 'bottom top', scrub: 0.6 },
-        })
-        gsap.to('[data-ghost]', {
-          y: 120,
-          ease: 'none',
-          scrollTrigger: { trigger: el, start: 'top top', end: 'bottom top', scrub: true },
-        })
+        /*
+         * MOTION · scroll (hero leaving) · LAYERED PARALLAX: phone rises faster (y 0 -> -170px, scale 1 -> 1.05, rotateX 0 -> 7deg),
+         *   the container panel behind it slower (y 0 -> -50px), the two chips at their own speeds (y -> -110 / -60) ·
+         *   scrubbed (ease none, scrub 0.8) · desktop only · reduced-motion: none.
+         * MOTION · scroll · the giant "DealDesk" wordmark glides sideways (x 8vw -> -22vw) instead of falling ·
+         *   scrubbed (ease none) · desktop only · reduced-motion: none.
+         */
+        const scrub = { trigger: el, start: 'top top', end: 'bottom top' }
+        gsap.to(phone.current, { y: -170, scale: 1.05, rotateX: 7, ease: 'none', scrollTrigger: { ...scrub, scrub: 0.8 } })
+        gsap.to('[data-panel]', { y: -50, ease: 'none', scrollTrigger: { ...scrub, scrub: 0.8 } })
+        gsap.to('[data-chip]', { y: (i) => (i ? -60 : -110), ease: 'none', scrollTrigger: { ...scrub, scrub: 0.8 } })
+        gsap.fromTo('[data-ghost]', { x: '8vw' }, { x: '-22vw', ease: 'none', scrollTrigger: { ...scrub, scrub: true } })
       }
     }, el)
     return () => {
@@ -95,7 +96,7 @@ export function Hero() {
       <p
         data-ghost
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[360px] hidden -translate-x-1/2 select-none whitespace-nowrap text-[clamp(160px,27.7vw,400px)] font-extrabold leading-none tracking-[-0.04em] text-white/[0.04] lg:block"
+        className="pointer-events-none absolute left-[-4vw] top-[360px] hidden select-none whitespace-nowrap text-[clamp(160px,27.7vw,400px)] font-extrabold leading-none tracking-[-0.04em] text-white/[0.045] lg:block"
       >
         DealDesk
       </p>
@@ -164,7 +165,7 @@ export function Hero() {
       <div className="relative z-10 mx-auto mt-12 max-w-[1440px] px-6 pb-16 lg:pb-0">
         <div
           aria-hidden
-          className="absolute inset-x-6 top-[22%] hidden h-[640px] rounded-[56px] border border-white/[0.14] bg-gradient-to-b from-[rgba(29,36,104,0.85)] to-bg lg:inset-x-[100px] lg:block"
+          data-panel className="absolute inset-x-6 top-[22%] hidden h-[640px] rounded-[56px] border border-white/[0.14] bg-gradient-to-b from-[rgba(29,36,104,0.85)] to-bg lg:inset-x-[100px] lg:block"
         />
         <div style={{ perspective: 1400 }} className="relative mx-auto w-[min(426px,72vw)]">
           <div ref={phone} data-phone className="will-change-transform [transform-style:preserve-3d]">

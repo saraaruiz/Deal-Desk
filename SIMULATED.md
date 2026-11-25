@@ -11,3 +11,4 @@ DealDesk is a fictional product (Project Harbor), shown as a prototype. The page
 - **Chips.** The hero chip that read "APPROVED" in Figma is rendered "CHECKED", to respect the no-Approved rule.
 
 - **Videos.** The six screen recordings are of the Figma prototype running on a phone (fictional data, nothing is sent). They are sped up (1.2x to 2.4x) and trimmed for the web; audio is removed. The Motion reel is a promo animation made for the project; its audio track was removed for the web version.
+- **Avatars (v2).** Illustrated, Memoji-style faces drawn as vector in code (src/lib/avatars.tsx) for Jordan, Pat, Alex, Dana and Sam. They are fictional characters, not photos of real people.

@@ -15,7 +15,10 @@ export function PhoneFrame({
   stack,
   video,
   activeIndex,
+  scrub,
 }: {
+  /** Clips are scrubbed by scroll from outside instead of playing */
+  scrub?: boolean
   src?: string
   alt?: string
   className?: string
@@ -88,6 +91,7 @@ export function PhoneFrame({
                 src={s.video}
                 poster={s.src}
                 label={`Screen recording: ${s.alt}`}
+                scrub={scrub}
                 playing={activeIndex === undefined ? undefined : activeIndex === i}
               />
             )}
