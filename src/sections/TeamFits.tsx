@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { fits } from '@/content/copy'
 import { OrbitingTeamCarousel, type TeamPerson } from '@/components/ui/orbiting-team-carousel'
 import { Words } from '@/components/Words'
-import { gsap, prefersReducedMotion } from '@/lib/motion'
+import { gsap, isDesktopMotion, prefersReducedMotion } from '@/lib/motion'
 
 // The fictional deal team, from the prototype (Harbor · Deal team). Alternating so the ring reads as a mix.
 const team: TeamPerson[] = [
@@ -28,6 +28,14 @@ export function TeamFits() {
       /*
        * MOTION · scroll into view · line and orbit rise (y 36 -> 0, fade) · 0.9s expo.out, stagger 0.1 · plays once · reduced-motion: none.
        */
+      /*
+       * MOTION · scroll · the title block (headline + line) comes out of BLUR and drifts up at its own pace: it enters from y 90 / blur 12px / opacity .25
+       *   and sharpens to y -40 / blur 0 as the section reaches the middle of the screen, then keeps drifting up slower (y -40 -> -90) while the
+       *   orbit scrolls past at normal speed (parallax) · scrubbed 0.6, ease none · blur on desktop only (phones: no blur) · reduced-motion: none.
+       */
+      const blur = isDesktopMotion()
+      gsap.fromTo('[data-fits-copy]', { y: 90, opacity: 0.25, ...(blur ? { filter: 'blur(12px)' } : {}) }, { y: -40, opacity: 1, ...(blur ? { filter: 'blur(0px)' } : {}), ease: 'none', scrollTrigger: { trigger: root.current, start: 'top 95%', end: 'center 45%', scrub: 0.6 } })
+      gsap.fromTo('[data-fits-copy]', { y: -40 }, { y: -90, ease: 'none', immediateRender: false, scrollTrigger: { trigger: root.current, start: 'center 45%', end: 'bottom top', scrub: true } })
       gsap.from('[data-rise]', { y: 36, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.1, scrollTrigger: { trigger: root.current, start: 'top 70%', once: true } })
     }, root.current!)
     return () => ctx.revert()
@@ -35,11 +43,12 @@ export function TeamFits() {
 
   return (
     <section ref={root} id="fits" aria-labelledby="fits-title" className="relative overflow-hidden bg-bg py-24 lg:py-[120px]">
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_55%_at_15%_20%,rgba(58,107,224,0.28),transparent_70%),radial-gradient(60%_60%_at_90%_85%,rgba(139,92,246,0.3),transparent_70%)]" />
       <div aria-hidden className="pointer-events-none absolute left-[70%] top-1/2 size-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-glow-2/20 blur-[140px] max-md:hidden" />
       <div className="relative mx-auto grid max-w-[1440px] items-center gap-14 px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-20 lg:px-[120px]">
-        <div>
+        <div data-fits-copy className="will-change-transform">
           <h2 id="fits-title" className="text-[clamp(40px,5vw,76px)] font-extrabold leading-[1] tracking-[-0.03em]">
-            <Words lines={fits.title} gradientLines={[1]} />
+            <Words lines={fits.title} gradientLast />
           </h2>
           <p data-rise className="h-lede mt-6 max-w-[520px] text-muted">
             {fits.line}

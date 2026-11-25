@@ -225,3 +225,65 @@
 @media (max-width: 767px), (pointer: coarse) {
   .glass-real { -webkit-backdrop-filter: blur(14px) saturate(150%); backdrop-filter: blur(14px) saturate(150%); }
 }
+
+/* Hero entrances without JS: rises with a transform only (no opacity), `backwards` so it never overrides later inline transforms (magnetic button) */
+@keyframes rise-in { from { transform: translateY(16px); } }
+.rise-in { animation: rise-in 0.8s var(--ease) var(--d, 0s) backwards; }
+@media (prefers-reduced-motion: reduce) { .rise-in { animation: none; } }
+
+/*
+ * Glass v3: LIQUID, GREY, MINIMAL. Neutral white tint only (no lavender), backdrop saturation kept close to 1 so it never amplifies the
+ * colours behind it, a soft curved highlight at the top-left, a bright hairline top edge, white-only rim and specular.
+ * Overrides the earlier .glass-real rules (same selectors, declared later).
+ */
+.glass-real {
+  background:
+    radial-gradient(120% 90% at 8% 0%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.025) 52%, rgba(255, 255, 255, 0.055) 100%);
+  -webkit-backdrop-filter: blur(30px) saturate(112%) brightness(1.05);
+  backdrop-filter: blur(30px) saturate(112%) brightness(1.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 30px 60px -32px rgba(0, 0, 0, 0.75);
+}
+.glass-real::before {
+  background:
+    radial-gradient(220px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.75), transparent 62%),
+    linear-gradient(140deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.04) 38%, rgba(255, 255, 255, 0.02) 62%, rgba(255, 255, 255, 0.16));
+}
+.glass-real::after {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 30%),
+    radial-gradient(340px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.12), transparent 70%);
+}
+.glass-real:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.11),
+    0 38px 66px -32px rgba(0, 0, 0, 0.8);
+}
+
+/* Glass v4: liquid glass with a SUBTLE blue/purple tint and a blue->purple rim (v3 read too grey). */
+.glass-real {
+  background:
+    radial-gradient(120% 90% at 8% 0%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 52%),
+    radial-gradient(90% 80% at 100% 100%, rgba(139, 92, 246, 0.22) 0%, rgba(139, 92, 246, 0) 70%),
+    linear-gradient(160deg, rgba(96, 140, 255, 0.16) 0%, rgba(120, 90, 240, 0.08) 55%, rgba(140, 100, 255, 0.14) 100%);
+  -webkit-backdrop-filter: blur(30px) saturate(135%) brightness(1.04);
+  backdrop-filter: blur(30px) saturate(135%) brightness(1.04);
+}
+.glass-real::before {
+  background:
+    radial-gradient(220px circle at var(--mx) var(--my), rgba(190, 200, 255, 0.8), transparent 62%),
+    linear-gradient(140deg, rgba(150, 190, 255, 0.65), rgba(255, 255, 255, 0.05) 36%, rgba(168, 120, 255, 0.08) 62%, rgba(168, 120, 255, 0.55));
+}
+.glass-tint-face {
+  background:
+    radial-gradient(120% 90% at 8% 0%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 52%),
+    radial-gradient(90% 80% at 100% 100%, rgba(139, 92, 246, 0.24) 0%, rgba(139, 92, 246, 0) 70%),
+    linear-gradient(160deg, rgba(96, 140, 255, 0.2) 0%, rgba(120, 90, 240, 0.1) 60%, rgba(140, 100, 255, 0.16) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(200, 215, 255, 0.5), inset 0 0 0 1px rgba(150, 140, 255, 0.28) !important;
+}

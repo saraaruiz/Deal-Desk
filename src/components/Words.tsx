@@ -10,7 +10,8 @@ import { cn } from '@/lib/utils'
  *   desktop) · 1s expo.out, stagger 0.045 · plays once · reduced-motion: none (text is already in its final state).
  * Each heading owns its reveal, so it also works for sections that mount late (see App.tsx).
  */
-export function Words({ lines, className, gradientLines }: { lines: string[]; className?: string; gradientLines?: number[] }) {
+/** gradientLast: the gradient is used only on the LAST word of the heading (e.g. just utton.), everything else stays white. */
+export function Words({ lines, className, gradientLast }: { lines: string[]; className?: string; gradientLast?: boolean }) {
   const ref = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
@@ -36,8 +37,8 @@ export function Words({ lines, className, gradientLines }: { lines: string[]; cl
         <span key={line} className="block">
           {line.split(' ').map((w, i, a) => (
             <span key={i}>
-              <span className="inline-block overflow-hidden pb-[0.12em] align-top">
-                <span data-w className={cn('inline-block will-change-transform', gradientLines?.includes(li) && 'grad-text')}>
+              <span className="-mx-[0.06em] -mb-[0.12em] -mt-[0.06em] inline-block overflow-hidden px-[0.06em] pb-[0.24em] pt-[0.06em] align-top">
+                <span data-w className={cn('inline-block will-change-transform', gradientLast && li === lines.length - 1 && i === a.length - 1 && 'grad-text')}>
                   {w}
                 </span>
               </span>

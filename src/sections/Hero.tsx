@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { hero, nav } from '@/content/copy'
-import { Chip, Logo, MagneticLink, MaskLines, btnGhost, btnPrimary } from '@/components/bits'
+import { Logo, MagneticLink, MaskLines, btnGhost, btnPrimary } from '@/components/bits'
 import { PhoneFrame } from '@/components/PhoneFrame'
 import { ShaderBackground } from '@/components/ShaderBackground'
 import { gsap, ScrollTrigger, isDesktopMotion, prefersReducedMotion } from '@/lib/motion'
@@ -10,84 +10,50 @@ export function Hero() {
   const root = useRef<HTMLElement>(null)
   const phone = useRef<HTMLDivElement>(null)
   const [menu, setMenu] = useState(false) // mobile menu (Figma M0 has a Menu button)
-  // 0 = typing, 1 = Ready, 2 = Sent. Follows the real screen recording playing in the phone (reduced motion: shows the final state).
-  const [chat, setChat] = useState(() => (typeof window !== 'undefined' && prefersReducedMotion() ? 1 : 0))
 
   useEffect(() => {
-    if (prefersReducedMotion()) return
-    /*
-     * MOTION · the chips follow the chat: while the recording plays (typing 0-0.9 s, Ready 0.9-1.75 s, Sent after), the left chip goes
-     *   DRAFTING -> CHECKED and the right chip appears as READY, then SENT (pop-in 0.5s) · loops with the clip · reduced motion: static.
-     */
-    const id = window.setInterval(() => {
-      const v = root.current?.querySelector<HTMLVideoElement>('[data-phone] video')
-      if (!v || v.paused) return
-      const next = v.currentTime < 0.9 ? 0 : v.currentTime < 1.75 ? 1 : 2
-      setChat((p) => (p === next ? p : next))
-    }, 120)
-    return () => window.clearInterval(id)
-  }, [])
+    document.body.style.overflow = menu ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [menu])
 
   useEffect(() => {
     const el = root.current!
     if (prefersReducedMotion()) return // static: everything is already in its final state
     const ctx = gsap.context(() => {
       /*
-       * MOTION · page load · LOAD SEQUENCE (~2.2s): shader canvas fades in (1.2s, CSS), H1 lines rise from a mask
-       *   (y 105% -> 0, 0.9s, stagger 0.12), sub + buttons rise (y 18 -> 0, 0.6s; NO opacity fade, so the text paints on the first frame), then the iPhone
-       *   rises (y 140 -> 0, scale .96 -> 1, 1.2s, also no fade) · all expo.out ≈ cubic-bezier(.22,1,.36,1) ·
-       *   reduced-motion: skipped, content is shown in its final state.
+       * MOTION · page load · the H1 lines rise out of a mask (yPercent 105 -> 0, 0.9s, stagger 0.12) and the iPhone rises
+       *   (y 140 -> 0, scale .96 -> 1, 1.2s) · expo.out ≈ cubic-bezier(.22,1,.36,1) · no opacity fades (text and phone paint on the first frame) ·
+       *   the sub-line, buttons and micro-line rise with a CSS animation (.rise-in, 0.7s, staggered) · reduced-motion: final state.
        */
       const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
-      tl.from('[data-line]', { yPercent: 105, duration: 0.9, stagger: 0.12 }, 0.05)
-        .from('[data-sub]', { y: 18, duration: 0.6 }, 0.3)
-        .from('[data-cta]', { y: 18, duration: 0.6, stagger: 0.08 }, 0.4)
-        
-        .from('[data-phone-in]', { y: 140, scale: 0.96, duration: 1.2 }, 0.5)
-        .from('[data-chip]', { opacity: 0, x: (i) => (i ? 24 : -24), duration: 0.8, stagger: 0.12 }, 1.5)
+      tl.from('[data-line]', { yPercent: 105, duration: 0.9, stagger: 0.12 }, 0.05).from('[data-phone-in]', { y: 140, scale: 0.96, duration: 1.2 }, 0.5)
 
       if (isDesktopMotion()) {
         /*
-         * MOTION · pointer move over the hero (desktop) · the phone turns toward the cursor (rotationY ±8°, rotationX ±5°) and the
-         *   two chips drift the opposite way (x/y up to ±22px) for depth · 0.9s power3.out via quickTo · reduced-motion / touch: none.
+         * MOTION · pointer move over the hero (desktop) · the (static) phone turns a little toward the cursor
+         *   (rotationY ±4.5°, rotationX ±3°) · 0.9s power3.out via quickTo · reduced-motion / touch: none.
          */
         const tiltEl = el.querySelector<HTMLElement>('[data-phone-tilt]')!
         gsap.set(tiltEl, { transformPerspective: 1200 })
         const ry = gsap.quickTo(tiltEl, 'rotationY', { duration: 0.9, ease: 'power3.out' })
         const rx = gsap.quickTo(tiltEl, 'rotationX', { duration: 0.9, ease: 'power3.out' })
-        const pars = gsap.utils.toArray<HTMLElement>('[data-par]', el).map((p) => ({
-          dir: Number(p.dataset.par),
-          x: gsap.quickTo(p, 'x', { duration: 0.9, ease: 'power3.out' }),
-          y: gsap.quickTo(p, 'y', { duration: 0.9, ease: 'power3.out' }),
-        }))
         const onMove = (e: PointerEvent) => {
           const r = el.getBoundingClientRect()
           const nx = (e.clientX - r.left) / r.width - 0.5
           const ny = (e.clientY - r.top) / Math.min(r.height, 900) - 0.5
           ry(nx * 9)
           rx(-ny * 6)
-          pars.forEach((p) => {
-            p.x(nx * 26 * p.dir)
-            p.y(-ny * 16)
-          })
         }
         el.addEventListener('pointermove', onMove)
         el.addEventListener('pointerleave', () => {
           ry(0)
           rx(0)
-          pars.forEach((p) => {
-            p.x(0)
-            p.y(0)
-          })
         })
         /*
-         * MOTION · scroll (hero leaving) · phone: slow Z parallax (translateY 0 -> -90px) + subtle tilt
-         *   (rotateX 0 -> 6deg max) · scrubbed (ease none, scrub 0.6) · desktop only · reduced-motion: none.
-         */
-        /*
          * MOTION · scroll (hero leaving) · LAYERED PARALLAX: phone rises faster (y 0 -> -170px, scale 1 -> 1.05, rotateX 0 -> 7deg),
-         *   the container panel behind it slower (y 0 -> -50px), the two chips at their own speeds (y -> -110 / -60) ·
-         *   scrubbed (ease none, scrub 0.8) · desktop only · reduced-motion: none.
+         *   the container panel behind it slower (y 0 -> -50px) · scrubbed (ease none, scrub 0.8) · desktop only · reduced-motion: none.
          * MOTION · scroll · the giant "DealDesk" wordmark glides sideways (x 8vw -> -22vw) instead of falling ·
          *   scrubbed (ease none) · desktop only · reduced-motion: none.
          */
@@ -139,14 +105,19 @@ export function Hero() {
           aria-controls="mobile-menu"
           aria-label={menu ? 'Close menu' : 'Open menu'}
           onClick={() => setMenu((m) => !m)}
-          className="inline-flex size-11 items-center justify-center rounded-full border border-white/20 bg-white/[0.07] text-text backdrop-blur sm:hidden"
+          className={`relative z-40 inline-flex size-11 items-center justify-center rounded-full border backdrop-blur sm:hidden ${menu ? 'border-black/15 bg-white/70 text-[#0b0d1a]' : 'border-white/20 bg-white/[0.07] text-text'}`}
         >
           {menu ? <X size={20} /> : <Menu size={20} />}
         </button>
         {menu && (
-          <nav id="mobile-menu" aria-label="Mobile" className="absolute inset-x-6 top-[80px] z-30 rounded-3xl border border-white/15 bg-card/95 p-3 backdrop-blur sm:hidden">
+          <nav
+            id="mobile-menu"
+            aria-label="Mobile"
+            className="fixed inset-0 z-30 flex flex-col justify-center gap-1 px-8 pb-10 pt-24 backdrop-blur-[40px] backdrop-saturate-150 sm:hidden"
+            style={{ background: 'radial-gradient(90% 60% at 0% 0%, rgba(105,140,255,0.55), transparent 70%), radial-gradient(90% 60% at 100% 100%, rgba(150,100,255,0.5), transparent 70%), rgba(238,240,252,0.94)' }}
+          >
             {[...nav.links, { label: nav.cta, href: '#prototype' }].map((l) => (
-              <a key={l.label} href={l.href} onClick={() => setMenu(false)} className="flex min-h-[48px] items-center rounded-2xl px-4 text-[16px] font-medium text-text hover:bg-white/10">
+              <a key={l.label} href={l.href} onClick={() => setMenu(false)} className="flex min-h-[56px] items-center rounded-2xl px-4 text-[26px] font-semibold tracking-[-0.01em] text-[#0b0d1a] transition-colors hover:bg-white/60 active:bg-white/70">
                 {l.label}
               </a>
             ))}
@@ -161,27 +132,29 @@ export function Hero() {
         >
           <MaskLines lines={hero.h1} />
         </h1>
-        <p data-sub className="mx-auto mt-6 max-w-[780px] text-[clamp(17px,1.5vw,22px)] text-muted lg:mt-[34px]">
+        <p className="rise-in mx-auto mt-6 max-w-[780px] text-[clamp(17px,1.5vw,22px)] text-muted lg:mt-[34px]" style={{ ['--d' as string]: '0.25s' }}>
           {hero.sub}
         </p>
+        {/* Both buttons: same height, same width, same line (no per-button animation that could leave one offset) */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:mt-[33px]">
-          <MagneticLink data-cta href="#prototype" className={btnPrimary}>
+          <MagneticLink href="#prototype" className={btnPrimary}>
             {hero.primary}
           </MagneticLink>
-          <a data-cta href="#moments" className={btnGhost}>
+          <a href="#moments" className={btnGhost}>
             {hero.ghost}
           </a>
         </div>
-        <p data-micro className="mt-5 text-[14px] text-muted/80">
+        <p className="rise-in mt-5 text-[14px] text-muted/80" style={{ ['--d' as string]: '0.45s' }}>
           {hero.micro}
         </p>
       </div>
 
-      {/* Phone breaks out of the container. The floating chips live INSIDE the phone group, so they rise, scale and tilt with it. */}
+      {/* Phone breaks out of the container (a still image of the prototype's "Ready" screen) */}
       <div className="relative z-10 mx-auto mt-12 max-w-[1440px] px-6 pb-16 lg:pb-0">
         <div
           aria-hidden
-          data-panel className="absolute inset-x-6 top-[22%] hidden h-[640px] rounded-[56px] border border-white/[0.14] bg-gradient-to-b from-[rgba(29,36,104,0.85)] to-bg lg:inset-x-[100px] lg:block"
+          data-panel
+          className="absolute inset-x-6 top-[22%] hidden h-[640px] rounded-[56px] border border-white/[0.14] bg-gradient-to-b from-[rgba(29,36,104,0.85)] to-bg lg:inset-x-[100px] lg:block"
         />
         <div style={{ perspective: 1400 }} className="relative mx-auto w-[min(426px,72vw)]">
           <div ref={phone} data-phone className="relative will-change-transform [transform-style:preserve-3d]">
@@ -190,35 +163,8 @@ export function Hero() {
                 <PhoneFrame
                   eager
                   src="/assets/screens/G11.webp"
-                  video="/assets/video/hero-chat.mp4"
-                  videoAfterLoad
-                  alt="Project Harbor chat with Pat Morgan. A message is typed, checked and shown as Ready, then sent. The message says: Hi @Pat Morgan quick question on Harbor. Can you confirm the fee question?"
+                  alt="Project Harbor chat with Pat Morgan. The message says: Hi @Pat Morgan quick question on Harbor. Can you confirm the fee question? Status: Ready · Nothing leaves until you tap Send."
                 />
-              </div>
-            </div>
-
-            {/* chips (decorative, desktop): they change with the chat (see the effect above) */}
-            <div data-chip className="absolute -left-[182px] top-[53%] hidden lg:block" aria-hidden>
-              <div data-par="-1" className="flex items-center">
-                <div className="float-y flex items-center">
-                  <Chip key={chat > 0 ? 'checked' : 'drafting'} className="pop-in">
-                    {chat > 0 ? '✓ CHECKED' : '✎ DRAFTING'}
-                  </Chip>
-                  <span className="h-[1.5px] w-[110px] bg-gradient-to-r from-softblue/70 to-transparent" />
-                </div>
-              </div>
-            </div>
-            <div data-chip className="absolute -right-[122px] top-[64%] hidden lg:block" aria-hidden>
-              <div data-par="1" className="flex items-center">
-                <div className="float-y flex items-center [animation-delay:-3s]">
-                  <span className="h-[1.5px] w-[150px] -translate-x-[78px] bg-gradient-to-l from-softblue/70 to-transparent" />
-                  <Chip
-                    key={chat}
-                    className={'-translate-x-[78px] transition-opacity duration-500 ' + (chat === 0 ? 'opacity-0' : 'pop-in')}
-                  >
-                    {chat === 2 ? '↗ SENT' : '✓ READY'}
-                  </Chip>
-                </div>
               </div>
             </div>
           </div>

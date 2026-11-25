@@ -163,8 +163,8 @@ export function FourMoments() {
           <div className="relative z-10">
             <p className="text-[12px] font-semibold tracking-[0.18em] text-lavender-soft">HOW IT WORKS</p>
             <h2 id="moments-title" className="mt-2 text-[clamp(36px,4.8vw,76px)] font-extrabold leading-[1] tracking-[-0.03em] text-text">
-              {moments.title[0]}{' '}
-              <span className="bg-gradient-to-r from-[#F2F4F8] via-[#B7ACFF] to-[#7FB4FF] bg-clip-text text-transparent">{moments.title[1]}</span>
+              {moments.title[0]} {moments.title[1].split(' ')[0]}{' '}
+              <span className="bg-gradient-to-r from-[#F2F4F8] via-[#B7ACFF] to-[#7FB4FF] bg-clip-text text-transparent">{moments.title[1].split(' ')[1]}</span>
             </h2>
           </div>
 
@@ -182,7 +182,7 @@ export function FourMoments() {
               </span>
             ))}
             {moments.steps.map((s) => (
-              <div key={s.step} data-phone className="absolute left-1/2 top-1/2 w-[clamp(150px,min(40vw,25vh),280px)] will-change-transform">
+              <div key={s.step} data-phone className="absolute left-1/2 top-1/2 w-[clamp(160px,min(46vw,31vh),350px)] will-change-transform">
                 <div data-tilt className="relative" style={{ filter: 'drop-shadow(0 36px 50px rgba(8,12,60,.65))' }}>
                   <PhoneFrame src={screen(s)} alt={s.alt} video={clip(s)} scrub />
                   {/* light that follows the cursor across the glass (mouse only) */}
@@ -199,15 +199,15 @@ export function FourMoments() {
 
           {/* who acts + the sentence for the centred step. The role chip is a frosted, iOS-style pill: it sits over the giant word,
               so the glass has something to refract. */}
-          <div className="relative h-[110px] sm:h-[92px]" aria-live="polite">
+          <div className="relative h-[84px] sm:h-[66px]" aria-live="polite">
             {moments.steps.map((s, i) => (
               <div key={s.step} data-step-line className="absolute left-1/2 top-0 flex w-max max-w-[90vw] flex-col items-center gap-2.5 will-change-transform">
                 <span className="flex items-center gap-2.5 rounded-full bg-white/[0.07] py-1.5 pl-1.5 pr-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] ring-1 ring-white/12 backdrop-blur-xl">
-                  <RoleVisual name={fits.roles[i].name} size={30} />
-                  <span className="text-[12px] font-semibold uppercase tracking-[0.1em] text-lavender-soft">{fits.roles[i].name}</span>
+                  <RoleVisual name={fits.roles[i].name} size={26} />
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-lavender-soft">{fits.roles[i].name}</span>
                   {fits.roles[i].note && <span className="hidden text-[12px] text-muted/80 sm:inline">· {fits.roles[i].note}</span>}
                 </span>
-                <p className="text-center text-[clamp(18px,2.2vw,30px)] font-semibold leading-[1.2] tracking-[-0.01em] text-text sm:whitespace-nowrap">{s.line}</p>
+                <p className="text-center text-[clamp(15px,1.45vw,20px)] font-semibold leading-[1.25] tracking-[-0.005em] text-text/90 sm:whitespace-nowrap">{s.line}</p>
               </div>
             ))}
           </div>

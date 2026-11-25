@@ -34,20 +34,20 @@ export function Limits() {
   return (
     <section ref={root} id="limits" aria-labelledby="limits-title" className="relative isolate overflow-hidden bg-bg-deep py-24 lg:py-[130px]">
       {/* deep indigo wash instead of a white block: same dark world as the rest */}
-      <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(70%_60%_at_50%_0%,rgba(37,41,122,0.45),transparent_70%)]" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(70%_60%_at_50%_0%,rgba(105,65,225,0.28),transparent_70%)]" />
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <span data-orb className="absolute left-[6%] top-[38%] size-[240px] rounded-full bg-[#6941E1]/55 blur-[70px] md:size-[420px] md:blur-[110px]" />
-        <span data-orb className="absolute right-[5%] top-[52%] size-[260px] rounded-full bg-[#3A3FC0]/55 blur-[70px] md:size-[460px] md:blur-[120px]" />
-        <span data-orb className="absolute bottom-[4%] left-[40%] size-[200px] rounded-full bg-[#B04BD8]/35 blur-[70px] md:size-[340px] md:blur-[110px]" />
+        <span data-orb className="absolute left-[6%] top-[38%] size-[240px] rounded-full bg-[#6941E1]/[0.34] blur-[70px] md:size-[420px] md:blur-[110px]" />
+        <span data-orb className="absolute right-[5%] top-[52%] size-[260px] rounded-full bg-[#3A6BE0]/[0.36] blur-[70px] md:size-[460px] md:blur-[120px]" />
+        <span data-orb className="absolute bottom-[4%] left-[40%] size-[200px] rounded-full bg-[#8B5CF6]/[0.28] blur-[70px] md:size-[340px] md:blur-[110px]" />
       </div>
-      <span data-light-line aria-hidden className="absolute inset-x-[10%] top-0 h-px origin-center bg-gradient-to-r from-transparent via-lavender-soft/70 to-transparent" />
+      <span data-light-line aria-hidden className="absolute inset-x-[10%] top-0 h-px origin-center bg-gradient-to-r from-transparent via-[#a78bfa]/80 to-transparent" />
 
       <div className="relative mx-auto max-w-[1440px] px-6 lg:px-[120px]">
-        <p data-head className="text-center text-[14px] font-semibold tracking-[0.12em] text-lavender-soft">
+        <p data-head className="text-center text-[14px] font-semibold tracking-[0.12em] text-white/65">
           {limits.marker.toUpperCase()}
         </p>
         <h2 id="limits-title" className="h-display mt-5 text-center text-text">
-          <Words lines={limits.title} gradientLines={[1]} />
+          <Words lines={limits.title} gradientLast />
         </h2>
         <p data-head className="h-lede mt-6 text-center text-muted">
           {limits.line}
@@ -60,7 +60,7 @@ export function Limits() {
             return (
               <GlassCard key={it.t} as="li" variant="real" tilt={featured ? 2 : 3} data-limit className={cn('group relative overflow-hidden p-8', featured ? 'lg:col-span-3 lg:p-12' : 'lg:min-h-[270px]')}>
                 {/* accent hairline and a big faint index number */}
-                <span aria-hidden className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-lavender/55 to-transparent" />
+                <span aria-hidden className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#9bb8ff]/70 to-transparent" />
                 <span aria-hidden className="pointer-events-none absolute right-6 top-3 select-none text-[clamp(64px,8vw,128px)] font-extrabold leading-none tracking-[-0.04em] text-white/[0.045]">
                   {String(i + 1).padStart(2, '0')}
                 </span>
@@ -68,7 +68,7 @@ export function Limits() {
                   <span
                     aria-hidden
                     className={cn(
-                      'inline-flex flex-none items-center justify-center rounded-full bg-lavender/12 text-lavender-soft ring-1 ring-lavender/30 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-rotate-6 group-hover:scale-105',
+                      'inline-flex flex-none items-center justify-center rounded-full bg-white/[0.07] text-white/85 ring-1 ring-white/15 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-rotate-6 group-hover:scale-105',
                       featured ? 'size-16 lg:size-20' : 'size-12',
                     )}
                   >
