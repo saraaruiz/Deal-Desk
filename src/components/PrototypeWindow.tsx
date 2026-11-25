@@ -7,9 +7,10 @@ import { ExternalLink, Maximize2, Minimize2, Minus, X } from 'lucide-react'
  * MOTION · open / restore · panel fades in (opacity 0 -> 1, scale .98 -> 1) · 220ms cubic-bezier(.22,1,.36,1) · reduced-motion: none.
  */
 const PATH =
-  'proto/jgldLsdlZKwrYC2xhzIm7k/DealDesk---Futureproofing?node-id=173-2546&starting-point-node-id=173%3A2529&scaling=scale-down&content-scaling=fixed'
-const EMBED = `https://embed.figma.com/${PATH}&embed-host=dealdesk`
-const OPEN = `https://www.figma.com/${PATH}`
+  'proto/jgldLsdlZKwrYC2xhzIm7k/DealDesk---Futureproofing?node-id=173-2546&starting-point-node-id=173%3A2529'
+// scaling=contain fits the whole phone frame inside the window (no inner scrolling); on small screens Figma's own bars are hidden too
+const embedUrl = (small: boolean) => `https://embed.figma.com/${PATH}&scaling=contain&embed-host=dealdesk${small ? '&footer=false&hide-ui=1' : ''}`
+const OPEN = `https://www.figma.com/${PATH}&scaling=scale-down&content-scaling=fixed`
 
 type Lenis = { stop: () => void; start: () => void }
 
@@ -17,6 +18,7 @@ export function PrototypeWindow() {
   const [state, setState] = useState<'closed' | 'open' | 'min'>('closed')
   const [big, setBig] = useState(false)
   const [loaded, setLoaded] = useState(false)
+  const [src, setSrc] = useState('') // decided when the window opens, so rotating the phone does not reload the prototype
   const trigger = useRef<HTMLElement | null>(null)
   const panel = useRef<HTMLDivElement>(null)
   const restore = useRef<HTMLButtonElement>(null)
@@ -25,6 +27,7 @@ export function PrototypeWindow() {
     setState('closed')
     setLoaded(false)
     setBig(false)
+    setSrc('')
     const t = trigger.current
     window.setTimeout(() => t?.isConnected && t.focus({ preventScroll: true }), 0)
   }
@@ -37,6 +40,7 @@ export function PrototypeWindow() {
       trigger.current = a
       // sound from the films would play over the prototype
       document.querySelectorAll('video').forEach((v) => !v.muted && v.pause())
+      setSrc((current) => current || embedUrl(window.matchMedia('(max-width: 639px), (max-height: 500px)').matches))
       setState('open')
     }
     document.addEventListener('click', onClick, true)
@@ -106,9 +110,12 @@ export function PrototypeWindow() {
                 <span className="dd-spinner" aria-hidden /> Opening the prototype…
               </p>
             )}
-            <iframe title="DealDesk Figma prototype" src={EMBED} onLoad={() => setLoaded(true)} allowFullScreen className="relative size-full border-0" />
+            <iframe title="DealDesk Figma prototype" src={src} onLoad={() => setLoaded(true)} allowFullScreen className="relative size-full border-0" />
           </div>
-          <p className="px-4 py-2 text-center text-[12px] text-muted/80">Prototype · fictional data · nothing is sent</p>
+          <a href={OPEN} target="_blank" rel="noopener noreferrer" className="mx-3 mt-2 flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-lavender px-4 text-center text-[13px] font-semibold text-indigo sm:hidden">
+            For a better experience, open it in the Figma app <ExternalLink size={14} aria-hidden />
+          </a>
+          <p className="px-4 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 text-center text-[12px] text-muted/80">Prototype · fictional data · nothing is sent</p>
         </div>
       </div>
       {state === 'min' && (

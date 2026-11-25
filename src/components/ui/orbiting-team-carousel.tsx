@@ -169,7 +169,7 @@ export function OrbitingTeamCarousel({
                 type="button"
                 onClick={toggleRequest}
                 className={cn(
-                  "mt-[2.4cqw] min-h-[40px] rounded-full px-4 text-[clamp(12px,2.6cqw,14px)] font-semibold transition-colors",
+                  "cta-pulse mt-[2.4cqw] min-h-[44px] rounded-full px-4 text-[clamp(12px,2.6cqw,14px)] font-semibold transition-colors",
                   isRequested
                     ? "text-text ring-1 ring-white/25 hover:bg-white/10"
                     : "bg-lavender text-indigo hover:bg-lavender-soft",

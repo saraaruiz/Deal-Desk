@@ -337,3 +337,12 @@ a[aria-busy='true']::before { content: ''; flex: none; width: 14px; height: 14px
   .nudge-btn { box-shadow: inset 0 0 0 2px rgba(155, 140, 255, 0.8); }
   button:active:not(:disabled), a.btn-shine:active { scale: 1; }
 }
+
+/* "Ask Dana to add" / "Withdraw request": a soft ring that expands around the button so it reads as tappable.
+ * Transform/opacity only · 2s loop, 3 cycles each time the card changes · stops on hover/focus · reduced motion: static ring. */
+.cta-pulse { position: relative; transition: translate 0.2s var(--ease), scale 0.15s var(--ease), background-color 0.2s var(--ease); }
+.cta-pulse::after { content: ''; position: absolute; inset: -3px; border-radius: 9999px; border: 2px solid #9b8cff; opacity: 0; pointer-events: none; animation: dd-cta 2s ease-out 0.4s 3; }
+.cta-pulse:hover, .cta-pulse:focus-visible { translate: 0 -2px; }
+.cta-pulse:hover::after, .cta-pulse:focus-visible::after { animation: none; opacity: 1; }
+@keyframes dd-cta { from { transform: scale(1); opacity: 0.9; } to { transform: scale(1.18, 1.45); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .cta-pulse::after { animation: none; opacity: 0.6; } }
