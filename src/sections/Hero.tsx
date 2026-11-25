@@ -10,6 +10,23 @@ export function Hero() {
   const root = useRef<HTMLElement>(null)
   const phone = useRef<HTMLDivElement>(null)
   const [menu, setMenu] = useState(false) // mobile menu (Figma M0 has a Menu button)
+  // 0 = typing, 1 = Ready, 2 = Sent. Follows the real screen recording playing in the phone (reduced motion: shows the final state).
+  const [chat, setChat] = useState(() => (typeof window !== 'undefined' && prefersReducedMotion() ? 1 : 0))
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return
+    /*
+     * MOTION · the chips follow the chat: while the recording plays (typing 0-0.9 s, Ready 0.9-1.75 s, Sent after), the left chip goes
+     *   DRAFTING -> CHECKED and the right chip appears as READY, then SENT (pop-in 0.5s) · loops with the clip · reduced motion: static.
+     */
+    const id = window.setInterval(() => {
+      const v = root.current?.querySelector<HTMLVideoElement>('[data-phone] video')
+      if (!v || v.paused) return
+      const next = v.currentTime < 0.9 ? 0 : v.currentTime < 1.75 ? 1 : 2
+      setChat((p) => (p === next ? p : next))
+    }, 120)
+    return () => window.clearInterval(id)
+  }, [])
 
   useEffect(() => {
     const el = root.current!
@@ -77,7 +94,6 @@ export function Hero() {
         const scrub = { trigger: el, start: 'top top', end: 'bottom top' }
         gsap.to(phone.current, { y: -170, scale: 1.05, rotateX: 7, ease: 'none', scrollTrigger: { ...scrub, scrub: 0.8 } })
         gsap.to('[data-panel]', { y: -50, ease: 'none', scrollTrigger: { ...scrub, scrub: 0.8 } })
-        gsap.to('[data-chip]', { y: (i) => (i ? -60 : -110), ease: 'none', scrollTrigger: { ...scrub, scrub: 0.8 } })
         gsap.fromTo('[data-ghost]', { x: '8vw' }, { x: '-22vw', ease: 'none', scrollTrigger: { ...scrub, scrub: true } })
       }
     }, el)
@@ -161,38 +177,47 @@ export function Hero() {
         </p>
       </div>
 
-      {/* Phone breaks out of the container */}
+      {/* Phone breaks out of the container. The floating chips live INSIDE the phone group, so they rise, scale and tilt with it. */}
       <div className="relative z-10 mx-auto mt-12 max-w-[1440px] px-6 pb-16 lg:pb-0">
         <div
           aria-hidden
           data-panel className="absolute inset-x-6 top-[22%] hidden h-[640px] rounded-[56px] border border-white/[0.14] bg-gradient-to-b from-[rgba(29,36,104,0.85)] to-bg lg:inset-x-[100px] lg:block"
         />
         <div style={{ perspective: 1400 }} className="relative mx-auto w-[min(426px,72vw)]">
-          <div ref={phone} data-phone className="will-change-transform [transform-style:preserve-3d]">
+          <div ref={phone} data-phone className="relative will-change-transform [transform-style:preserve-3d]">
             <div data-phone-in>
               <div data-phone-tilt className="[transform-style:preserve-3d]">
-              <PhoneFrame
-                eager
-                src="/assets/screens/G11.webp"
-                alt="Project Harbor chat with Pat Morgan. The message says: Hi @Pat Morgan quick question on Harbor. Can you confirm the fee question? Status: Ready · Nothing leaves until you tap Send."
-              />
+                <PhoneFrame
+                  eager
+                  src="/assets/screens/G11.webp"
+                  video="/assets/video/hero-chat.mp4"
+                  alt="Project Harbor chat with Pat Morgan. A message is typed, checked and shown as Ready, then sent. The message says: Hi @Pat Morgan quick question on Harbor. Can you confirm the fee question?"
+                />
               </div>
             </div>
-          </div>
-          {/* chips + connectors (decorative, desktop) */}
-          <div data-chip className="absolute -left-[182px] top-[53%] hidden lg:block" aria-hidden>
-            <div data-par="-1" className="flex items-center">
-              <div className="float-y flex items-center">
-                <Chip>✓ CHECKED</Chip>
-                <span className="h-[1.5px] w-[110px] bg-gradient-to-r from-softblue/70 to-transparent" />
+
+            {/* chips (decorative, desktop): they change with the chat (see the effect above) */}
+            <div data-chip className="absolute -left-[182px] top-[53%] hidden lg:block" aria-hidden>
+              <div data-par="-1" className="flex items-center">
+                <div className="float-y flex items-center">
+                  <Chip key={chat > 0 ? 'checked' : 'drafting'} className="pop-in">
+                    {chat > 0 ? '✓ CHECKED' : '✎ DRAFTING'}
+                  </Chip>
+                  <span className="h-[1.5px] w-[110px] bg-gradient-to-r from-softblue/70 to-transparent" />
+                </div>
               </div>
             </div>
-          </div>
-          <div data-chip className="absolute -right-[122px] top-[64%] hidden lg:block" aria-hidden>
-            <div data-par="1" className="flex items-center">
-              <div className="float-y flex items-center [animation-delay:-3s]">
-                <span className="h-[1.5px] w-[150px] -translate-x-[78px] bg-gradient-to-l from-softblue/70 to-transparent" />
-                <Chip className="-translate-x-[78px]">✓ READY</Chip>
+            <div data-chip className="absolute -right-[122px] top-[64%] hidden lg:block" aria-hidden>
+              <div data-par="1" className="flex items-center">
+                <div className="float-y flex items-center [animation-delay:-3s]">
+                  <span className="h-[1.5px] w-[150px] -translate-x-[78px] bg-gradient-to-l from-softblue/70 to-transparent" />
+                  <Chip
+                    key={chat}
+                    className={'-translate-x-[78px] transition-opacity duration-500 ' + (chat === 0 ? 'opacity-0' : 'pop-in')}
+                  >
+                    {chat === 2 ? '↗ SENT' : '✓ READY'}
+                  </Chip>
+                </div>
               </div>
             </div>
           </div>

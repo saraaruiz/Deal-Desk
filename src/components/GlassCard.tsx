@@ -12,10 +12,11 @@ export function GlassCard({
   children,
   tilt = 5,
   tone = 'dark',
+  variant = 'solid',
   as: Tag = 'div',
   label,
   ...rest
-}: React.HTMLAttributes<HTMLElement> & { tilt?: number; tone?: 'dark' | 'light'; as?: 'div' | 'article' | 'li'; label?: string }) {
+}: React.HTMLAttributes<HTMLElement> & { tilt?: number; tone?: 'dark' | 'light'; variant?: 'solid' | 'real'; as?: 'div' | 'article' | 'li'; label?: string }) {
   const ref = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -55,7 +56,7 @@ export function GlassCard({
 
   return (
     // @ts-expect-error polymorphic ref: the element type is one of div | article | li
-    <Tag ref={ref} data-tone={tone} aria-label={label} className={cn('glass-apple', className)} {...rest}>
+    <Tag ref={ref} data-tone={tone} aria-label={label} className={cn(variant === 'real' ? 'glass-real' : 'glass-apple', className)} {...rest}>
       {children}
     </Tag>
   )

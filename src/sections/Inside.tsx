@@ -15,7 +15,7 @@ function Face({ n, tint, children }: { n: string; tint: string; children: React.
   return (
     <div
       className="relative flex h-full w-full flex-col p-6 text-left sm:p-7"
-      style={{ background: `linear-gradient(160deg, ${tint} 0%, #12151c 62%)`, boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.09)' }}
+      style={{ background: `linear-gradient(160deg, ${tint}cc 0%, rgba(18,21,28,0.28) 72%)`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,.5), inset 0 0 0 1px rgba(255,255,255,.14)' }}
     >
       <span aria-hidden className="text-[13px] font-semibold tracking-[0.14em] text-white/45">
         {n} / 04
@@ -111,6 +111,12 @@ export function Inside() {
        *   translateZ recession, fading 10% per step); the ring loops. Exponential ease-out settle (factor 0.16 per frame),
        *   a flick carries up to 2 cards · reduced-motion: movement is still user-driven only (nothing autoplays).
        */
+      /*
+       * MOTION · scroll (whole section) · the coloured light orbs behind the glass drift in opposite directions (y ±90px, x ±40px) and the
+       *   carousel floats against the page (y 40 -> -40px) · scrubbed, ease none · reduced-motion: none.
+       */
+      gsap.fromTo('[data-orb]', { y: (i) => (i % 2 ? 90 : -90), x: (i) => (i === 1 ? -40 : 40) }, { y: (i) => (i % 2 ? -90 : 90), x: (i) => (i === 1 ? 40 : -40), ease: 'none', scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: true } })
+      gsap.fromTo('[data-stage-inner]', { y: 40 }, { y: -40, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: true } })
       gsap.from('[data-stage]', { y: 60, opacity: 0, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '[data-stage]', start: 'top 85%', once: true } })
     }, root.current!)
     return () => ctx.revert()
@@ -118,15 +124,20 @@ export function Inside() {
 
   return (
     <section ref={root} id="inside" aria-labelledby="inside-title" className="relative overflow-hidden bg-bg py-24 lg:py-[130px]">
-      <div aria-hidden className="drift pointer-events-none absolute left-1/2 top-[40%] size-[620px] -translate-x-1/2 rounded-full bg-glow-3/15 blur-[130px] max-md:hidden" />
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <span data-orb className="absolute left-[4%] top-[24%] size-[260px] rounded-full bg-[#6941E1]/60 blur-[70px] md:size-[440px] md:blur-[110px]" />
+        <span data-orb className="absolute right-[3%] top-[36%] size-[280px] rounded-full bg-[#3A3FC0]/60 blur-[70px] md:size-[480px] md:blur-[120px]" />
+        <span data-orb className="absolute bottom-[2%] left-[36%] size-[220px] rounded-full bg-[#B04BD8]/40 blur-[70px] md:size-[380px] md:blur-[110px]" />
+      </div>
       <div className="relative mx-auto max-w-[1440px] px-6 lg:px-[120px]">
-        <h2 id="inside-title" className="text-[clamp(40px,5vw,72px)] font-extrabold leading-[1.04] tracking-[-0.02em]">
-          <Words lines={[inside.title]} />
+        <h2 id="inside-title" className="h-display">
+          <Words lines={[inside.title]} gradientLines={[0]} />
         </h2>
         <p className="mt-5 max-w-[520px] text-[clamp(17px,1.5vw,20px)] text-muted">Drag, or use the arrows, to move through a review.</p>
       </div>
 
       <div data-stage className="relative mt-6 lg:mt-10">
+        <div data-stage-inner>
         <CoverflowCarousel
           slides={slides}
           label="Inside every review"
@@ -138,8 +149,9 @@ export function Inside() {
           fade={0.14}
           gap={0.06}
           showNavigation
-          cardClassName="!rounded-[26px] shadow-[0_40px_70px_-30px_rgba(0,0,0,0.85)]"
+          cardClassName="!rounded-[26px] !bg-transparent backdrop-blur-[18px] backdrop-saturate-[1.7] shadow-[0_40px_70px_-30px_rgba(0,0,0,0.7)]"
         />
+        </div>
       </div>
     </section>
   )

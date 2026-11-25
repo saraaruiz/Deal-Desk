@@ -130,7 +130,7 @@ export function FourMoments() {
   }, [staticMode])
 
   return (
-    <section ref={root} id="moments" aria-labelledby="moments-title" className="relative overflow-hidden bg-bg py-20 lg:py-0">
+    <section ref={root} id="moments" aria-labelledby="moments-title" className={`relative overflow-hidden bg-bg ${staticMode ? 'py-20' : ''}`}>
       <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 size-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-glow-1/25 blur-[140px] max-md:hidden" />
       {staticMode ? (
         <div className="relative mx-auto max-w-[1440px] px-6 md:px-12">
@@ -159,10 +159,10 @@ export function FourMoments() {
           </ol>
         </div>
       ) : (
-        <div className="relative flex h-[100svh] flex-col px-[clamp(20px,7vw,120px)] pb-6 pt-20 sm:pb-8">
+        <div className="relative flex h-[100svh] flex-col px-[clamp(20px,7vw,120px)] pb-6 pt-14 sm:pb-8">
           <div className="relative z-10">
             <p className="text-[12px] font-semibold tracking-[0.18em] text-lavender-soft">HOW IT WORKS</p>
-            <h2 id="moments-title" className="mt-2 text-[clamp(32px,4.2vw,60px)] font-extrabold leading-[1.02] tracking-[-0.025em] text-text">
+            <h2 id="moments-title" className="mt-2 text-[clamp(36px,4.8vw,76px)] font-extrabold leading-[1] tracking-[-0.03em] text-text">
               {moments.title[0]}{' '}
               <span className="bg-gradient-to-r from-[#F2F4F8] via-[#B7ACFF] to-[#7FB4FF] bg-clip-text text-transparent">{moments.title[1]}</span>
             </h2>

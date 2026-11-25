@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { FilmGrain, ScrollProgress, SkipLink } from '@/components/bits'
 import { FloatingNav } from '@/components/FloatingNav'
+import { SectionDivider } from '@/components/SectionDivider'
 import { ScrollTrigger, revealWords, startSmoothScroll } from '@/lib/motion'
 import { DealsOneSend } from '@/sections/DealsOneSend'
 import { Footer } from '@/sections/Footer'
@@ -35,10 +36,15 @@ export default function App() {
       <main id="main">
         <Hero />
         <DealsOneSend />
+        <SectionDivider n="02" label="How it works" />
         <FourMoments />
+        <SectionDivider n="03" label="Who it's for" />
         <TeamFits />
+        <SectionDivider n="04" label="Inside every review" />
         <Inside />
+        <SectionDivider n="05" label="Limits" />
         <Limits />
+        <SectionDivider n="06" label="Look twice" />
         <Invitation />
       </main>
       <Footer />

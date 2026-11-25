@@ -82,10 +82,10 @@ export function DealsOneSend() {
 
   const header = (
     <div data-head className="relative z-20 mx-auto flex w-full max-w-[1200px] flex-col gap-4 px-6 pt-20 lg:flex-row lg:items-end lg:justify-between lg:px-0 lg:pt-24">
-      <h2 id="deals-title" className="text-[clamp(34px,4.6vw,66px)] font-extrabold leading-[1.04] tracking-[-0.02em] text-text">
-        <Words lines={deals.title} />
+      <h2 id="deals-title" className="h-display text-text">
+        <Words lines={deals.title} gradientLines={[1]} />
       </h2>
-      <p className="max-w-[420px] text-[clamp(16px,1.3vw,20px)] leading-[1.5] text-muted lg:pb-2">{deals.line}</p>
+      <p className="h-lede max-w-[440px] text-muted lg:pb-2">{deals.line}</p>
     </div>
   )
 
@@ -93,8 +93,8 @@ export function DealsOneSend() {
     return (
       <section id="deals" aria-labelledby="deals-title" className="relative overflow-hidden bg-bg px-6 py-24 lg:px-[120px] lg:py-[130px]">
         <div className="relative mx-auto w-full max-w-[1200px]">
-          <h2 id="deals-title" className="text-[clamp(40px,5vw,72px)] font-extrabold leading-[1.04] tracking-[-0.02em] text-text">
-            <Words lines={deals.title} />
+          <h2 id="deals-title" className="h-display text-text">
+            <Words lines={deals.title} gradientLines={[1]} />
           </h2>
           <p className="mt-5 max-w-[520px] text-[clamp(17px,1.5vw,22px)] leading-[1.5] text-muted">{deals.line}</p>
           <FilmPlayer className="mt-10 lg:mt-14" {...player} />

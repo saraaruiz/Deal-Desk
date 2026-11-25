@@ -99,9 +99,9 @@ export function MagneticLink({
 }
 
 export const btnPrimary =
-  'btn-shine inline-flex h-14 w-[240px] items-center justify-center rounded-full bg-lavender px-8 text-[17px] font-semibold leading-none text-indigo shadow-[0_10px_30px_rgba(156,140,255,0.3)] hover:bg-lavender-soft'
+  'btn-shine inline-flex h-14 w-[min(100%,300px)] whitespace-nowrap sm:w-[260px] items-center justify-center rounded-full bg-lavender px-8 text-[17px] font-semibold leading-none text-indigo shadow-[0_10px_30px_rgba(156,140,255,0.3)] hover:bg-lavender-soft'
 export const btnGhost =
-  'btn-shine inline-flex h-14 w-[240px] items-center justify-center rounded-full bg-white/[0.04] px-8 text-[17px] font-semibold leading-none text-text shadow-[inset_0_0_0_1.2px_rgba(255,255,255,0.28)] hover:bg-white/10 hover:shadow-[inset_0_0_0_1.2px_rgba(255,255,255,0.5)]'
+  'btn-shine inline-flex h-14 w-[min(100%,300px)] whitespace-nowrap sm:w-[260px] items-center justify-center rounded-full bg-white/[0.04] px-8 text-[17px] font-semibold leading-none text-text shadow-[inset_0_0_0_1.2px_rgba(255,255,255,0.28)] hover:bg-white/10 hover:shadow-[inset_0_0_0_1.2px_rgba(255,255,255,0.5)]'
 
 export function Chip({ children, className, tone }: { children: React.ReactNode; className?: string; tone?: 'ready' | 'muted' }) {
   return (

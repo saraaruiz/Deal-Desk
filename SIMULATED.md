@@ -16,3 +16,6 @@ DealDesk is a fictional product (Project Harbor), shown as a prototype. The page
 - **Jordan's film.** Contains an AI-generated character; the end card says so ("Prototype · fictional data · AI-generated character") and the page keeps that line. The sound version has music and sound design.
 
 - **Deal team orbit.** The eight people (Pat Morgan, Alex Rivera, Dana, Priya Nair, Sam Lee, Maya Chen, Leo Ortiz, Adrian Soto) and their roles come from the prototype's fictional deal-team list. "Ask Dana to add" only changes the card on the page: no request exists and nothing is sent.
+
+- **Footer.** The email (hello@dealdesk.example), the phone (+1 (555) 010-0100) and the social icons are placeholders: reserved example values, and the links go nowhere. The page says so under the icons.
+- **Hero chat.** The clip in the phone is a screen recording of the prototype (fictional data). The chips next to it change with the clip's time, not with any real status.

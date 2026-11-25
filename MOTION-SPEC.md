@@ -128,3 +128,14 @@ Replaces rows 49 and 50's frame-in-page behaviour for section 1.
 | 67 | 2 Four moments | Always | Giant step words are filled with a soft gradient that fades inside the letters (lavender to transparent) and are blurred 3 px, no outline | n/a | Not shown | 2x phone speed |
 | 68 | 4 Inside | n/a | Cards are text and pills only (no phone mockup); "OUTDATED" appears once | n/a | n/a | n/a |
 | 69 | 5 Limits | Enter view | One featured limit (full width, large type) and three supporting ones, each with a faint index number and an accent hairline | 0.9 s expo.out, stagger 0.14 | Final state | n/a |
+## Revision 9 (hero chat, big headings, real glass, footer, dividers)
+
+| # | Section | Trigger | What moves | Duration / easing | Reduced motion / touch | Parallax |
+|---|---|---|---|---|---|---|
+| 70 | 0 Hero | Always (on screen) | The phone plays a real recording of the chat (typing, Ready, Send, Sent), muted loop, 6.5 s | Loop | Poster (final state) | n/a |
+| 71 | 0 Hero | Follows the clip | Chips change with the chat: left DRAFTING then CHECKED; right appears READY, then SENT (pop-in) | 0.5 s | Static CHECKED / READY | n/a |
+| 72 | 0 Hero | Scroll | The chips now live inside the phone group: they rise, scale and tilt with it (they no longer have their own scroll tween) | Scrubbed 0.8 | None | Same layer as phone |
+| 73 | All sections | Enter view | One heading scale (`.h-display`, up to 92px) and gradient inside the letters (`.grad-text`) on key words | 1 s expo.out (words) | Final state | n/a |
+| 74 | 4 Inside, 5 Limits | Scroll | Coloured light orbs behind the frosted glass drift in opposite directions; Inside's carousel floats against the page (y 40 to -40) | Scrubbed, none | None | Orbs vs cards |
+| 75 | Between sections | Scroll | Divider: a hairline draws left to right with a light at its tip, the number and name of the next section slide in | Scrubbed 0.6, none | Fully drawn | n/a |
+| 76 | Footer | Enter view / scroll | Top line draws across; four columns rise one by one; the giant wordmark rises (y 140 to 0) and brightens | 1.4 s / 1 s expo.out, wordmark scrubbed | Final state | Wordmark |

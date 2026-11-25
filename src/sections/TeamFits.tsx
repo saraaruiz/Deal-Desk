@@ -38,10 +38,10 @@ export function TeamFits() {
       <div aria-hidden className="pointer-events-none absolute left-[70%] top-1/2 size-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-glow-2/20 blur-[140px] max-md:hidden" />
       <div className="relative mx-auto grid max-w-[1440px] items-center gap-14 px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-20 lg:px-[120px]">
         <div>
-          <h2 id="fits-title" className="text-[clamp(36px,4.4vw,64px)] font-extrabold leading-[1.06] tracking-[-0.02em]">
-            <Words lines={fits.title} />
+          <h2 id="fits-title" className="text-[clamp(40px,5vw,76px)] font-extrabold leading-[1] tracking-[-0.03em]">
+            <Words lines={fits.title} gradientLines={[1]} />
           </h2>
-          <p data-rise className="mt-6 max-w-[520px] text-[clamp(17px,1.5vw,22px)] leading-[1.5] text-muted">
+          <p data-rise className="h-lede mt-6 max-w-[520px] text-muted">
             {fits.line}
           </p>
         </div>
