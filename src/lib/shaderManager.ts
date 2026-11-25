@@ -83,8 +83,29 @@ class ShaderManager {
     return this.io
   }
 
+  // The shader is deferred until the page has loaded and gone idle, so it never competes with the first paint.
+  private armed = false
+  private arm() {
+    if (this.armed) return
+    const go = () => {
+      const idle = (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => void }).requestIdleCallback
+      const fire = () => {
+        this.armed = true
+        this.pick()
+      }
+      if (idle) idle(fire, { timeout: 2500 })
+      else setTimeout(fire, 1200)
+    }
+    if (document.readyState === 'complete') go()
+    else window.addEventListener('load', go, { once: true })
+  }
+
   /** Most visible host wins. */
   private pick() {
+    if (!this.armed) {
+      this.arm()
+      return
+    }
     let best: Host | null = null
     for (const h of this.hosts.values()) if (h.ratio > 0 && (!best || h.ratio > best.ratio)) best = h
     if (best !== this.active) {
@@ -167,9 +188,10 @@ class ShaderManager {
   private resize() {
     if (!this.canvas || !this.active) return
     const r = this.active.el.getBoundingClientRect()
-    // DPR capped at 2 (1.5 on mobile / coarse pointers)
+    // DPR capped at 2 (1.5 on mobile / coarse pointers). The gradient is a soft field, so it is rendered at a
+    // fraction of that resolution and stretched by the browser: same look, far fewer fragments to shade.
     const mobile = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches
-    const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2)
+    const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2) * (mobile ? 0.4 : 0.55)
     const w = Math.max(2, Math.round(r.width * dpr))
     const h = Math.max(2, Math.round(r.height * dpr))
     if (this.canvas.width !== w) this.canvas.width = w
@@ -197,11 +219,38 @@ class ShaderManager {
     }
   }
 
-  private loop = () => {
+  private last = 0
+  private prevT = 0
+  private slow = 0
+  private frames = 0
+  private loop = (now = 0) => {
     this.raf = 0
     if (!this.active || document.visibilityState !== 'visible') return
-    this.draw()
+    // Adaptive quality: if the device can't keep ~15 fps, stop WebGL and keep the static CSS gradient underneath.
+    if (this.prevT) {
+      const dt = now - this.prevT
+      this.frames++
+      if (dt > 66) this.slow++
+      if (this.frames === 24) {
+        if (this.slow > 10) return this.giveUp()
+        this.frames = 0
+        this.slow = 0
+      }
+    }
+    this.prevT = now
+    // 30 fps is plenty for a slow gradient and halves the GPU/CPU cost
+    if (now - this.last >= 32) {
+      this.last = now
+      this.draw()
+    }
     this.raf = requestAnimationFrame(this.loop)
+  }
+
+  private giveUp() {
+    this.failed = true
+    this.canvas?.remove()
+    for (const h of this.hosts.values()) h.opts.onReady?.(false)
+    this.active = null
   }
 
   private draw() {

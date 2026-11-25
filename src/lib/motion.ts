@@ -89,4 +89,27 @@ export function startSmoothScroll() {
   }
 }
 
+/*
+ * MOTION · scroll into view (every [data-words] headline) · words rise out of a mask and un-blur
+ *   (yPercent 115 -> 0, opacity 0 -> 1, blur 10px -> 0) · 1s expo.out, stagger 0.045 · plays once ·
+ *   reduced-motion: none (text is already in its final state).
+ */
+export function revealWords() {
+  if (prefersReducedMotion()) return () => {}
+  const ctx = gsap.context(() => {
+    gsap.utils.toArray<HTMLElement>('[data-words]').forEach((el) => {
+      gsap.from(el.querySelectorAll('[data-w]'), {
+        yPercent: 115,
+        opacity: 0,
+        ...(isDesktopMotion() ? { filter: 'blur(10px)' } : {}),
+        duration: 1,
+        ease: 'expo.out',
+        stagger: 0.045,
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+      })
+    })
+  })
+  return () => ctx.revert()
+}
+
 export { gsap, ScrollTrigger }

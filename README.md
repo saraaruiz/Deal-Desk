@@ -36,8 +36,10 @@ shadcn's CLI and every 21st.dev snippet import from `@/components/ui/...`. `comp
 | File | Used by | Fallback today |
 |---|---|---|
 | `public/assets/video1-jordan.mp4` | Section 1 (scrubbed on desktop, muted loop on mobile) | Poster only |
-| `public/assets/video1-poster.png` | Section 1 poster | Placeholder exported from Figma (ASSET A3). Replace with a compressed `.jpg` and update `POSTER` in `DealsOneSend.tsx` |
-| `public/assets/video2-motion.mp4` | Optional final beat of section 3 | Not wired yet |
+| `public/assets/video1-poster.webp` | Section 1 poster | Placeholder exported from Figma (ASSET A3). Replace it (same path) when you have the real poster |
+| `public/assets/video/motion-reel.mp4` + `.jpg` | Section 2 (Motion reel, 16:9, no audio) | Poster only |
+| `public/assets/video/moment-draft / review / ask / send .mp4` + `.jpg` | Section 3, inside the phone, one clip per moment | Static exported screen |
+| `public/assets/video/invite-sent.mp4` | Invitation phone | Static G11 screen |
 
 Video 1 for scrubbing should be encoded with frequent keyframes (`ffmpeg -i in.mp4 -g 1 -an -movflags +faststart out.mp4`) or seeking will feel choppy.
 

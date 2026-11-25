@@ -4,7 +4,7 @@ import { gsap, ScrollTrigger, isDesktopMotion, useLiteMode } from '@/lib/motion'
 import { Pause, Play } from 'lucide-react'
 
 const VIDEO = '/assets/video1-jordan.mp4'
-const POSTER = '/assets/video1-poster.png' // placeholder from Figma (ASSET A3). Swap for /assets/video1-poster.jpg when it exists
+const POSTER = '/assets/video1-poster.webp' // placeholder from Figma (ASSET A3). Replace with your own poster (same path) when you have the real video
 
 export function DealsOneSend() {
   const root = useRef<HTMLElement>(null)
@@ -75,8 +75,8 @@ export function DealsOneSend() {
       aria-labelledby="deals-title"
       className="relative overflow-hidden bg-bg px-6 py-20 lg:flex lg:h-screen lg:flex-col lg:justify-center lg:px-[120px] lg:py-0"
     >
-      <div aria-hidden className="pointer-events-none absolute -left-[200px] top-[300px] size-[700px] rounded-full bg-glow-1/30 blur-[120px]" />
-      <div aria-hidden className="pointer-events-none absolute -top-[100px] right-0 size-[700px] rounded-full bg-glow-2/20 blur-[120px]" />
+      <div aria-hidden className="pointer-events-none absolute -left-[200px] top-[300px] size-[700px] rounded-full bg-glow-1/30 blur-[120px] max-md:hidden" />
+      <div aria-hidden className="pointer-events-none absolute -top-[100px] right-0 size-[700px] rounded-full bg-glow-2/20 blur-[120px] max-md:hidden" />
       <div className="relative mx-auto w-full max-w-[1200px]">
         <div data-title className="will-change-transform">
           <h2 id="deals-title" className="text-[clamp(40px,5vw,72px)] font-extrabold leading-[1.04] tracking-[-0.02em] text-text">

@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { FileText, Pause, Search, Users } from 'lucide-react'
 import { limits } from '@/content/copy'
+import { GlassCard } from '@/components/GlassCard'
+import { Words } from '@/components/Words'
 import { gsap, ScrollTrigger, isDesktopMotion, prefersReducedMotion } from '@/lib/motion'
 
 const icons = { search: Search, users: Users, pause: Pause, file: FileText }
@@ -55,17 +57,16 @@ export function Limits() {
 
   return (
     <section ref={root} id="limits" aria-labelledby="limits-title" className="relative bg-bg">
-      <div ref={wrap} className="bg-paper py-20 text-ink will-change-[clip-path] lg:py-[110px]">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-[120px]">
+      <div ref={wrap} className="relative isolate overflow-hidden bg-paper py-20 text-ink will-change-[clip-path] lg:py-[110px]">
+        {/* colour orbs behind the frosted glass */}
+        <div aria-hidden className="drift pointer-events-none absolute -left-24 top-[38%] size-[420px] rounded-full bg-[#9b8cff]/35 blur-[90px] max-md:hidden" />
+        <div aria-hidden className="drift pointer-events-none absolute -right-20 top-[60%] size-[380px] rounded-full bg-[#7fb4ff]/35 blur-[90px] max-md:hidden [animation-delay:-10s]" />
+        <div className="relative mx-auto max-w-[1440px] px-6 lg:px-[120px]">
           <p data-head className="text-center text-[14px] font-semibold tracking-[0.04em] text-[#5b4bdb]">
             {limits.marker}
           </p>
-          <h2 id="limits-title" data-head className="mt-5 text-center text-[clamp(38px,4.4vw,64px)] font-extrabold leading-[1.06] tracking-[-0.02em] text-ink">
-            {limits.title.map((l) => (
-              <span key={l} className="block">
-                {l}
-              </span>
-            ))}
+          <h2 id="limits-title" className="mt-5 text-center text-[clamp(38px,4.4vw,64px)] font-extrabold leading-[1.06] tracking-[-0.02em] text-ink">
+            <Words lines={limits.title} />
           </h2>
           <p data-head className="mt-6 text-center text-[clamp(17px,1.4vw,20px)] text-ink-2">
             {limits.line}
@@ -75,9 +76,9 @@ export function Limits() {
             {limits.items.map((it) => {
               const Icon = icons[it.icon]
               return (
-                <li key={it.t} data-limit className="rounded-[28px] border border-ink/10 bg-white p-8 lg:min-h-[210px]">
+                <GlassCard key={it.t} as="li" tone="light" tilt={4} data-limit className="group p-8 lg:min-h-[210px]">
                   <div className="flex items-start gap-4">
-                    <span aria-hidden className="mt-0.5 inline-flex size-11 flex-none items-center justify-center rounded-full bg-[#eceaff] text-[#5b4bdb]">
+                    <span aria-hidden className="depth mt-0.5 inline-flex size-11 flex-none items-center justify-center rounded-full bg-[#eceaff] text-[#5b4bdb] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-rotate-12 group-hover:scale-110" style={{ ['--d' as string]: 1.6 } as React.CSSProperties}>
                       <Icon size={20} strokeWidth={1.75} />
                     </span>
                     <div>
@@ -85,7 +86,7 @@ export function Limits() {
                       <p className="mt-3 text-[17px] leading-[1.5] text-ink-2">{it.d}</p>
                     </div>
                   </div>
-                </li>
+                </GlassCard>
               )
             })}
           </ul>

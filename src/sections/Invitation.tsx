@@ -49,7 +49,8 @@ export function Invitation() {
         </p>
         <div data-in className="mx-auto mt-14 w-[min(405px,72vw)] lg:mt-[70px]">
           <PhoneFrame
-            src="/assets/screens/G11.png"
+            src="/assets/screens/G11.webp"
+            video="/assets/video/invite-sent.mp4"
             alt="Project Harbor chat with Pat Morgan: the message is Ready and Nothing leaves until you tap Send."
           />
         </div>

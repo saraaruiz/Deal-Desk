@@ -3,7 +3,10 @@ import { moments } from '@/content/copy'
 import { PhoneFrame } from '@/components/PhoneFrame'
 import { gsap, ScrollTrigger, isDesktopMotion, useLiteMode } from '@/lib/motion'
 
-const shot = (s: (typeof moments.steps)[number]) => ({ src: `/assets/screens/${s.screen}.png`, alt: s.alt })
+// Each moment has its real screen recording (public/assets/video/moment-<step>.mp4). The exported PNG/WebP stays
+// underneath as the poster, the reduced-motion version and the fallback if a clip is missing.
+const clip = (s: (typeof moments.steps)[number]) => `/assets/video/moment-${s.step.toLowerCase()}.mp4`
+const shot = (s: (typeof moments.steps)[number]) => ({ src: `/assets/screens/${s.screen}.webp`, alt: s.alt, video: clip(s) })
 
 export function FourMoments() {
   const root = useRef<HTMLElement>(null)
@@ -60,7 +63,7 @@ export function FourMoments() {
 
   return (
     <section ref={root} id="moments" aria-labelledby="moments-title" className="relative overflow-hidden bg-bg py-20 lg:py-0">
-      <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 size-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-glow-1/30 blur-[140px]" />
+      <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 size-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-glow-1/30 blur-[140px] max-md:hidden" />
       {lite ? (
         <div className="relative mx-auto max-w-[1440px] px-6 md:px-12">
           {title}
@@ -68,7 +71,7 @@ export function FourMoments() {
           <ol className="swipe -mx-6 mt-10 px-6 pb-4 md:mx-0 md:px-0" aria-label="The four moments">
             {moments.steps.map((s, i) => (
               <li key={s.step} className="w-[min(70vw,260px)] text-center">
-                <PhoneFrame src={`/assets/screens/${s.screen}.png`} alt={s.alt} />
+                <PhoneFrame src={`/assets/screens/${s.screen}.webp`} alt={s.alt} video={clip(s)} />
                 <p className="mt-5 text-[15px] font-semibold tracking-[0.06em] text-lavender-soft">
                   {i + 1} · {s.step}
                 </p>
@@ -109,7 +112,7 @@ export function FourMoments() {
           </div>
 
           <div className="w-[300px]">
-            <PhoneFrame stack={moments.steps.map(shot)} />
+            <PhoneFrame stack={moments.steps.map(shot)} activeIndex={step} />
           </div>
 
           <div className="relative h-[120px] self-center" aria-live="polite">

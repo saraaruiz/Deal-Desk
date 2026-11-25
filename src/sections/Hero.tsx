@@ -22,14 +22,47 @@ export function Hero() {
        *   reduced-motion: skipped, content is shown in its final state.
        */
       const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
-      tl.from('[data-line]', { yPercent: 105, duration: 0.9, stagger: 0.12 }, 0.15)
-        .from('[data-sub]', { y: 18, opacity: 0, duration: 0.7 }, 0.75)
-        .from('[data-cta]', { y: 18, opacity: 0, duration: 0.7, stagger: 0.08 }, 0.9)
-        .from('[data-micro]', { opacity: 0, duration: 0.7 }, 1.1)
-        .from('[data-phone-in]', { y: 140, scale: 0.96, opacity: 0, duration: 1.2 }, 1.0)
-        .from('[data-chip]', { opacity: 0, x: (i) => (i ? 24 : -24), duration: 0.8, stagger: 0.12 }, 1.8)
+      tl.from('[data-line]', { yPercent: 105, duration: 0.9, stagger: 0.12 }, 0.05)
+        .from('[data-sub]', { y: 18, opacity: 0, duration: 0.6 }, 0.3)
+        .from('[data-cta]', { y: 18, opacity: 0, duration: 0.6, stagger: 0.08 }, 0.4)
+        .from('[data-micro]', { opacity: 0, duration: 0.6 }, 0.6)
+        .from('[data-phone-in]', { y: 140, scale: 0.96, opacity: 0, duration: 1.2 }, 0.5)
+        .from('[data-chip]', { opacity: 0, x: (i) => (i ? 24 : -24), duration: 0.8, stagger: 0.12 }, 1.5)
 
       if (isDesktopMotion()) {
+        /*
+         * MOTION · pointer move over the hero (desktop) · the phone turns toward the cursor (rotationY ±8°, rotationX ±5°) and the
+         *   two chips drift the opposite way (x/y up to ±22px) for depth · 0.9s power3.out via quickTo · reduced-motion / touch: none.
+         */
+        const tiltEl = el.querySelector<HTMLElement>('[data-phone-tilt]')!
+        gsap.set(tiltEl, { transformPerspective: 1200 })
+        const ry = gsap.quickTo(tiltEl, 'rotationY', { duration: 0.9, ease: 'power3.out' })
+        const rx = gsap.quickTo(tiltEl, 'rotationX', { duration: 0.9, ease: 'power3.out' })
+        const pars = gsap.utils.toArray<HTMLElement>('[data-par]', el).map((p) => ({
+          dir: Number(p.dataset.par),
+          x: gsap.quickTo(p, 'x', { duration: 0.9, ease: 'power3.out' }),
+          y: gsap.quickTo(p, 'y', { duration: 0.9, ease: 'power3.out' }),
+        }))
+        const onMove = (e: PointerEvent) => {
+          const r = el.getBoundingClientRect()
+          const nx = (e.clientX - r.left) / r.width - 0.5
+          const ny = (e.clientY - r.top) / Math.min(r.height, 900) - 0.5
+          ry(nx * 16)
+          rx(-ny * 10)
+          pars.forEach((p) => {
+            p.x(-nx * 44 * p.dir * -1)
+            p.y(-ny * 30)
+          })
+        }
+        el.addEventListener('pointermove', onMove)
+        el.addEventListener('pointerleave', () => {
+          ry(0)
+          rx(0)
+          pars.forEach((p) => {
+            p.x(0)
+            p.y(0)
+          })
+        })
         /*
          * MOTION · scroll (hero leaving) · phone: slow Z parallax (translateY 0 -> -90px) + subtle tilt
          *   (rotateX 0 -> 6deg max) · scrubbed (ease none, scrub 0.6) · desktop only · reduced-motion: none.
@@ -136,21 +169,31 @@ export function Hero() {
         <div style={{ perspective: 1400 }} className="relative mx-auto w-[min(426px,72vw)]">
           <div ref={phone} data-phone className="will-change-transform [transform-style:preserve-3d]">
             <div data-phone-in>
+              <div data-phone-tilt className="[transform-style:preserve-3d]">
               <PhoneFrame
                 eager
-                src="/assets/screens/G11.png"
+                src="/assets/screens/G11.webp"
                 alt="Project Harbor chat with Pat Morgan. The message says: Hi @Pat Morgan quick question on Harbor. Can you confirm the fee question? Status: Ready · Nothing leaves until you tap Send."
               />
+              </div>
             </div>
           </div>
           {/* chips + connectors (decorative, desktop) */}
-          <div data-chip className="absolute -left-[182px] top-[53%] hidden items-center lg:flex" aria-hidden>
-            <Chip>✓ CHECKED</Chip>
-            <span className="h-[1.5px] w-[110px] bg-softblue/60" />
+          <div data-chip className="absolute -left-[182px] top-[53%] hidden lg:block" aria-hidden>
+            <div data-par="-1" className="flex items-center">
+              <div className="float-y flex items-center">
+                <Chip>✓ CHECKED</Chip>
+                <span className="h-[1.5px] w-[110px] bg-gradient-to-r from-softblue/70 to-transparent" />
+              </div>
+            </div>
           </div>
-          <div data-chip className="absolute -right-[122px] top-[64%] hidden items-center lg:flex" aria-hidden>
-            <span className="h-[1.5px] w-[150px] -translate-x-[78px] bg-softblue/60" />
-            <Chip className="-translate-x-[78px]">✓ READY</Chip>
+          <div data-chip className="absolute -right-[122px] top-[64%] hidden lg:block" aria-hidden>
+            <div data-par="1" className="flex items-center">
+              <div className="float-y flex items-center [animation-delay:-3s]">
+                <span className="h-[1.5px] w-[150px] -translate-x-[78px] bg-gradient-to-l from-softblue/70 to-transparent" />
+                <Chip className="-translate-x-[78px]">✓ READY</Chip>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -3,6 +3,8 @@ import { ArrowRight } from 'lucide-react'
 import { fits } from '@/content/copy'
 import { TeamInvite } from '@/components/ui/team-invite'
 import { Chip } from '@/components/bits'
+import { GlassCard } from '@/components/GlassCard'
+import { Words } from '@/components/Words'
 import { gsap, prefersReducedMotion } from '@/lib/motion'
 
 export function TeamFits() {
@@ -23,21 +25,17 @@ export function TeamFits() {
 
   return (
     <section ref={root} id="fits" aria-labelledby="fits-title" className="relative overflow-hidden bg-bg py-20 lg:py-[110px]">
-      <div aria-hidden className="pointer-events-none absolute left-1/2 top-[55%] size-[700px] -translate-x-1/2 rounded-full bg-glow-2/25 blur-[140px]" />
+      <div aria-hidden className="pointer-events-none absolute left-1/2 top-[55%] size-[700px] -translate-x-1/2 rounded-full bg-glow-2/25 blur-[140px] max-md:hidden" />
       <div className="relative mx-auto max-w-[1440px] px-6 lg:px-[120px]">
-        <h2 id="fits-title" data-rise className="text-[clamp(36px,4.4vw,64px)] font-extrabold leading-[1.06] tracking-[-0.02em]">
-          {fits.title.map((l) => (
-            <span key={l} className="block">
-              {l}
-            </span>
-          ))}
+        <h2 id="fits-title" className="text-[clamp(36px,4.4vw,64px)] font-extrabold leading-[1.06] tracking-[-0.02em]">
+          <Words lines={fits.title} />
         </h2>
         <p data-rise className="mt-6 max-w-[620px] text-[clamp(17px,1.5vw,22px)] leading-[1.5] text-muted">
           {fits.line}
         </p>
 
         <div className="mt-14 grid items-center gap-10 lg:grid-cols-[minmax(0,560px)_1fr] lg:gap-20">
-          <div data-rise className="glass rounded-[32px] p-4 sm:p-8">
+          <GlassCard data-rise tilt={4} className="!rounded-[32px] p-4 sm:p-8">
             {/* Initials avatars: no photos of real people. D (Dana, deal owner) is the one dragged into the slot. */}
             <TeamInvite
               avatars={[
@@ -47,15 +45,16 @@ export function TeamFits() {
               ]}
               label={fits.label}
             />
-          </div>
+          </GlassCard>
 
           <ol data-roles className="space-y-3">
             {fits.roles.map((r, i) => (
               <li key={r.name} data-role>
-                <div
+                <GlassCard
+                  tilt={3}
                   className={
-                    'glass flex items-center justify-between gap-4 rounded-[24px] px-6 py-5 ' +
-                    (r.name === 'DealDesk' ? '!border-lavender/70 !bg-lavender/10' : '')
+                    'group flex items-center justify-between gap-4 !rounded-[24px] px-6 py-5 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:translate-x-2 ' +
+                    (r.name === 'DealDesk' ? 'ring-1 ring-lavender/60 !bg-lavender/10' : '')
                   }
                 >
                   <div>
@@ -64,7 +63,7 @@ export function TeamFits() {
                     {r.note && <p className="mt-2 text-[13px] text-muted/80">{r.note}</p>}
                   </div>
                   {r.name === 'Send' && <Chip>✓ READY</Chip>}
-                </div>
+                </GlassCard>
                 {i < fits.roles.length - 1 && <ArrowRight aria-hidden className="mx-auto mt-3 rotate-90 text-lavender/90" size={22} />}
               </li>
             ))}

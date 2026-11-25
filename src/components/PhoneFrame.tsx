@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { LoopVideo } from '@/components/LoopVideo'
 
 /**
  * iPhone 16 Pro frame (Black Titanium), proportions measured from the Figma frame (426 × 881.27).
@@ -12,6 +13,8 @@ export function PhoneFrame({
   eager,
   imgRef,
   stack,
+  video,
+  activeIndex,
 }: {
   src?: string
   alt?: string
@@ -19,7 +22,11 @@ export function PhoneFrame({
   eager?: boolean
   imgRef?: React.Ref<HTMLImageElement>
   /** Several screens layered in the same frame (cross-faded from outside via [data-screen]). */
-  stack?: { src: string; alt: string }[]
+  stack?: { src: string; alt: string; video?: string }[]
+  /** Screen recording for the single-screen case */
+  video?: string
+  /** With a stack: which screen is the active one (only that one plays). Omit to play by visibility. */
+  activeIndex?: number
 }) {
   return (
     <div className={cn('relative w-full [container-type:inline-size]', className)} style={{ aspectRatio: '426 / 881.27' }}>
@@ -60,20 +67,31 @@ export function PhoneFrame({
         className="absolute overflow-hidden bg-bg"
         style={{ left: '3.79%', top: '1.6%', width: '92.06%', height: '96.75%', borderRadius: '12.6cqw' }}
       >
-        {(stack ?? [{ src: src!, alt: alt! }]).map((s, i) => (
-          <img
-            key={s.src}
-            ref={i === 0 ? imgRef : undefined}
-            data-screen={i}
-            src={s.src}
-            alt={s.alt}
-            width={780}
-            height={1688}
-            loading={eager ? 'eager' : 'lazy'}
-            decoding="async"
-            draggable={false}
-            className={i === 0 ? 'block h-full w-full object-cover' : 'absolute inset-0 block h-full w-full object-cover'}
-          />
+        {(stack ?? [{ src: src!, alt: alt!, video: video }]).map((s, i) => (
+          <div key={s.src} data-screen={i} className="absolute inset-0">
+            {/* static exported screen: always there (poster + reduced-motion + video fallback) */}
+            <img
+              ref={i === 0 ? imgRef : undefined}
+              src={s.src}
+              alt={s.alt}
+              width={780}
+              height={1688}
+              loading={eager ? 'eager' : 'lazy'}
+              fetchPriority={eager ? 'high' : 'auto'}
+              decoding="async"
+              draggable={false}
+              className="block h-full w-full object-cover"
+            />
+            {/* the real screen recording plays on top while it is the active / visible one */}
+            {s.video && (
+              <LoopVideo
+                src={s.video}
+                poster={s.src}
+                label={`Screen recording: ${s.alt}`}
+                playing={activeIndex === undefined ? undefined : activeIndex === i}
+              />
+            )}
+          </div>
         ))}
       </div>
       {/* Dynamic Island */}

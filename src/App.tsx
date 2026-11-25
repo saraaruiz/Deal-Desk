@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
 import { FilmGrain, ScrollProgress, SkipLink } from '@/components/bits'
-import { ScrollTrigger, startSmoothScroll } from '@/lib/motion'
+import { Cursor } from '@/components/Cursor'
+import { FloatingNav } from '@/components/FloatingNav'
+import { Marquee } from '@/components/Marquee'
+import { ScrollTrigger, revealWords, startSmoothScroll } from '@/lib/motion'
 import { DealsOneSend } from '@/sections/DealsOneSend'
 import { Footer } from '@/sections/Footer'
 import { FourMoments } from '@/sections/FourMoments'
@@ -14,12 +17,14 @@ import { TeamFits } from '@/sections/TeamFits'
 export default function App() {
   useEffect(() => {
     const stop = startSmoothScroll()
+    const stopWords = revealWords()
     // Pinned sections depend on final layout: refresh once fonts and images settle.
     const refresh = () => ScrollTrigger.refresh()
     window.addEventListener('load', refresh)
     void document.fonts?.ready.then(refresh)
     return () => {
       window.removeEventListener('load', refresh)
+      stopWords()
       stop()
     }
   }, [])
@@ -29,8 +34,11 @@ export default function App() {
       <SkipLink />
       <ScrollProgress />
       <FilmGrain />
+      <Cursor />
+      <FloatingNav />
       <main id="main">
         <Hero />
+        <Marquee />
         <DealsOneSend />
         <RightPeople />
         <FourMoments />

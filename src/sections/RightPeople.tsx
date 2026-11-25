@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { look } from '@/content/copy'
 import { reviewCards } from '@/content/cards'
 import { WarpCarousel } from '@/components/ui/warp-carousel'
+import { Words } from '@/components/Words'
+import { GlassCard } from '@/components/GlassCard'
+import { LoopVideo } from '@/components/LoopVideo'
 import { gsap, useLiteMode, useNearViewport, prefersReducedMotion } from '@/lib/motion'
 
 const FONT = '"Inter Variable", "Inter", system-ui, sans-serif'
@@ -62,17 +65,32 @@ export function RightPeople() {
 
   return (
     <section ref={root} id="look" aria-labelledby="look-title" className="relative overflow-hidden bg-bg py-20 lg:py-[110px]">
-      <div aria-hidden className="pointer-events-none absolute left-1/2 top-[300px] size-[700px] rounded-full bg-glow-2/25 blur-[140px]" />
+      <div aria-hidden className="pointer-events-none absolute left-1/2 top-[300px] size-[700px] rounded-full bg-glow-2/25 blur-[140px] max-md:hidden" />
       <div className="relative mx-auto max-w-[1440px] px-6 lg:px-[120px]">
         <h2 id="look-title" className="text-[clamp(40px,5vw,72px)] font-extrabold leading-[1.04] tracking-[-0.02em]">
-          {look.title.map((l) => (
-            <span key={l} data-rise className="block">
-              {l}
-            </span>
-          ))}
+          <Words lines={look.title} />
         </h2>
         <p data-rise className="mt-6 max-w-[520px] text-[clamp(17px,1.5vw,22px)] leading-[1.5] text-muted">
           {look.line}
+        </p>
+      </div>
+
+      {/* Motion reel (16:9). Its on-screen words are the same three ideas as this section's title. */}
+      <div data-rise className="relative mx-auto mt-12 max-w-[1440px] px-6 lg:mt-14 lg:px-[120px]">
+        <GlassCard tilt={2} className="!rounded-[32px] p-2 sm:p-3">
+          <div className="relative aspect-video overflow-hidden rounded-[24px] bg-card">
+            <img src="/assets/video/motion-reel.jpg" alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+            <LoopVideo
+              src="/assets/video/motion-reel.mp4"
+              poster="/assets/video/motion-reel.jpg"
+              label="Motion reel: DealDesk flags a recipient who is not on the deal team and a promise nobody approved, and marks the message outdated after an edit"
+              showToggle
+            />
+          </div>
+        </GlassCard>
+        <p className="sr-only">
+          Motion reel, no audio. Looks ready. Sam isn&apos;t on the deal team. A promise nobody approved. Pending is not approved. Ready when everything
+          is clear. Edit it, and it&apos;s outdated. Look twice. Send once. A second look, not a guarantee.
         </p>
       </div>
 

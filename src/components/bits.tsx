@@ -99,9 +99,9 @@ export function MagneticLink({
 }
 
 export const btnPrimary =
-  'inline-flex min-h-[48px] items-center justify-center rounded-full bg-lavender px-[30px] py-[16px] text-[17px] font-semibold text-indigo shadow-[0_10px_30px_rgba(156,140,255,0.35)] transition-[box-shadow,background-color] duration-500 hover:bg-lavender-soft'
+  'btn-shine inline-flex min-h-[48px] items-center justify-center rounded-full bg-lavender px-[30px] py-[16px] text-[17px] font-semibold text-indigo shadow-[0_10px_30px_rgba(156,140,255,0.35)] hover:bg-lavender-soft'
 export const btnGhost =
-  'inline-flex min-h-[48px] items-center justify-center rounded-full border-[1.2px] border-white/30 px-[30px] py-[16px] text-[17px] font-semibold text-text transition-colors duration-500 hover:bg-white/10'
+  'btn-shine inline-flex min-h-[48px] items-center justify-center rounded-full border-[1.2px] border-white/30 bg-white/[0.04] px-[30px] py-[16px] text-[17px] font-semibold text-text backdrop-blur hover:border-white/50 hover:bg-white/10'
 
 export function Chip({ children, className, tone }: { children: React.ReactNode; className?: string; tone?: 'ready' | 'muted' }) {
   return (
