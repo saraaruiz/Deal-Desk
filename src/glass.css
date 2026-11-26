@@ -354,3 +354,10 @@ a[aria-busy='true']::before { content: ''; flex: none; width: 14px; height: 14px
 
 /* the film is scaled / moved on ITSELF (never on a parent) while the section holds the screen */
 .film-zoom { transform: translate3d(0, var(--film-y, 0px), 0) scale(var(--film-scale, 1)); }
+/* phones: soft radial gradients instead of 90px blur filters (cheap to paint, the logo never waits behind them) */
+@media (max-width: 767px) {
+  .dd-splash-glow { filter: none; }
+  .dd-splash-glow--a { background: radial-gradient(closest-side, rgba(120, 90, 230, 0.55), transparent); }
+  .dd-splash-glow--b { background: radial-gradient(closest-side, rgba(110, 80, 215, 0.45), transparent); }
+  .dd-splash-glow--c { background: radial-gradient(closest-side, rgba(60, 100, 190, 0.45), transparent); }
+}

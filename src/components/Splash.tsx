@@ -3,29 +3,18 @@ import { useEffect, useState } from 'react'
 /*
  * Splash (Figma "G1 · Splash"): dark screen, soft blue/purple glows, the DealDesk eye mark with its wordmark and the prototype note.
  * MOTION · page load · glows fade in and drift; the mark rises, un-blurs and settles (0.9s expo-out); the wordmark follows (+0.15s);
- *   after ~1.7s the whole splash fades and lifts away (0.6s) and is removed from the DOM · plays once per tab session ·
+ *   after ~1.7s the whole splash fades and lifts away (0.6s) and is removed from the DOM · plays on every load / refresh ·
  *   reduced-motion: no movement, a short fade only. CSS only (no JS animation library) so it costs nothing at startup.
  * It is fixed ON TOP of the hero, which keeps rendering underneath, so it does not delay the first paint of the page.
  */
 export function Splash() {
-  const [phase, setPhase] = useState<'in' | 'out' | 'gone'>(() => {
-    try {
-      return sessionStorage.getItem('dd-splash') ? 'gone' : 'in'
-    } catch {
-      return 'in'
-    }
-  })
+  const [phase, setPhase] = useState<'in' | 'out' | 'gone'>('in') // every load and refresh, phones included
 
   useEffect(() => {
     if (phase === 'gone') return
-    try {
-      sessionStorage.setItem('dd-splash', '1')
-    } catch {
-      /* private mode: splash simply shows every visit */
-    }
     document.documentElement.style.overflow = 'hidden'
-    const t1 = window.setTimeout(() => setPhase('out'), 1700)
-    const t2 = window.setTimeout(() => setPhase('gone'), 2350)
+    const t1 = window.setTimeout(() => setPhase('out'), 1900)
+    const t2 = window.setTimeout(() => setPhase('gone'), 2550)
     return () => {
       window.clearTimeout(t1)
       window.clearTimeout(t2)
