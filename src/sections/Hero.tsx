@@ -58,7 +58,7 @@ export function Hero() {
          *   scrubbed (ease none) · desktop only · reduced-motion: none.
          */
         const scrub = { trigger: el, start: 'top top', end: 'bottom top' }
-        gsap.to(phone.current, { y: -170, scale: 1.05, rotateX: 7, ease: 'none', scrollTrigger: { ...scrub, scrub: 0.8 } })
+        gsap.fromTo(phone.current, { y: 0, scale: 0.94, rotateX: 20, transformPerspective: 1400 }, { y: -170, scale: 1.06, rotateX: -4, ease: 'none', scrollTrigger: { ...scrub, end: 'bottom 30%', scrub: 0.8 } })
         gsap.to('[data-panel]', { y: -50, ease: 'none', scrollTrigger: { ...scrub, scrub: 0.8 } })
         gsap.fromTo('[data-ghost]', { x: '8vw' }, { x: '-22vw', ease: 'none', scrollTrigger: { ...scrub, scrub: true } })
       } else {

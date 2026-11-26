@@ -346,3 +346,8 @@ a[aria-busy='true']::before { content: ''; flex: none; width: 14px; height: 14px
 .cta-pulse:hover::after, .cta-pulse:focus-visible::after { animation: none; opacity: 1; }
 @keyframes dd-cta { from { transform: scale(1); opacity: 0.9; } to { transform: scale(1.18, 1.45); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .cta-pulse::after { animation: none; opacity: 0.6; } }
+
+/* Film stage: a soft, translucent blur of the film around the film itself, with a subtle blue / purple tint, fading into the page */
+.film-stage { position: absolute; inset: 0; z-index: 0; overflow: hidden; -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); }
+.film-stage img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.25); filter: blur(46px) saturate(1.25); opacity: 0.55; }
+.film-stage::after { content: ''; position: absolute; inset: 0; background: radial-gradient(70% 45% at 12% 15%, rgba(96, 140, 255, 0.34), transparent 70%), radial-gradient(70% 45% at 90% 88%, rgba(150, 100, 255, 0.36), transparent 70%), rgba(15, 17, 21, 0.28); }
