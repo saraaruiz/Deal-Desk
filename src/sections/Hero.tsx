@@ -61,6 +61,18 @@ export function Hero() {
         gsap.to(phone.current, { y: -170, scale: 1.05, rotateX: 7, ease: 'none', scrollTrigger: { ...scrub, scrub: 0.8 } })
         gsap.to('[data-panel]', { y: -50, ease: 'none', scrollTrigger: { ...scrub, scrub: 0.8 } })
         gsap.fromTo('[data-ghost]', { x: '8vw' }, { x: '-22vw', ease: 'none', scrollTrigger: { ...scrub, scrub: true } })
+      } else {
+        /*
+         * MOTION · scroll (phones / tablets) · the same layered parallax, tuned for a tall screen: the phone starts leaning back and
+         *   stands up while it rises (rotateX 16 -> -4deg, scale .92 -> 1.06, y 0 -> -80px), the panel behind moves slower (y 0 -> -28px),
+         *   the giant wordmark crosses the screen sideways (x 28vw -> -85vw) and the headline block drifts up and dims ·
+         *   scrubbed (ease none, scrub 0.5), native touch scrolling · reduced-motion: none.
+         */
+        const st = () => ({ trigger: el, start: 'top top', end: 'bottom 25%', scrub: 0.5 }) // a fresh object per tween
+        gsap.fromTo(phone.current, { y: 0, scale: 0.92, rotateX: 16, transformPerspective: 1100 }, { y: -80, scale: 1.06, rotateX: -4, ease: 'none', scrollTrigger: st() })
+        gsap.to('[data-panel]', { y: -28, ease: 'none', scrollTrigger: st() })
+        gsap.fromTo('[data-ghost-m]', { x: '28vw' }, { x: '-85vw', ease: 'none', scrollTrigger: st() })
+        gsap.to('[data-copy]', { y: -30, opacity: 0.35, ease: 'none', scrollTrigger: { trigger: el, start: 'top+=240 top', end: '+=420', scrub: 0.5 } })
       }
     }, el)
     return () => {
@@ -125,7 +137,7 @@ export function Hero() {
         )}
       </header>
 
-      <div className="relative z-10 mx-auto max-w-[1440px] px-6 text-center">
+      <div data-copy className="relative z-10 mx-auto max-w-[1440px] px-6 text-center">
         <h1
           id="hero-title"
           className="mx-auto mt-[44px] max-w-[1100px] text-[clamp(44px,6.67vw,96px)] font-extrabold leading-[0.98] tracking-[-0.03em] text-text lg:mt-[62px]"
@@ -150,12 +162,20 @@ export function Hero() {
       </div>
 
       {/* Phone breaks out of the container (a still image of the prototype's "Ready" screen) */}
-      <div className="relative z-10 mx-auto mt-12 max-w-[1440px] px-6 pb-16 lg:pb-0">
+      <div className="relative z-10 mx-auto mt-6 max-w-[1440px] lg:mt-12 px-6 pb-16 lg:pb-0">
         <div
           aria-hidden
           data-panel
-          className="absolute inset-x-6 top-[22%] hidden h-[640px] rounded-[56px] border border-white/[0.14] bg-gradient-to-b from-[rgba(29,36,104,0.85)] to-bg lg:inset-x-[100px] lg:block"
+          className="absolute inset-x-4 top-[24%] h-[68%] rounded-[36px] border border-white/[0.14] bg-gradient-to-b from-[rgba(29,36,104,0.85)] to-bg lg:inset-x-[100px] lg:top-[22%] lg:h-[640px] lg:rounded-[56px]"
         />
+        {/* phones: the giant wordmark sits behind the device */}
+        <p
+          data-ghost-m
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-[34%] select-none whitespace-nowrap text-[42vw] font-extrabold leading-none tracking-[-0.04em] text-white/[0.09] lg:hidden"
+        >
+          DealDesk
+        </p>
         <div style={{ perspective: 1400 }} className="relative mx-auto w-[min(426px,72vw)]">
           <div ref={phone} data-phone className="relative will-change-transform [transform-style:preserve-3d]">
             <div data-phone-in>
