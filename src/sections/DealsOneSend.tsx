@@ -48,7 +48,7 @@ export function DealsOneSend() {
       const portrait = vw < vh
       // size of the starting window: as large as fits under the title
       const headBottom = head.getBoundingClientRect().bottom - el.getBoundingClientRect().top
-      const s0 = portrait ? 0.88 : Math.min(0.66, Math.max(0.4, (vh - headBottom - 56) / vh))
+      const s0 = portrait ? 1 : Math.min(0.66, Math.max(0.4, (vh - headBottom - 56) / vh))
       const boxH = portrait ? (vw * 9) / 16 * s0 : s0 * vh
       const y0 = portrait ? headBottom + 24 + boxH / 2 - vh / 2 : headBottom + 24 + boxH / 2 - vh / 2
       gsap.set(frame, { scale: s0, y: y0, borderRadius: 28 / s0, transformOrigin: '50% 50%' })
@@ -109,7 +109,7 @@ export function DealsOneSend() {
       {header}
       {/* the film: a full-screen element that starts scaled down into a window under the title and zooms to fill the screen */}
       <div data-zoom className="absolute inset-0 z-10 overflow-hidden will-change-transform">
-        <FilmPlayer fullBleed playWhen={play} className="portrait:absolute portrait:inset-x-0 portrait:top-1/2 portrait:-translate-y-1/2" {...player} />
+        <FilmPlayer fullBleed wide playWhen={play} className="portrait:absolute portrait:inset-x-0 portrait:top-1/2 portrait:-translate-y-1/2" {...player} />
       </div>
       {/* dissolve into the next section */}
       <div data-veil aria-hidden className="pointer-events-none absolute inset-0 z-30 bg-bg opacity-0" />

@@ -25,7 +25,10 @@ export function FilmPlayer({
   fullBleed,
   playWhen,
   volume,
+  wide,
 }: {
+  /** Upright phones: a taller frame (aspect 16:10.26) that trims 6% off each side, so the film looks 14% bigger. Only for films whose words stay inside that margin. */
+  wide?: boolean
   /** When set, it decides if the film should be playing (used by the pinned zoom section) instead of the on-screen test. */
   playWhen?: boolean
   /** 0..1, for the fade-out at the end of the pinned section. */
@@ -146,12 +149,12 @@ export function FilmPlayer({
 
   return (
     <div ref={stage} className={cn('relative will-change-transform', className)}>
-      <div className={cn('relative w-full overflow-hidden bg-black', fullBleed ? 'h-[100svh] portrait:aspect-video portrait:h-auto' : 'aspect-video rounded-[20px] shadow-[0_40px_90px_-30px_rgba(10,14,70,0.9)] ring-1 ring-white/10 lg:rounded-[28px]')}>
-        <img src={poster} alt={posterAlt} loading="lazy" decoding="async" className={cn('absolute inset-0 h-full w-full', fullBleed ? 'object-contain' : 'object-cover')} />
+      <div className={cn('relative w-full overflow-hidden bg-black', fullBleed ? cn('h-[100svh] portrait:aspect-video portrait:h-auto', wide && 'max-sm:portrait:aspect-auto max-sm:portrait:h-[calc(64.2vw+60px)]') : 'aspect-video rounded-[20px] shadow-[0_40px_90px_-30px_rgba(10,14,70,0.9)] ring-1 ring-white/10 lg:rounded-[28px]')}>
+        <img src={poster} alt={posterAlt} loading="lazy" decoding="async" className={cn('absolute inset-0 h-full w-full', fullBleed ? cn('object-contain', wide && 'max-sm:portrait:top-[60px] max-sm:portrait:h-[calc(100%-60px)] max-sm:portrait:object-cover') : 'object-cover')} />
         {!broken && (
           <video
             ref={video}
-            className={cn('absolute inset-0 h-full w-full', fullBleed ? 'object-contain' : 'object-cover')}
+            className={cn('absolute inset-0 h-full w-full', fullBleed ? cn('object-contain', wide && 'max-sm:portrait:top-[60px] max-sm:portrait:h-[calc(100%-60px)] max-sm:portrait:object-cover') : 'object-cover')}
             playsInline
             preload="metadata"
             poster={poster}
