@@ -27,7 +27,9 @@ export function FilmPlayer({
   volume,
   wide,
   dock,
+  onDock,
 }: {
+  onDock?: (docked: boolean) => void
   /** Once it has started, scrolling away turns it into a small player in the corner that keeps playing (pause, sound, close). */
   dock?: boolean
   /** Upright phones: a taller frame (aspect 16:10.26) that trims 6% off each side, so the film looks 14% bigger. Only for films whose words stay inside that margin. */
@@ -68,6 +70,7 @@ export function FilmPlayer({
   const keep = !!dock && started && !dismissed
   const visible = keep || (playWhen ?? ioVisible)
   const docked = keep && away && !ended && !broken
+  useEffect(() => onDock?.(docked), [docked, onDock])
   useEffect(() => {
     if (video.current && volume !== undefined) video.current.volume = Math.min(1, Math.max(0, volume))
   }, [volume])
@@ -179,15 +182,16 @@ export function FilmPlayer({
         role={docked ? 'region' : undefined}
         aria-label={docked ? 'Mini video player' : undefined}
         className={cn(
-          'overflow-hidden bg-black',
+          'overflow-hidden',
+          dock ? (docked ? 'bg-[#0f1115]' : 'film-zoom') : 'bg-black',
           docked
-            ? 'dd-pop fixed bottom-3 right-3 z-[105] aspect-video w-[min(58vw,380px)] sm:w-[380px] rounded-2xl shadow-2xl ring-1 ring-[#9b8cff]/60 sm:bottom-6 sm:right-6'
+            ? 'dd-pop fixed bottom-3 right-3 z-[105] aspect-video w-[min(58vw,380px)] sm:w-[380px] rounded-2xl shadow-2xl sm:bottom-6 sm:right-6'
             : cn(
                 'relative w-full',
                 fullBleed
                   ? 'h-[100svh] portrait:aspect-video portrait:h-auto'
-                  : 'aspect-video rounded-[20px] shadow-[0_40px_90px_-30px_rgba(10,14,70,0.9)] ring-1 ring-white/10 lg:rounded-[28px]',
-                big && 'max-sm:portrait:aspect-auto max-sm:portrait:h-[calc(64.2vw+60px)] max-sm:portrait:rounded-none',
+                  : cn('aspect-video rounded-[20px] lg:rounded-[28px]', dock ? 'shadow-[0_40px_90px_-30px_rgba(20,20,90,0.7)]' : 'shadow-[0_40px_90px_-30px_rgba(10,14,70,0.9)] ring-1 ring-white/10'),
+                big && 'max-sm:portrait:aspect-auto max-sm:portrait:h-[calc(64.2vw+60px)] max-sm:portrait:rounded-none max-sm:portrait:shadow-none',
               ),
         )}
       >
@@ -216,7 +220,7 @@ export function FilmPlayer({
         )}
 
         {!broken && (
-          <div className={cn('absolute inset-x-0 top-0 flex items-center justify-end gap-2 bg-gradient-to-b from-black/55 to-transparent p-3 lg:p-4', fullBleed && 'lg:px-8 lg:pt-6', docked && '!gap-1 !p-1.5')}>
+          <div className={cn('absolute inset-x-0 top-0 flex items-center justify-end gap-2 bg-gradient-to-b from-black/55 to-transparent p-3 lg:p-4', big && 'max-sm:portrait:from-transparent', fullBleed && 'lg:px-8 lg:pt-6', docked && '!gap-1 !p-1.5')}>
             {soundBlocked && !docked && (
               <span className="mr-1 hidden rounded-full bg-bg/70 px-3 py-2 text-[13px] text-text backdrop-blur sm:inline">Sound is off · tap to turn it on</span>
             )}
