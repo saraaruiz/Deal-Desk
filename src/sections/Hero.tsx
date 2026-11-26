@@ -117,20 +117,16 @@ export function Hero() {
           aria-controls="mobile-menu"
           aria-label={menu ? 'Close menu' : 'Open menu'}
           onClick={() => setMenu((m) => !m)}
-          className={`relative z-40 inline-flex size-11 items-center justify-center rounded-full border backdrop-blur sm:hidden ${menu ? 'border-black/15 bg-white/70 text-[#0b0d1a]' : 'border-white/20 bg-white/[0.07] text-text'}`}
+          className={`relative z-40 inline-flex size-11 items-center justify-center rounded-full border backdrop-blur sm:hidden ${menu ? 'border-[#9b8cff]/60 bg-[#161a2e] text-white' : 'border-white/20 bg-white/[0.07] text-text'}`}
         >
           {menu ? <X size={20} /> : <Menu size={20} />}
         </button>
         {menu && (
-          <nav
-            id="mobile-menu"
-            aria-label="Mobile"
-            className="fixed inset-0 z-30 flex flex-col justify-center gap-1 px-8 pb-10 pt-24 backdrop-blur-[40px] backdrop-saturate-150 sm:hidden"
-            style={{ background: 'radial-gradient(90% 60% at 0% 0%, rgba(105,140,255,0.55), transparent 70%), radial-gradient(90% 60% at 100% 100%, rgba(150,100,255,0.5), transparent 70%), rgba(238,240,252,0.94)' }}
-          >
-            {[...nav.links, { label: nav.cta, href: '#prototype' }].map((l) => (
-              <a key={l.label} href={l.href} onClick={() => setMenu(false)} className="flex min-h-[56px] items-center rounded-2xl px-4 text-[26px] font-semibold tracking-[-0.01em] text-[#0b0d1a] transition-colors hover:bg-white/60 active:bg-white/70">
+          <nav id="mobile-menu" aria-label="Mobile" className="dd-menu fixed inset-0 z-30 flex flex-col justify-center gap-3 px-6 pb-10 pt-24 sm:hidden">
+            {[...nav.links, { label: nav.cta, href: '#prototype' }].map((l, i) => (
+              <a key={l.label} href={l.href} onClick={() => setMenu(false)} className="dd-menu-link" style={{ ['--d' as string]: `${0.05 + i * 0.07}s` }}>
                 {l.label}
+                <span aria-hidden>→</span>
               </a>
             ))}
           </nav>

@@ -361,3 +361,13 @@ a[aria-busy='true']::before { content: ''; flex: none; width: 14px; height: 14px
   .dd-splash-glow--b { background: radial-gradient(closest-side, rgba(110, 80, 215, 0.45), transparent); }
   .dd-splash-glow--c { background: radial-gradient(closest-side, rgba(60, 100, 190, 0.45), transparent); }
 }
+
+/* Mobile menu: DARK glass, fully opaque (nothing behind shows through), white type, soft purple / blue light and glass-edged rows */
+.dd-menu { background: radial-gradient(80% 50% at 100% 0%, rgba(139, 92, 246, 0.42), transparent 70%), radial-gradient(80% 50% at 0% 100%, rgba(58, 107, 224, 0.4), transparent 70%), radial-gradient(60% 35% at 15% 28%, rgba(105, 65, 225, 0.2), transparent 70%), #0b0d15; }
+.dd-menu-link { display: flex; min-height: 64px; align-items: center; justify-content: space-between; border-radius: 20px; padding: 0 22px; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; color: #fff; border: 1px solid transparent;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015)) padding-box, linear-gradient(#131627, #131627) padding-box, linear-gradient(130deg, rgba(150, 190, 255, 0.65), rgba(255, 255, 255, 0.06) 40%, rgba(255, 255, 255, 0.04) 62%, rgba(168, 120, 255, 0.65)) border-box;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14); animation: rise-in 0.6s var(--ease) var(--d, 0s) backwards, dd-note 0.5s ease var(--d, 0s) backwards; transition: box-shadow 0.2s var(--ease), scale 0.15s var(--ease); }
+.dd-menu-link span { color: #b7acff; }
+.dd-menu-link:hover, .dd-menu-link:focus-visible, .dd-menu-link:active { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 28px -6px rgba(139, 92, 246, 0.75), 0 0 36px -12px rgba(96, 140, 255, 0.7); }
+.dd-menu-link:active { scale: 0.98; }
+@media (prefers-reduced-motion: reduce) { .dd-menu-link { animation: none; } }
