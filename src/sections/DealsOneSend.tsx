@@ -51,6 +51,8 @@ export function DealsOneSend() {
       tl.fromTo(el, { '--film-scale': () => start().s0, '--film-y': () => start().y0 + 'px' }, { '--film-scale': 1, '--film-y': '0px', duration: 0.55 }, 0)
         .fromTo(head, { y: 0, opacity: 1 }, { y: -80, opacity: 0, duration: 0.3, immediateRender: false }, 0.1)
         .fromTo('[data-backdrop]', { y: -70 }, { y: 70, duration: 1 }, 0)
+      // the sub-line follows the title out of the blur
+      gsap.fromTo('[data-lede]', { y: 30, opacity: 0, filter: 'blur(12px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.2, delay: 0.55, ease: 'expo.out', scrollTrigger: { trigger: head, start: 'top 72%', toggleActions: 'play none none reset' } })
     }, el)
     return () => ctx.revert()
   }, [staticMode])
@@ -66,9 +68,9 @@ export function DealsOneSend() {
 
         <div data-head className={`pointer-events-none z-20 mx-auto flex w-full max-w-[1200px] flex-col gap-4 px-6 lg:flex-row lg:items-end lg:justify-between lg:px-0 ${staticMode ? 'relative' : 'absolute inset-x-0 top-0 pt-20 lg:pt-24'}`}>
           <h2 id="deals-title" className="h-display text-text">
-            <Words lines={deals.title} gradientLast />
+            <Words lines={deals.title} gradientLast cinema />
           </h2>
-          <p className="h-lede max-w-[440px] text-muted lg:pb-2">{deals.line}</p>
+          <p data-lede className="h-lede max-w-[440px] text-muted lg:pb-2">{deals.line}</p>
         </div>
 
         <div className={staticMode ? 'relative mt-8 sm:px-6' : 'relative flex h-full items-center justify-center sm:px-6'}>

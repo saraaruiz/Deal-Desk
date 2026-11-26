@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { fits, moments } from '@/content/copy'
 import { RoleVisual } from '@/components/RoleVisual'
+import { Words } from '@/components/Words'
 import { PhoneFrame } from '@/components/PhoneFrame'
 import { gsap, ScrollTrigger, useStaticMotion } from '@/lib/motion'
 
@@ -191,8 +192,7 @@ export function FourMoments() {
           <div className="relative z-10">
             <p className="text-[12px] font-semibold tracking-[0.18em] text-lavender-soft">HOW IT WORKS</p>
             <h2 id="moments-title" className="mt-2 text-[clamp(36px,4.8vw,76px)] font-extrabold leading-[1] tracking-[-0.03em] text-text">
-              {moments.title[0]} {moments.title[1].split(' ')[0]}{' '}
-              <span className="bg-gradient-to-r from-[#F2F4F8] via-[#B7ACFF] to-[#7FB4FF] bg-clip-text text-transparent">{moments.title[1].split(' ')[1]}</span>
+              <Words lines={[moments.title.join(' ')]} gradientLast cinema />
             </h2>
             <div className="mt-3 flex items-center gap-3">
               <p className="text-[13px] font-semibold tabular-nums tracking-[0.04em] text-text/80">
