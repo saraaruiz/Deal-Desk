@@ -12,6 +12,13 @@ export function Hero() {
   const [menu, setMenu] = useState(false) // mobile menu (Figma M0 has a Menu button)
 
   useEffect(() => {
+    if (!menu) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenu(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menu])
+
+  useEffect(() => {
     document.body.style.overflow = menu ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
@@ -121,16 +128,23 @@ export function Hero() {
         >
           {menu ? <X size={20} /> : <Menu size={20} />}
         </button>
-        {menu && (
-          <nav id="mobile-menu" aria-label="Mobile" className="dd-menu fixed inset-0 z-30 flex flex-col justify-center gap-3 px-6 pb-10 pt-24 sm:hidden">
-            {[...nav.links, { label: nav.cta, href: '#prototype' }].map((l, i) => (
-              <a key={l.label} href={l.href} onClick={() => setMenu(false)} className="dd-menu-link" style={{ ['--d' as string]: `${0.05 + i * 0.07}s` }}>
-                {l.label}
-                <span aria-hidden>→</span>
-              </a>
-            ))}
-          </nav>
-        )}
+        {/* always in the page so it can animate in AND out; tap the glass outside the links to close */}
+        <nav
+          id="mobile-menu"
+          aria-label="Mobile"
+          data-open={menu}
+          inert={!menu}
+          onClick={(e) => e.target === e.currentTarget && setMenu(false)}
+          className="dd-menu fixed inset-0 z-30 flex flex-col justify-center gap-3 px-6 pb-10 pt-24 sm:hidden"
+        >
+          {[...nav.links, { label: nav.cta, href: '#prototype' }].map((l, i) => (
+            <a key={l.label} href={l.href} onClick={() => setMenu(false)} className="dd-menu-link" style={{ ['--d' as string]: `${0.06 + i * 0.05}s` }}>
+              {l.label}
+              <span aria-hidden>→</span>
+            </a>
+          ))}
+          <p className="pointer-events-none mt-4 text-center text-[13px] text-white/60">Tap outside to close</p>
+        </nav>
       </header>
 
       <div data-copy className="relative z-10 mx-auto max-w-[1440px] px-6 text-center">
